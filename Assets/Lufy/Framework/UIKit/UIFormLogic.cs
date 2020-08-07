@@ -12,6 +12,13 @@ namespace LF.UI
     /// </summary>
     public abstract class UIFormLogic : MonoBehaviour
     {
+        private bool m_visible = true;
+
+        /// <summary>
+        /// 暂停覆盖其他页面
+        /// </summary>
+        public bool pauseCoveredUIForm = true;
+
         /// <summary>
         /// 获取已缓存的 Transform。
         /// </summary>
@@ -19,6 +26,27 @@ namespace LF.UI
         {
             get;
             private set;
+        }
+
+        /// <summary>
+        /// 获取或设置界面是否可见。
+        /// </summary>
+        public bool Visible
+        {
+            get
+            {
+                return m_visible;
+            }
+            set
+            {
+                if (m_visible == value)
+                {
+                    return;
+                }
+
+                m_visible = value;
+                InternalSetVisible(value);
+            }
         }
 
         /// <summary>
@@ -46,7 +74,7 @@ namespace LF.UI
         /// <param name="userData">用户自定义数据。</param>
         protected internal virtual void OnOpen(object userData)
         {
-            
+            Visible = true;
         }
 
         /// <summary>
@@ -54,9 +82,9 @@ namespace LF.UI
         /// </summary>
         /// <param name="isShutdown">是否是关闭界面管理器时触发。</param>
         /// <param name="userData">用户自定义数据。</param>
-        protected internal virtual void OnClose(bool isShutdown, object userData)
+        protected internal virtual void OnClose(object userData)
         {
-            
+            Visible = false;
         }
 
         /// <summary>
@@ -105,6 +133,15 @@ namespace LF.UI
         /// <param name="realElapseSeconds">真实流逝时间，以秒为单位。</param>
         protected internal virtual void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
+        }
+
+        /// <summary>
+        /// 设置界面的可见性。
+        /// </summary>
+        /// <param name="visible">界面的可见性。</param>
+        protected virtual void InternalSetVisible(bool visible)
+        {
+            gameObject.SetActive(visible);
         }
     }
 }

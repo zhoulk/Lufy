@@ -7,25 +7,25 @@ using LF;
 using LF.UI;
 using UnityEngine.UI;
 
-public class LoadingForm : UIFormLogic
+public class SelectForm : UIFormLogic
 {
-    public Button shopBtn;
-    public Button selectBtn;
+    public Button P1Btn;
+    public Button P2Btn;
 
     protected override void OnInit(object userData)
     {
         base.OnInit(userData);
 
-        Log.Debug("loading init");
+        Log.Debug("select init");
 
-        shopBtn.onClick.AddListener(() =>
+        P1Btn.onClick.AddListener(() =>
         {
-            GameEntry.UI.OpenUIForm("shop");
+            //GameEntry.UI.OpenUIForm("shop");
         });
 
-        selectBtn.onClick.AddListener(() =>
+        P2Btn.onClick.AddListener(() =>
         {
-            GameEntry.UI.OpenUIForm("select");
+            //GameEntry.UI.OpenUIForm("select");
         });
     }
 
@@ -33,62 +33,62 @@ public class LoadingForm : UIFormLogic
     {
         base.OnOpen(userData);
 
-        Log.Debug("loading open");
+        Log.Debug("select open");
     }
 
     protected override void OnClose(object userData)
     {
         base.OnClose(userData);
 
-        Log.Debug("loading close");
+        Log.Debug("select close");
     }
 
     protected override void OnResume()
     {
         base.OnResume();
 
-        Log.Debug("loading resume");
+        Log.Debug("select resume");
     }
 
     protected override void OnPause()
     {
         base.OnPause();
 
-        Log.Debug("loading pause");
+        Log.Debug("select pause");
     }
 
     protected override void OnReveal()
     {
         base.OnReveal();
 
-        Log.Debug("loading reveal");
+        Log.Debug("select reveal");
     }
 
     protected override void OnRecycle()
     {
         base.OnRecycle();
 
-        Log.Debug("loading recycle");
+        Log.Debug("select recycle");
     }
 
     protected override void OnCover()
     {
         base.OnCover();
 
-        Log.Debug("loading cover");
+        Log.Debug("select cover");
     }
 
     protected override void OnRefocus(object userData)
     {
         base.OnRefocus(userData);
 
-        Log.Debug("loading refocus");
+        Log.Debug("select refocus");
     }
 
     protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 
-        Log.Debug("loading update " + elapseSeconds);
+        Log.Debug("select update " + elapseSeconds);
     }
 }

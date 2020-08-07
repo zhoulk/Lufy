@@ -7,25 +7,19 @@ using LF;
 using LF.UI;
 using UnityEngine.UI;
 
-public class LoadingForm : UIFormLogic
+public class ShopForm : UIFormLogic
 {
-    public Button shopBtn;
-    public Button selectBtn;
+    public Button backBtn;
 
     protected override void OnInit(object userData)
     {
         base.OnInit(userData);
 
-        Log.Debug("loading init");
+        Log.Debug("shop init");
 
-        shopBtn.onClick.AddListener(() =>
+        backBtn.onClick.AddListener(() =>
         {
-            GameEntry.UI.OpenUIForm("shop");
-        });
-
-        selectBtn.onClick.AddListener(() =>
-        {
-            GameEntry.UI.OpenUIForm("select");
+            GameEntry.UI.CloseUIForm(this);
         });
     }
 
@@ -33,62 +27,62 @@ public class LoadingForm : UIFormLogic
     {
         base.OnOpen(userData);
 
-        Log.Debug("loading open");
+        Log.Debug("shop open");
     }
 
     protected override void OnClose(object userData)
     {
         base.OnClose(userData);
 
-        Log.Debug("loading close");
+        Log.Debug("shop close");
     }
 
     protected override void OnResume()
     {
         base.OnResume();
 
-        Log.Debug("loading resume");
+        Log.Debug("shop resume");
     }
 
     protected override void OnPause()
     {
         base.OnPause();
 
-        Log.Debug("loading pause");
+        Log.Debug("shop pause");
     }
 
     protected override void OnReveal()
     {
         base.OnReveal();
 
-        Log.Debug("loading reveal");
+        Log.Debug("shop reveal");
     }
 
     protected override void OnRecycle()
     {
         base.OnRecycle();
 
-        Log.Debug("loading recycle");
+        Log.Debug("shop recycle");
     }
 
     protected override void OnCover()
     {
         base.OnCover();
 
-        Log.Debug("loading cover");
+        Log.Debug("shop cover");
     }
 
     protected override void OnRefocus(object userData)
     {
         base.OnRefocus(userData);
 
-        Log.Debug("loading refocus");
+        Log.Debug("shop refocus");
     }
 
     protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 
-        Log.Debug("loading update " + elapseSeconds);
+        Log.Debug("shop update " + elapseSeconds);
     }
 }

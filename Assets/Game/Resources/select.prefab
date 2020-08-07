@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 735527384584106172}
   - component: {fileID: 735527384584106170}
   - component: {fileID: 735527384584106171}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Loading
+  m_Text: Select
 --- !u!1 &735527384821902186
 GameObject:
   m_ObjectHideFlags: 0
@@ -90,12 +90,12 @@ GameObject:
   - component: {fileID: 735527384821902185}
   - component: {fileID: 735527384821901463}
   - component: {fileID: 735527384821902184}
-  - component: {fileID: 5607197852482620114}
-  - component: {fileID: 1434967891119591663}
-  - component: {fileID: 3313852232533577314}
-  - component: {fileID: 671713230533509997}
-  m_Layer: 5
-  m_Name: loading
+  - component: {fileID: 4478862255009377471}
+  - component: {fileID: 6247581287692872070}
+  - component: {fileID: 360195107744164382}
+  - component: {fileID: 4709054324256354182}
+  m_Layer: 0
+  m_Name: select
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.1990477, g: 0.25770637, b: 0.6698113, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &5607197852482620114
+--- !u!114 &4478862255009377471
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -169,12 +169,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 735527384821902186}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ae36a8ce9c10424cacc21bf1e292332, type: 3}
+  m_Script: {fileID: 11500000, guid: 043a86ee53e5c624a9ee3fd271881d74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shopBtn: {fileID: 5993640843135073704}
-  selectBtn: {fileID: 7175343029613555325}
---- !u!223 &1434967891119591663
+  P1Btn: {fileID: 5993640843135073704}
+  P2Btn: {fileID: 7175343029613555325}
+--- !u!223 &6247581287692872070
 Canvas:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,16 +186,16 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 1
+  m_PixelPerfect: 0
   m_ReceivesEvents: 1
-  m_OverrideSorting: 1
+  m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &3313852232533577314
+--- !u!114 &360195107744164382
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
---- !u!114 &671713230533509997
+--- !u!114 &4709054324256354182
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -246,8 +246,8 @@ GameObject:
   - component: {fileID: 898964454312269600}
   - component: {fileID: 5689684028873180597}
   - component: {fileID: 7175343029613555325}
-  m_Layer: 5
-  m_Name: SelectBtn
+  m_Layer: 0
+  m_Name: P2Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -270,7 +270,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 240, y: 0}
+  m_AnchoredPosition: {x: 150, y: 0}
   m_SizeDelta: {x: 160, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &898964454312269600
@@ -364,8 +364,8 @@ GameObject:
   - component: {fileID: 6224994963608007091}
   - component: {fileID: 7582520788054122567}
   - component: {fileID: 5993640843135073704}
-  m_Layer: 5
-  m_Name: ShopBtn
+  m_Layer: 0
+  m_Name: P1Btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -388,7 +388,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -237.35, y: 0}
+  m_AnchoredPosition: {x: -150, y: 0}
   m_SizeDelta: {x: 160, y: 44}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6224994963608007091
@@ -481,7 +481,7 @@ GameObject:
   - component: {fileID: 2370307120980870307}
   - component: {fileID: 3717266666749086591}
   - component: {fileID: 3330747555368434169}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -548,7 +548,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u6A21\u5F0F\u9009\u62E9"
+  m_Text: 2P
 --- !u!1 &7774022505217072228
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,7 +560,7 @@ GameObject:
   - component: {fileID: 1534786913583819884}
   - component: {fileID: 723050054038015784}
   - component: {fileID: 701260443143740031}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -627,4 +627,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: "\u5546\u5E97"
+  m_Text: 1P
