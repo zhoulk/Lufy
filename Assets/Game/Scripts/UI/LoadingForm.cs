@@ -43,6 +43,26 @@ public class LoadingForm : GameUILogic
         shopBtn.SetAsDefaultNavi();
 
         Log.Debug("loading open");
+
+        GameEntry.Timer.doOnce(3000, () =>
+        {
+            Log.Debug("3 seconds later");
+        });
+
+        GameEntry.Timer.doFrameOnce(10, () =>
+        {
+            Log.Debug("10 frame later");
+        });
+
+        GameEntry.Timer.doLoop(10000, () =>
+        {
+            Log.Debug("10 seconds later");
+        });
+
+        GameEntry.Timer.doFrameLoop(20, () =>
+        {
+            Log.Debug("20 frame later " + Time.frameCount);
+        });
     }
 
     protected override void OnClose(object userData)

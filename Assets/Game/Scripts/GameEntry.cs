@@ -4,6 +4,7 @@
 // 创建时间：2020-08-06 11:51:44
 // ========================================================
 
+using LF.Timer;
 using LF;
 using LF.Fsm;
 using LF.Procedure;
@@ -18,6 +19,7 @@ public class GameEntry : MonoBehaviour
     static ProcedureManager m_Procedure;
     static FsmManager m_Fsm;
     static UIEventManager m_UIEvent;
+    static TimerManager m_Timer;
 
     private void Awake()
     {
@@ -25,6 +27,7 @@ public class GameEntry : MonoBehaviour
         m_UI = Lufy.GetManager<UIManager>();
         m_Procedure = Lufy.GetManager<ProcedureManager>();
         m_Fsm = Lufy.GetManager<FsmManager>();
+        m_Timer = Lufy.GetManager<TimerManager>();
 
         m_UIEvent = Lufy.GetManager<UIEventManager>();
         m_UIEvent.Initialize(new GameInput());
@@ -63,6 +66,15 @@ public class GameEntry : MonoBehaviour
         get
         {
             return m_UIEvent;
+        }
+        set { }
+    }
+
+    public static TimerManager Timer
+    {
+        get
+        {
+            return m_Timer;
         }
         set { }
     }
