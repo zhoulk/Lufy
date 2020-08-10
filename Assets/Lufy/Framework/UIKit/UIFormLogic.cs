@@ -175,15 +175,6 @@ namespace LF.UI
         }
 
         /// <summary>
-        /// 界面激活。
-        /// </summary>
-        /// <param name="userData">用户自定义数据。</param>
-        protected internal virtual void OnRefocus(object userData)
-        {
-
-        }
-
-        /// <summary>
         /// 界面轮询。
         /// </summary>
         /// <param name="elapseSeconds">逻辑流逝时间，以秒为单位。</param>

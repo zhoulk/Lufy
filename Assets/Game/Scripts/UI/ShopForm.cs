@@ -5,6 +5,7 @@
 // ========================================================
 using LF;
 using LF.UI;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class ShopForm : GameUILogic
@@ -14,6 +15,12 @@ public class ShopForm : GameUILogic
     protected override void OnInit(object userData)
     {
         base.OnInit(userData);
+
+        if(userData != null)
+        {
+            Dictionary<string, object> param = userData as Dictionary<string, object>;
+            Log.Debug("shop param {0} {1} {2} ", param["key1"], param["key2"], param["key3"]);
+        }
 
         Log.Debug("shop init");
 
@@ -70,13 +77,6 @@ public class ShopForm : GameUILogic
         base.OnCover();
 
         Log.Debug("shop cover");
-    }
-
-    protected override void OnRefocus(object userData)
-    {
-        base.OnRefocus(userData);
-
-        Log.Debug("shop refocus");
     }
 
     protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)

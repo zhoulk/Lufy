@@ -78,13 +78,6 @@ public class SelectForm : GameUILogic
         Log.Debug("select cover");
     }
 
-    protected override void OnRefocus(object userData)
-    {
-        base.OnRefocus(userData);
-
-        Log.Debug("select refocus");
-    }
-
     protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);

@@ -72,13 +72,6 @@ public class DetailForm : GameUILogic
         Log.Debug("detail cover");
     }
 
-    protected override void OnRefocus(object userData)
-    {
-        base.OnRefocus(userData);
-
-        Log.Debug("detail refocus");
-    }
-
     protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);

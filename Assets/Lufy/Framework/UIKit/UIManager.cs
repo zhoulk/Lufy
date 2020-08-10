@@ -68,6 +68,7 @@ namespace LF.UI
             {
                 GameObject prefab = Resources.Load<GameObject>(uiFormAssetName);
                 GameObject obj = GameObject.Instantiate(prefab);
+                obj.name = obj.name.Substring(0, obj.name.Length - 7);
                 obj.transform.SetParent(rootTrans);
                 obj.transform.localPosition = Vector3.zero;
                 obj.transform.localScale = Vector3.one;

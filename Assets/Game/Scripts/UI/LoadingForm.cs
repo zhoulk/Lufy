@@ -4,13 +4,13 @@
 // 创建时间：2020-08-07 15:19:04
 // ========================================================
 using LF;
-using LF.UI;
-using UnityEngine.UI;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class LoadingForm : GameUILogic
 {
-    public Button shopBtn;
-    public Button selectBtn;
+    public GameObject shopBtn;
+    public GameObject selectBtn;
 
     protected override void OnInit(object userData)
     {
@@ -18,12 +18,19 @@ public class LoadingForm : GameUILogic
 
         Log.Debug("loading init");
 
-        shopBtn.onClick.AddListener(() =>
+        shopBtn.AddNaviRight(selectBtn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
+        selectBtn.AddNaviLeft(shopBtn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
+
+        GameEntry.UIEvent.AddOnClickHandler(shopBtn, (obj) =>
         {
-            Open(UIFormId.Shop);
+            Dictionary<string, object> param = new Dictionary<string, object>();
+            param.Add("key1", 100);
+            param.Add("key2", "23232");
+            param.Add("key3", this);
+            Open(UIFormId.Shop, param);
         });
 
-        selectBtn.onClick.AddListener(() =>
+        GameEntry.UIEvent.AddOnClickHandler(selectBtn, (obj) =>
         {
             Open(UIFormId.Select);
         });
@@ -32,6 +39,8 @@ public class LoadingForm : GameUILogic
     protected override void OnOpen(object userData)
     {
         base.OnOpen(userData);
+
+        shopBtn.SetAsDefaultNavi();
 
         Log.Debug("loading open");
     }
@@ -61,6 +70,8 @@ public class LoadingForm : GameUILogic
     {
         base.OnReveal();
 
+        shopBtn.SetAsDefaultNavi();
+
         Log.Debug("loading reveal");
     }
 
@@ -76,13 +87,6 @@ public class LoadingForm : GameUILogic
         base.OnCover();
 
         Log.Debug("loading cover");
-    }
-
-    protected override void OnRefocus(object userData)
-    {
-        base.OnRefocus(userData);
-
-        Log.Debug("loading refocus");
     }
 
     protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
