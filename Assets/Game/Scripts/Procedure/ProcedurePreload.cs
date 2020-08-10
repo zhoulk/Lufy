@@ -8,7 +8,7 @@ using LF;
 using LF.Fsm;
 using LF.Procedure;
 
-public class ProcedurePreload : ProcedureBase
+public class ProcedurePreload : GameProcedure
 {
     protected override void OnInit(IFsm<ProcedureManager> procedureOwner)
     {
@@ -23,7 +23,7 @@ public class ProcedurePreload : ProcedureBase
 
         Log.Debug("procedure preload enter");
 
-        GameEntry.UI.OpenUIForm("loading");
+        Open(UIFormId.Loading);
     }
 
     protected override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)

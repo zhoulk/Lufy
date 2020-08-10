@@ -7,7 +7,7 @@ using LF;
 using LF.UI;
 using UnityEngine.UI;
 
-public class ShopForm : GameUILogic
+public class DetailForm : GameUILogic
 {
     public Button backBtn;
 
@@ -15,11 +15,11 @@ public class ShopForm : GameUILogic
     {
         base.OnInit(userData);
 
-        Log.Debug("shop init");
+        Log.Debug("detail init");
 
         backBtn.onClick.AddListener(() =>
         {
-            Close();
+            GameEntry.UI.CloseUIForm(this);
         });
     }
 
@@ -27,62 +27,62 @@ public class ShopForm : GameUILogic
     {
         base.OnOpen(userData);
 
-        Log.Debug("shop open");
+        Log.Debug("detail open");
     }
 
     protected override void OnClose(object userData)
     {
         base.OnClose(userData);
 
-        Log.Debug("shop close");
+        Log.Debug("detail close");
     }
 
     protected override void OnResume()
     {
         base.OnResume();
 
-        Log.Debug("shop resume");
+        Log.Debug("detail resume");
     }
 
     protected override void OnPause()
     {
         base.OnPause();
 
-        Log.Debug("shop pause");
+        Log.Debug("detail pause");
     }
 
     protected override void OnReveal()
     {
         base.OnReveal();
 
-        Log.Debug("shop reveal");
+        Log.Debug("detail reveal");
     }
 
     protected override void OnRecycle()
     {
         base.OnRecycle();
 
-        Log.Debug("shop recycle");
+        Log.Debug("detail recycle");
     }
 
     protected override void OnCover()
     {
         base.OnCover();
 
-        Log.Debug("shop cover");
+        Log.Debug("detail cover");
     }
 
     protected override void OnRefocus(object userData)
     {
         base.OnRefocus(userData);
 
-        Log.Debug("shop refocus");
+        Log.Debug("detail refocus");
     }
 
     protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 
-        Log.Debug("shop update " + elapseSeconds);
+        Log.Debug("detail update " + elapseSeconds);
     }
 }

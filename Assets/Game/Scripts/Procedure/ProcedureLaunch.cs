@@ -7,7 +7,7 @@ using LF;
 using LF.Fsm;
 using LF.Procedure;
 
-public class ProcedureLaunch : ProcedureBase
+public class ProcedureLaunch : GameProcedure
 {
     protected override void OnInit(IFsm<ProcedureManager> procedureOwner)
     {

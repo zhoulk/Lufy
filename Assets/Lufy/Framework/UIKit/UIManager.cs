@@ -17,7 +17,7 @@ namespace LF.UI
     public sealed class UIManager : LufyManager
     {
         private readonly Dictionary<string, UIFormLogic> m_cachedForms = new Dictionary<string, UIFormLogic>();
-        private readonly Queue<UIFormLogic> m_RecycleQueue = new Queue<UIFormLogic>();
+        private readonly LinkedList<UIFormLogic> m_formList = new LinkedList<UIFormLogic>();
 
         Transform rootTrans = null;
 
@@ -46,18 +46,7 @@ namespace LF.UI
         /// <returns>界面的序列编号。</returns>
         public void OpenUIForm(string uiFormAssetName)
         {
-            OpenUIForm(uiFormAssetName, false, null);
-        }
-
-        /// <summary>
-        /// 打开界面。
-        /// </summary>
-        /// <param name="uiFormAssetName">界面资源名称。</param>
-        /// <param name="pauseCoveredUIForm">是否暂停被覆盖的界面。</param>
-        /// <returns>界面的序列编号。</returns>
-        public void OpenUIForm(string uiFormAssetName, bool pauseCoveredUIForm)
-        {
-            OpenUIForm(uiFormAssetName, pauseCoveredUIForm, null);
+            OpenUIForm(uiFormAssetName, null);
         }
 
         /// <summary>
@@ -67,18 +56,6 @@ namespace LF.UI
         /// <param name="userData">用户自定义数据。</param>
         /// <returns>界面的序列编号。</returns>
         public void OpenUIForm(string uiFormAssetName, object userData)
-        {
-            OpenUIForm(uiFormAssetName, false, userData);
-        }
-
-        /// <summary>
-        /// 打开界面。
-        /// </summary>
-        /// <param name="uiFormAssetName">界面资源名称。</param>
-        /// <param name="pauseCoveredUIForm">是否暂停被覆盖的界面。</param>
-        /// <param name="userData">用户自定义数据。</param>
-        /// <returns>界面的序列编号。</returns>
-        public void OpenUIForm(string uiFormAssetName, bool pauseCoveredUIForm, object userData)
         {
             if (string.IsNullOrEmpty(uiFormAssetName))
             {
@@ -95,14 +72,28 @@ namespace LF.UI
                 obj.transform.localPosition = Vector3.zero;
                 obj.transform.localScale = Vector3.one;
                 uiFormInstanceObject = obj.GetComponent<UIFormLogic>();
-                uiFormInstanceObject.pauseCoveredUIForm = pauseCoveredUIForm;
                 m_cachedForms.Add(uiFormAssetName, uiFormInstanceObject);
 
                 uiFormInstanceObject.OnInit(userData);
             }
+            else
+            {
+                m_formList.Remove(uiFormInstanceObject);
+            }
             uiFormInstanceObject.OnOpen(userData);
 
+            m_formList.AddFirst(uiFormInstanceObject);
+
             Refresh();
+        }
+
+        /// <summary>
+        /// 关闭界面。
+        /// </summary>
+        /// <param name="uiFormAssetName">要关闭界面的名字</param>
+        public void CloseUIForm(string uiFormAssetName)
+        {
+            CloseUIForm(uiFormAssetName, null);
         }
 
         /// <summary>
@@ -144,7 +135,7 @@ namespace LF.UI
 
             uiForm.OnClose(userData);
 
-            m_RecycleQueue.Enqueue(uiForm);
+            m_formList.Remove(uiForm);
 
             Refresh();
         }
@@ -152,9 +143,90 @@ namespace LF.UI
         /// <summary>
         /// 重新计算UI层次
         /// </summary>
-        void Refresh()
+        public void Refresh()
         {
+            LinkedListNode<UIFormLogic> current = m_formList.First;
+            bool pause = false;
+            bool cover = false;
+            int depth = m_formList.Count;
+            while (current != null && current.Value != null)
+            {
+                LinkedListNode<UIFormLogic> next = current.Next;
+                current.Value.OnDepthChanged(depth--);
+                if (current.Value == null)
+                {
+                    return;
+                }
 
+                if (pause)
+                {
+                    if (!current.Value.Covered)
+                    {
+                        current.Value.Covered = true;
+                        current.Value.OnCover();
+                        if (current.Value == null)
+                        {
+                            return;
+                        }
+                    }
+
+                    if (!current.Value.Paused)
+                    {
+                        current.Value.Paused = true;
+                        current.Value.OnPause();
+                        if (current.Value == null)
+                        {
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    if (current.Value.Paused)
+                    {
+                        current.Value.Paused = false;
+                        current.Value.OnResume();
+                        if (current.Value == null)
+                        {
+                            return;
+                        }
+                    }
+
+                    if (current.Value.PauseCoveredUIForm)
+                    {
+                        pause = true;
+                    }
+
+                    if (cover)
+                    {
+                        if (!current.Value.Covered)
+                        {
+                            current.Value.Covered = true;
+                            current.Value.OnCover();
+                            if (current.Value == null)
+                            {
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (current.Value.Covered)
+                        {
+                            current.Value.Covered = false;
+                            current.Value.OnReveal();
+                            if (current.Value == null)
+                            {
+                                return;
+                            }
+                        }
+
+                        cover = true;
+                    }
+                }
+
+                current = next;
+            }
         }
 
         protected override void Awake()
@@ -167,16 +239,12 @@ namespace LF.UI
         internal override void Shutdown()
         {
             m_cachedForms.Clear();
-            m_RecycleQueue.Clear();
+            m_formList.Clear();
         }
 
         internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
-            while (m_RecycleQueue.Count > 0)
-            {
-                UIFormLogic uiForm = m_RecycleQueue.Dequeue();
-                uiForm.OnRecycle();
-            }
+
         }
     }
 }

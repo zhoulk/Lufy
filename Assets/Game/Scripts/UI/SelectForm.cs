@@ -7,7 +7,7 @@ using LF;
 using LF.UI;
 using UnityEngine.UI;
 
-public class SelectForm : UIFormLogic
+public class SelectForm : GameUILogic
 {
     public Button P1Btn;
     public Button P2Btn;
@@ -20,12 +20,12 @@ public class SelectForm : UIFormLogic
 
         P1Btn.onClick.AddListener(() =>
         {
-            //GameEntry.UI.OpenUIForm("shop");
+            Open(UIFormId.Detail);
         });
 
         P2Btn.onClick.AddListener(() =>
         {
-            //GameEntry.UI.OpenUIForm("select");
+            Close();
         });
     }
 

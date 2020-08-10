@@ -3,7 +3,9 @@
 // 作者：Lufy 
 // 创建时间：2020-08-06 16:59:12
 // ========================================================
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace LF.UI
 {
@@ -12,21 +14,36 @@ namespace LF.UI
     /// </summary>
     public abstract class UIFormLogic : MonoBehaviour
     {
-        private bool m_visible = true;
+        private bool m_Visible = false;
+        private bool m_Paused = false;
+        private bool m_Covered = false;
 
-        /// <summary>
-        /// 暂停覆盖其他页面
-        /// </summary>
-        public bool pauseCoveredUIForm = true;
+        public Vector2 scalerSize = new Vector2(1280, 720);
+        public const int DepthFactor = 100;
 
-        /// <summary>
-        /// 获取已缓存的 Transform。
-        /// </summary>
-        public Transform CachedTransform
+        private CanvasGroup m_CanvasGroup = null;
+        private CanvasScaler m_CanvasScaler = null;
+        private Canvas m_CachedCanvas = null;
+        private List<Canvas> m_CachedCanvasContainer = new List<Canvas>();
+
+        public int OriginalDepth
         {
             get;
             private set;
         }
+
+        public int Depth
+        {
+            get
+            {
+                return m_CachedCanvas.sortingOrder;
+            }
+        }
+
+        /// <summary>
+        /// 暂停覆盖其他页面
+        /// </summary>
+        public bool PauseCoveredUIForm = true;
 
         /// <summary>
         /// 获取或设置界面是否可见。
@@ -35,17 +52,41 @@ namespace LF.UI
         {
             get
             {
-                return m_visible;
+                return m_Visible;
             }
             set
             {
-                if (m_visible == value)
+                if (m_Visible == value)
                 {
                     return;
                 }
 
-                m_visible = value;
+                m_Visible = value;
                 InternalSetVisible(value);
+            }
+        }
+
+        public bool Paused
+        {
+            get
+            {
+                return m_Paused;
+            }
+            set
+            {
+                m_Paused = value;
+            }
+        }
+
+        public bool Covered
+        {
+            get
+            {
+                return m_Covered;
+            }
+            set
+            {
+                m_Covered = value;
             }
         }
 
@@ -55,10 +96,26 @@ namespace LF.UI
         /// <param name="userData">用户自定义数据。</param>
         protected internal virtual void OnInit(object userData)
         {
-            if (CachedTransform == null)
-            {
-                CachedTransform = transform;
-            }
+            m_CachedCanvas = gameObject.GetOrAddComponent<Canvas>();
+            m_CachedCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            m_CachedCanvas.overrideSorting = true;
+            OriginalDepth = m_CachedCanvas.sortingOrder;
+
+            //RectTransform transform = GetComponent<RectTransform>();
+            //transform.anchorMin = Vector2.zero;
+            //transform.anchorMax = Vector2.one;
+            //transform.anchoredPosition = Vector2.zero;
+            //transform.sizeDelta = Vector2.zero;
+
+            m_CanvasGroup = gameObject.GetOrAddComponent<CanvasGroup>();
+            m_CanvasGroup.interactable = false;
+            m_CanvasGroup.alpha = 0f;
+
+            m_CanvasScaler = gameObject.GetOrAddComponent<CanvasScaler>();
+            m_CanvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            m_CanvasScaler.referenceResolution = scalerSize;
+
+            gameObject.GetOrAddComponent<GraphicRaycaster>();
         }
 
         /// <summary>
@@ -92,7 +149,7 @@ namespace LF.UI
         /// </summary>
         protected internal virtual void OnPause()
         {
-            
+            Visible = false;
         }
 
         /// <summary>
@@ -100,7 +157,7 @@ namespace LF.UI
         /// </summary>
         protected internal virtual void OnResume()
         {
-            
+            Visible = true;
         }
 
         /// <summary>
@@ -142,6 +199,21 @@ namespace LF.UI
         protected virtual void InternalSetVisible(bool visible)
         {
             gameObject.SetActive(visible);
+            m_CanvasGroup.alpha = visible ? 1 : 0;
+            m_CanvasGroup.interactable = visible;
+        }
+
+        internal void OnDepthChanged(int uiDepth)
+        {
+            int oldDepth = Depth;
+            int deltaDepth = DepthFactor * uiDepth - oldDepth + OriginalDepth;
+            GetComponentsInChildren(true, m_CachedCanvasContainer);
+            for (int i = 0; i < m_CachedCanvasContainer.Count; i++)
+            {
+                m_CachedCanvasContainer[i].sortingOrder += deltaDepth;
+            }
+
+            m_CachedCanvasContainer.Clear();
         }
     }
 }

@@ -7,7 +7,7 @@ using LF;
 using LF.UI;
 using UnityEngine.UI;
 
-public class LoadingForm : UIFormLogic
+public class LoadingForm : GameUILogic
 {
     public Button shopBtn;
     public Button selectBtn;
@@ -20,12 +20,12 @@ public class LoadingForm : UIFormLogic
 
         shopBtn.onClick.AddListener(() =>
         {
-            GameEntry.UI.OpenUIForm("shop");
+            Open(UIFormId.Shop);
         });
 
         selectBtn.onClick.AddListener(() =>
         {
-            GameEntry.UI.OpenUIForm("select");
+            Open(UIFormId.Select);
         });
     }
 
