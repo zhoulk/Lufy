@@ -37,6 +37,22 @@ namespace LF.Procedure
         }
 
         /// <summary>
+        /// 获取当前流程。
+        /// </summary>
+        public ProcedureBase CurrentProcedure
+        {
+            get
+            {
+                if (m_ProcedureFsm == null)
+                {
+                    throw new LufyException("You must initialize procedure first.");
+                }
+
+                return (ProcedureBase)m_ProcedureFsm.CurrentState;
+            }
+        }
+
+        /// <summary>
         /// 开始流程。
         /// </summary>
         /// <param name="procedureType">要开始的流程类型。</param>

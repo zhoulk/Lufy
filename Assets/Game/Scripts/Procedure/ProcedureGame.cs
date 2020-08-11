@@ -8,30 +8,29 @@ using LF;
 using LF.Fsm;
 using LF.Procedure;
 
-public class ProcedurePreload : GameProcedure
+public class ProcedureGame : GameProcedure
 {
     protected override void OnInit(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnInit(procedureOwner);
 
-        Log.Debug("procedure preload init");
+        //Log.Debug("procedure preload init");
     }
 
     protected override void OnEnter(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnEnter(procedureOwner);
 
-        Log.Debug("procedure preload enter");
+        //Log.Debug("procedure preload enter");
 
-        Open(UIFormId.Loading);
-        ChangeState<ProcedureMain>(procedureOwner);
+        Open(UIFormId.Fight);
     }
 
     protected override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)
     {
         base.OnLeave(procedureOwner, isShutdown);
 
-        Log.Debug("procedure preload leave");
+        //Log.Debug("procedure preload leave");
     }
 
     protected override void OnUpdate(IFsm<ProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
@@ -45,6 +44,6 @@ public class ProcedurePreload : GameProcedure
     {
         base.OnDestroy(procedureOwner);
 
-        Log.Debug("procedure preload destroy");
+        //Log.Debug("procedure preload destroy");
     }
 }

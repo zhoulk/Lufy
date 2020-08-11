@@ -74,6 +74,14 @@ namespace LF.Fsm
         }
 
         /// <summary>
+        /// 获取当前有限状态机状态。
+        /// </summary>
+        FsmState<T> CurrentState
+        {
+            get;
+        }
+
+        /// <summary>
         /// 开始有限状态机。
         /// </summary>
         /// <typeparam name="TState">要开始的有限状态机状态类型。</typeparam>

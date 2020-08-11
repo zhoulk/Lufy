@@ -16,7 +16,7 @@ public class LoadingForm : GameUILogic
     {
         base.OnInit(userData);
 
-        Log.Debug("loading init");
+        //Log.Debug("loading init");
 
         shopBtn.AddNaviRight(selectBtn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
         selectBtn.AddNaviLeft(shopBtn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
@@ -42,48 +42,48 @@ public class LoadingForm : GameUILogic
 
         shopBtn.SetAsDefaultNavi();
 
-        Log.Debug("loading open");
+        //Log.Debug("loading open");
 
-        GameEntry.Timer.doOnce(3000, () =>
-        {
-            Log.Debug("3 seconds later");
-        });
+        //GameEntry.Timer.doOnce(3000, () =>
+        //{
+        //    Log.Debug("3 seconds later");
+        //});
 
-        GameEntry.Timer.doFrameOnce(10, () =>
-        {
-            Log.Debug("10 frame later");
-        });
+        //GameEntry.Timer.doFrameOnce(10, () =>
+        //{
+        //    Log.Debug("10 frame later");
+        //});
 
-        GameEntry.Timer.doLoop(10000, () =>
-        {
-            Log.Debug("10 seconds later");
-        });
+        //GameEntry.Timer.doLoop(10000, () =>
+        //{
+        //    Log.Debug("10 seconds later");
+        //});
 
-        GameEntry.Timer.doFrameLoop(20, () =>
-        {
-            Log.Debug("20 frame later " + Time.frameCount);
-        });
+        //GameEntry.Timer.doFrameLoop(20, () =>
+        //{
+        //    Log.Debug("20 frame later " + Time.frameCount);
+        //});
     }
 
     protected override void OnClose(object userData)
     {
         base.OnClose(userData);
 
-        Log.Debug("loading close");
+        //Log.Debug("loading close");
     }
 
     protected override void OnResume()
     {
         base.OnResume();
 
-        Log.Debug("loading resume");
+        //Log.Debug("loading resume");
     }
 
     protected override void OnPause()
     {
         base.OnPause();
 
-        Log.Debug("loading pause");
+        //Log.Debug("loading pause");
     }
 
     protected override void OnReveal()
@@ -92,27 +92,27 @@ public class LoadingForm : GameUILogic
 
         shopBtn.SetAsDefaultNavi();
 
-        Log.Debug("loading reveal");
+        //Log.Debug("loading reveal");
     }
 
     protected override void OnRecycle()
     {
         base.OnRecycle();
 
-        Log.Debug("loading recycle");
+        //Log.Debug("loading recycle");
     }
 
     protected override void OnCover()
     {
         base.OnCover();
 
-        Log.Debug("loading cover");
+        //Log.Debug("loading cover");
     }
 
     protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 
-        Log.Debug("loading update " + elapseSeconds);
+        //Log.Debug("loading update " + elapseSeconds);
     }
 }

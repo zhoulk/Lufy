@@ -16,7 +16,7 @@ public class SelectForm : GameUILogic
     {
         base.OnInit(userData);
 
-        Log.Debug("select init");
+        //Log.Debug("select init");
 
         P1Btn.onClick.AddListener(() =>
         {
@@ -33,55 +33,55 @@ public class SelectForm : GameUILogic
     {
         base.OnOpen(userData);
 
-        Log.Debug("select open");
+        //Log.Debug("select open");
     }
 
     protected override void OnClose(object userData)
     {
         base.OnClose(userData);
 
-        Log.Debug("select close");
+        //Log.Debug("select close");
     }
 
     protected override void OnResume()
     {
         base.OnResume();
 
-        Log.Debug("select resume");
+        //Log.Debug("select resume");
     }
 
     protected override void OnPause()
     {
         base.OnPause();
 
-        Log.Debug("select pause");
+        //Log.Debug("select pause");
     }
 
     protected override void OnReveal()
     {
         base.OnReveal();
 
-        Log.Debug("select reveal");
+        //Log.Debug("select reveal");
     }
 
     protected override void OnRecycle()
     {
         base.OnRecycle();
 
-        Log.Debug("select recycle");
+        //Log.Debug("select recycle");
     }
 
     protected override void OnCover()
     {
         base.OnCover();
 
-        Log.Debug("select cover");
+        //Log.Debug("select cover");
     }
 
     protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 
-        Log.Debug("select update " + elapseSeconds);
+        //Log.Debug("select update " + elapseSeconds);
     }
 }

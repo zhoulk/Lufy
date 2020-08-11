@@ -22,7 +22,7 @@ public class ShopForm : GameUILogic
             Log.Debug("shop param {0} {1} {2} ", param["key1"], param["key2"], param["key3"]);
         }
 
-        Log.Debug("shop init");
+        //Log.Debug("shop init");
 
         backBtn.onClick.AddListener(() =>
         {
@@ -34,55 +34,55 @@ public class ShopForm : GameUILogic
     {
         base.OnOpen(userData);
 
-        Log.Debug("shop open");
+        //Log.Debug("shop open");
     }
 
     protected override void OnClose(object userData)
     {
         base.OnClose(userData);
 
-        Log.Debug("shop close");
+        //Log.Debug("shop close");
     }
 
     protected override void OnResume()
     {
         base.OnResume();
 
-        Log.Debug("shop resume");
+        //Log.Debug("shop resume");
     }
 
     protected override void OnPause()
     {
         base.OnPause();
 
-        Log.Debug("shop pause");
+        //Log.Debug("shop pause");
     }
 
     protected override void OnReveal()
     {
         base.OnReveal();
 
-        Log.Debug("shop reveal");
+        //Log.Debug("shop reveal");
     }
 
     protected override void OnRecycle()
     {
         base.OnRecycle();
 
-        Log.Debug("shop recycle");
+        //Log.Debug("shop recycle");
     }
 
     protected override void OnCover()
     {
         base.OnCover();
 
-        Log.Debug("shop cover");
+        //Log.Debug("shop cover");
     }
 
     protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 
-        Log.Debug("shop update " + elapseSeconds);
+        //Log.Debug("shop update " + elapseSeconds);
     }
 }

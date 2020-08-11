@@ -7,30 +7,17 @@ using LF;
 using LF.UI;
 using UnityEngine.UI;
 
-public class DetailForm : GameUILogic
+public class FightForm : GameUILogic
 {
-    public Button fightBtn;
     public Button backBtn;
 
     protected override void OnInit(object userData)
     {
         base.OnInit(userData);
 
-        //Log.Debug("detail init");
-
-        fightBtn.onClick.AddListener(() =>
-        {
-            ProcedureMain game = GameEntry.Procedure.CurrentProcedure as ProcedureMain;
-            if (game != null)
-            {
-                Close();
-                game.EnterGame();
-            }
-        });
-
         backBtn.onClick.AddListener(() =>
         {
-            Close();
+            
         });
     }
 

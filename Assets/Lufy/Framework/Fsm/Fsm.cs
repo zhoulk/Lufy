@@ -28,7 +28,7 @@ namespace LF.Fsm
             m_IsDestroyed = true;
         }
 
-        FsmState<T> CurrentState => m_CurrentState;
+        public FsmState<T> CurrentState => m_CurrentState;
 
         /// <summary>
         /// 获取有限状态机名称。

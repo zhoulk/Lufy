@@ -21,5 +21,9 @@ public enum UIFormId
     /// <summary>
     /// 详情
     /// </summary>
-    Detail
+    Detail,
+    /// <summary>
+    /// 战斗
+    /// </summary>
+    Fight
 }
