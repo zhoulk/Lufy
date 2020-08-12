@@ -24,14 +24,7 @@ public class GameLogic : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_BulletPool = GameEntry.ObjectPool.CreateMultiSpawnObjectPool<Bullet>("bullet", 10);
-
-        GameObject prefab = Resources.Load<GameObject>("bullet/bullet");
-        GameObject obj = GameObject.Instantiate(prefab);
-        obj.name = "bullet1";
-        m_BulletPool.Register(Bullet.Create("bullet1", obj), false);
-
-
+        TestManager.Instance.Step1();
     }
 
     // Update is called once per frame
@@ -44,7 +37,7 @@ public class GameLogic : MonoBehaviour
 
             Log.Debug("click {0}", mousePositionInWorld);
 
-            Bullet bullet = m_BulletPool.Spawn("bullet1");
+            Bullet bullet = BulletHelper.Instance.Spawn();
             bullets.Add(bullet);
 
             Debug.Log(bullet);
@@ -61,7 +54,7 @@ public class GameLogic : MonoBehaviour
             if(bullets.Count > 0)
             {
                 Bullet bullet = bullets[0];
-                m_BulletPool.Unspawn(bullet);
+                BulletHelper.Instance.UnSpawn(bullet);
                 bullets.RemoveAt(0);
             }
         }

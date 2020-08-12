@@ -251,6 +251,89 @@ namespace LF.Pool
         }
 
         /// <summary>
+        /// 创建允许单次获取的对象池。
+        /// </summary>
+        /// <typeparam name="T">对象类型。</typeparam>
+        /// <param name="expireTime">对象池对象过期秒数。</param>
+        /// <returns>要创建的允许单次获取的对象池。</returns>
+        public IObjectPool<T> CreateSingleSpawnObjectPool<T>(float expireTime) where T : ObjectBase
+        {
+            return InternalCreateObjectPool<T>(string.Empty, false, expireTime, DefaultCapacity, expireTime, DefaultPriority);
+        }
+
+        /// <summary>
+        /// 创建允许单次获取的对象池。
+        /// </summary>
+        /// <param name="objectType">对象类型。</param>
+        /// <param name="expireTime">对象池对象过期秒数。</param>
+        /// <returns>要创建的允许单次获取的对象池。</returns>
+        public ObjectPoolBase CreateSingleSpawnObjectPool(Type objectType, float expireTime)
+        {
+            return InternalCreateObjectPool(objectType, string.Empty, false, expireTime, DefaultCapacity, expireTime, DefaultPriority);
+        }
+
+        /// <summary>
+        /// 创建允许单次获取的对象池。
+        /// </summary>
+        /// <typeparam name="T">对象类型。</typeparam>
+        /// <param name="name">对象池名称。</param>
+        /// <param name="expireTime">对象池对象过期秒数。</param>
+        /// <returns>要创建的允许单次获取的对象池。</returns>
+        public IObjectPool<T> CreateSingleSpawnObjectPool<T>(string name, float expireTime) where T : ObjectBase
+        {
+            return InternalCreateObjectPool<T>(name, false, expireTime, DefaultCapacity, expireTime, DefaultPriority);
+        }
+
+        /// <summary>
+        /// 创建允许单次获取的对象池。
+        /// </summary>
+        /// <param name="objectType">对象类型。</param>
+        /// <param name="name">对象池名称。</param>
+        /// <param name="expireTime">对象池对象过期秒数。</param>
+        /// <returns>要创建的允许单次获取的对象池。</returns>
+        public ObjectPoolBase CreateSingleSpawnObjectPool(Type objectType, string name, float expireTime)
+        {
+            return InternalCreateObjectPool(objectType, name, false, expireTime, DefaultCapacity, expireTime, DefaultPriority);
+        }
+
+        /// <summary>
+        /// 创建允许单次获取的对象池。
+        /// </summary>
+        /// <typeparam name="T">对象类型。</typeparam>
+        /// <param name="capacity">对象池的容量。</param>
+        /// <param name="expireTime">对象池对象过期秒数。</param>
+        /// <returns>要创建的允许单次获取的对象池。</returns>
+        public IObjectPool<T> CreateSingleSpawnObjectPool<T>(int capacity, float expireTime) where T : ObjectBase
+        {
+            return InternalCreateObjectPool<T>(string.Empty, false, expireTime, capacity, expireTime, DefaultPriority);
+        }
+
+        /// <summary>
+        /// 创建允许单次获取的对象池。
+        /// </summary>
+        /// <param name="objectType">对象类型。</param>
+        /// <param name="capacity">对象池的容量。</param>
+        /// <param name="expireTime">对象池对象过期秒数。</param>
+        /// <returns>要创建的允许单次获取的对象池。</returns>
+        public ObjectPoolBase CreateSingleSpawnObjectPool(Type objectType, int capacity, float expireTime)
+        {
+            return InternalCreateObjectPool(objectType, string.Empty, false, expireTime, capacity, expireTime, DefaultPriority);
+        }
+
+        /// <summary>
+        /// 创建允许单次获取的对象池。
+        /// </summary>
+        /// <typeparam name="T">对象类型。</typeparam>
+        /// <param name="name">对象池名称。</param>
+        /// <param name="capacity">对象池的容量。</param>
+        /// <param name="expireTime">对象池对象过期秒数。</param>
+        /// <returns>要创建的允许单次获取的对象池。</returns>
+        public IObjectPool<T> CreateSingleSpawnObjectPool<T>(string name, int capacity, float expireTime) where T : ObjectBase
+        {
+            return InternalCreateObjectPool<T>(name, false, expireTime, capacity, expireTime, DefaultPriority);
+        }
+
+        /// <summary>
         /// 创建允许多次获取的对象池。
         /// </summary>
         /// <typeparam name="T">对象类型。</typeparam>
