@@ -66,6 +66,7 @@ public class ProcedureGame : GameProcedure
         if (exitGame)
         {
             exitGame = false;
+            procedureOwner.SetData<bool>("fromGame", true);
             ChangeState<ProcedureMain>(procedureOwner);
             SceneManager.UnloadSceneAsync("Game");
         }

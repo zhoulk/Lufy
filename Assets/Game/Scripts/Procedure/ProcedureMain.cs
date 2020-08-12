@@ -48,7 +48,14 @@ public class ProcedureMain : GameProcedure
 
         Log.Debug("procedure main enter");
 
-        //Open(UIFormId.Loading);
+        if (procedureOwner.HasData("fromGame"))
+        {
+            bool fromGame = procedureOwner.GetData<bool>("fromGame");
+            if (fromGame)
+            {
+                Open(UIFormId.Detail);
+            }
+        }
     }
 
     protected override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)

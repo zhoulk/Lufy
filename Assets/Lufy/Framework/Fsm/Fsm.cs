@@ -13,6 +13,7 @@ namespace LF.Fsm
         private string m_name;
         private T m_Owner;
         private readonly Dictionary<Type, FsmState<T>> m_States;
+        private readonly Dictionary<string, object> m_Datas;
         private FsmState<T> m_CurrentState;
         private bool m_IsDestroyed;
 
@@ -24,6 +25,7 @@ namespace LF.Fsm
             m_name = string.Empty;
             m_Owner = null;
             m_States = new Dictionary<Type, FsmState<T>>();
+            m_Datas = new Dictionary<string, object>();
             m_CurrentState = null;
             m_IsDestroyed = true;
         }
@@ -102,6 +104,21 @@ namespace LF.Fsm
         public bool HasState<TState>() where TState : FsmState<T>
         {
             return m_States.ContainsKey(typeof(TState));
+        }
+
+        public bool HasState(Type stateType)
+        {
+            if (stateType == null)
+            {
+                throw new LufyException("State type is invalid.");
+            }
+
+            if (!typeof(FsmState<T>).IsAssignableFrom(stateType))
+            {
+                throw new LufyException(Utility.Text.Format("State type '{0}' is invalid.", stateType.FullName));
+            }
+
+            return m_States.ContainsKey(stateType);
         }
 
         public TState GetState<TState>() where TState : FsmState<T>
@@ -323,6 +340,67 @@ namespace LF.Fsm
             m_CurrentState.OnLeave(this, false);
             m_CurrentState = state;
             m_CurrentState.OnEnter(this);
+        }
+
+        public bool HasData(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new LufyException("Data name is invalid.");
+            }
+
+            return m_Datas.ContainsKey(name);
+        }
+
+        public TData GetData<TData>(string name)
+        {
+            return (TData)GetData(name);
+        }
+
+        public object GetData(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new LufyException("Data name is invalid.");
+            }
+
+            object data = null;
+            if (m_Datas.TryGetValue(name, out data))
+            {
+                return data;
+            }
+
+            return null;
+        }
+
+        public void SetData<TData>(string name, TData data)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new LufyException("Data name is invalid.");
+            }
+
+            m_Datas[name] = data;
+        }
+
+        public void SetData(string name, object data)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new LufyException("Data name is invalid.");
+            }
+
+            m_Datas[name] = data;
+        }
+
+        public bool RemoveData(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new LufyException("Data name is invalid.");
+            }
+
+            return m_Datas.Remove(name);
         }
     }
 }

@@ -84,6 +84,66 @@ namespace LF.Procedure
         {
             
         }
+
+        /// <summary>
+        /// 是否存在流程。
+        /// </summary>
+        /// <typeparam name="T">要检查的流程类型。</typeparam>
+        /// <returns>是否存在流程。</returns>
+        public bool HasProcedure<T>() where T : ProcedureBase
+        {
+            if (m_ProcedureFsm == null)
+            {
+                throw new LufyException("You must initialize procedure first.");
+            }
+
+            return m_ProcedureFsm.HasState<T>();
+        }
+
+        /// <summary>
+        /// 是否存在流程。
+        /// </summary>
+        /// <param name="procedureType">要检查的流程类型。</param>
+        /// <returns>是否存在流程。</returns>
+        public bool HasProcedure(Type procedureType)
+        {
+            if (m_ProcedureFsm == null)
+            {
+                throw new LufyException("You must initialize procedure first.");
+            }
+
+            return m_ProcedureFsm.HasState(procedureType);
+        }
+
+        /// <summary>
+        /// 获取流程。
+        /// </summary>
+        /// <typeparam name="T">要获取的流程类型。</typeparam>
+        /// <returns>要获取的流程。</returns>
+        public ProcedureBase GetProcedure<T>() where T : ProcedureBase
+        {
+            if (m_ProcedureFsm == null)
+            {
+                throw new LufyException("You must initialize procedure first.");
+            }
+
+            return m_ProcedureFsm.GetState<T>();
+        }
+
+        /// <summary>
+        /// 获取流程。
+        /// </summary>
+        /// <param name="procedureType">要获取的流程类型。</param>
+        /// <returns>要获取的流程。</returns>
+        public ProcedureBase GetProcedure(Type procedureType)
+        {
+            if (m_ProcedureFsm == null)
+            {
+                throw new LufyException("You must initialize procedure first.");
+            }
+
+            return (ProcedureBase)m_ProcedureFsm.GetState(procedureType);
+        }
     }
 }
 
