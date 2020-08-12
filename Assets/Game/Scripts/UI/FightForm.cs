@@ -17,7 +17,8 @@ public class FightForm : GameUILogic
 
         backBtn.onClick.AddListener(() =>
         {
-            
+            Close();
+            GameEntry.Event.Fire(this, ExitGameEventArgs.Create(1));
         });
     }
 

@@ -4,6 +4,7 @@
 // 创建时间：2020-08-12 09:18:41
 // ========================================================
 using LF;
+using LF.Event;
 using LF.Pool;
 using UnityEngine;
 
@@ -18,6 +19,8 @@ public class BulletHelper : Singleton<BulletHelper>
     {
         m_BulletPool = GameEntry.ObjectPool.CreateSingleSpawnObjectPool<Bullet>("bullet", 10, 3);
         m_prefab = Resources.Load<GameObject>("bullet/bullet");
+
+        GameEntry.Event.Subscribe(BulletReleaseEventArgs.EventId, OnBulletReleaseHandler);
     }
 
     public Bullet Spawn()
@@ -37,5 +40,14 @@ public class BulletHelper : Singleton<BulletHelper>
     public void UnSpawn(Bullet bullet)
     {
         m_BulletPool.Unspawn(bullet);
+    }
+
+    void OnBulletReleaseHandler(object sender, GameEventArgs args)
+    {
+        BulletReleaseEventArgs ne = args as BulletReleaseEventArgs;
+        if (ne != null)
+        {
+            Log.Debug("helper release bullet {0}", ne.bullet.Name);
+        }
     }
 }

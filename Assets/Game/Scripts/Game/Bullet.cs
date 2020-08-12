@@ -20,6 +20,8 @@ public class Bullet : ObjectBase
     {
         Log.Debug("bullet release");
 
+        GameEntry.Event.Fire(this, BulletReleaseEventArgs.Create(this));
+
         if(Target != null)
         {
             GameObject.Destroy(Target as GameObject);

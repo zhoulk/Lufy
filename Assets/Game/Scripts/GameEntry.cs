@@ -12,6 +12,7 @@ using LF.UI;
 using LF.UINavi;
 using UnityEngine;
 using LF.Pool;
+using LF.Event;
 
 public class GameEntry : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class GameEntry : MonoBehaviour
     static UIEventManager m_UIEvent;
     static TimerManager m_Timer;
     static ObjectPoolManager m_ObjectPool;
+    static EventManager m_Event;
 
     private void Start()
     {
@@ -91,6 +93,15 @@ public class GameEntry : MonoBehaviour
         set { }
     }
 
+    public static EventManager Event
+    {
+        get
+        {
+            return m_Event;
+        }
+        set { }
+    }
+
     void initManagers()
     {
         m_Base = Lufy.GetManager<BaseManager>();
@@ -103,6 +114,7 @@ public class GameEntry : MonoBehaviour
         m_UIEvent.Initialize(new GameInput());
 
         m_ObjectPool = Lufy.GetManager<ObjectPoolManager>();
+        m_Event = Lufy.GetManager<EventManager>();
     }
 }
 

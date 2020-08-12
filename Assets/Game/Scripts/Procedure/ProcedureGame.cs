@@ -5,16 +5,41 @@
 // ========================================================
 
 using LF;
+using LF.Event;
 using LF.Fsm;
 using LF.Procedure;
+using UnityEngine.SceneManagement;
+
+public class ExitGameEventArgs : GameEventArgs
+{
+    public static readonly int EventId = typeof(ExitGameEventArgs).GetHashCode();
+
+    public override int Id => EventId;
+
+    /// <summary>
+    /// 游戏等级
+    /// </summary>
+    public int Level;
+
+    public static ExitGameEventArgs Create(int level)
+    {
+        ExitGameEventArgs e = new ExitGameEventArgs();
+        e.Level = level;
+        return e;
+    }
+}
 
 public class ProcedureGame : GameProcedure
 {
+    bool exitGame = false;
+
     protected override void OnInit(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnInit(procedureOwner);
 
         //Log.Debug("procedure preload init");
+
+        GameEntry.Event.Subscribe(ExitGameEventArgs.EventId, ExitGameHandler);
     }
 
     protected override void OnEnter(IFsm<ProcedureManager> procedureOwner)
@@ -38,6 +63,12 @@ public class ProcedureGame : GameProcedure
         base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
         //Log.Debug("procedure preload update " + elapseSeconds + "  " + realElapseSeconds);
+        if (exitGame)
+        {
+            exitGame = false;
+            ChangeState<ProcedureMain>(procedureOwner);
+            SceneManager.UnloadSceneAsync("Game");
+        }
     }
 
     protected override void OnDestroy(IFsm<ProcedureManager> procedureOwner)
@@ -45,5 +76,12 @@ public class ProcedureGame : GameProcedure
         base.OnDestroy(procedureOwner);
 
         //Log.Debug("procedure preload destroy");
+    }
+
+    void ExitGameHandler(object sender, GameEventArgs e)
+    {
+        ExitGameEventArgs ne = (ExitGameEventArgs)e;
+
+        exitGame = true;
     }
 }

@@ -4,9 +4,26 @@
 // 创建时间：2020-08-11 18:11:46
 // ========================================================
 using LF;
+using LF.Event;
 using LF.Pool;
 using System.Collections.Generic;
 using UnityEngine;
+
+public sealed class BulletReleaseEventArgs : GameEventArgs
+{
+    public static readonly int EventId = typeof(BulletReleaseEventArgs).GetHashCode();
+
+    public override int Id => EventId;
+
+    public Bullet bullet;
+
+    public static BulletReleaseEventArgs Create(Bullet bullet)
+    {
+        BulletReleaseEventArgs e = new BulletReleaseEventArgs();
+        e.bullet = bullet;
+        return e;
+    }
+}
 
 public class GameLogic : MonoBehaviour
 {
@@ -25,6 +42,8 @@ public class GameLogic : MonoBehaviour
     void Start()
     {
         TestManager.Instance.Step1();
+
+        GameEntry.Event.Subscribe(BulletReleaseEventArgs.EventId, OnBulletReleaseHandler);
     }
 
     // Update is called once per frame
@@ -57,6 +76,24 @@ public class GameLogic : MonoBehaviour
                 BulletHelper.Instance.UnSpawn(bullet);
                 bullets.RemoveAt(0);
             }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        foreach(var b in bullets)
+        {
+            BulletHelper.Instance.UnSpawn(b);
+        }
+        bullets.Clear();
+    }
+
+    void OnBulletReleaseHandler(object sender, GameEventArgs args)
+    {
+        BulletReleaseEventArgs ne = args as BulletReleaseEventArgs;
+        if (ne != null)
+        {
+            Log.Debug("release bullet {0}", ne.bullet.Name);
         }
     }
 }

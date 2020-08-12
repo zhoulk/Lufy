@@ -26,7 +26,6 @@ namespace LF.Timer
         /** 用数组保证按放入顺序执行*/
         private List<TimerHandler> m_Handlers = new List<TimerHandler>();
         private int m_CurrFrame = 0;
-        private uint m_Index = 0;
 
         /// /// <summary>
         /// 定时执行一次(基于毫秒)

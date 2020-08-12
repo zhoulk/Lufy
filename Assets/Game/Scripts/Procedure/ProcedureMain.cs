@@ -5,9 +5,29 @@
 // ========================================================
 
 using LF;
+using LF.Event;
 using LF.Fsm;
 using LF.Procedure;
 using UnityEngine.SceneManagement;
+
+public class EnterGameEventArgs : GameEventArgs
+{
+    public static readonly int EventId = typeof(EnterGameEventArgs).GetHashCode();
+
+    public override int Id => EventId;
+
+    /// <summary>
+    /// 游戏等级
+    /// </summary>
+    public int Level;
+
+    public static EnterGameEventArgs Create(int level)
+    {
+        EnterGameEventArgs e = new EnterGameEventArgs();
+        e.Level = level;
+        return e;
+    }
+}
 
 public class ProcedureMain : GameProcedure
 {
@@ -17,14 +37,16 @@ public class ProcedureMain : GameProcedure
     {
         base.OnInit(procedureOwner);
 
-        //Log.Debug("procedure preload init");
+        Log.Debug("procedure main init");
+
+        GameEntry.Event.Subscribe(EnterGameEventArgs.EventId, EnterGameHandler);
     }
 
     protected override void OnEnter(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnEnter(procedureOwner);
 
-        //Log.Debug("procedure preload enter");
+        Log.Debug("procedure main enter");
 
         //Open(UIFormId.Loading);
     }
@@ -56,8 +78,12 @@ public class ProcedureMain : GameProcedure
         //Log.Debug("procedure preload destroy");
     }
 
-    public void EnterGame()
+    void EnterGameHandler(object sender, GameEventArgs e)
     {
-        targetScene = 1;
+        EnterGameEventArgs ne = (EnterGameEventArgs)e;
+        if (ne != null)
+        {
+            targetScene = ne.Level;
+        }
     }
 }

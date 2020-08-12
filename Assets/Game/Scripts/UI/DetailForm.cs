@@ -3,8 +3,7 @@
 // 作者：Lufy 
 // 创建时间：2020-08-07 15:19:04
 // ========================================================
-using LF;
-using LF.UI;
+
 using UnityEngine.UI;
 
 public class DetailForm : GameUILogic
@@ -20,12 +19,7 @@ public class DetailForm : GameUILogic
 
         fightBtn.onClick.AddListener(() =>
         {
-            ProcedureMain game = GameEntry.Procedure.CurrentProcedure as ProcedureMain;
-            if (game != null)
-            {
-                Close();
-                game.EnterGame();
-            }
+            GameEntry.Event.Fire(this, EnterGameEventArgs.Create(1));
         });
 
         backBtn.onClick.AddListener(() =>
