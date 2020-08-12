@@ -19,6 +19,14 @@ namespace LF.Fsm
         }
 
         /// <summary>
+        /// 获取有限状态机完整名称。
+        /// </summary>
+        string FullName
+        {
+            get;
+        }
+
+        /// <summary>
         /// 获取有限状态机持有者类型。
         /// </summary>
         Type OwnerType
@@ -46,6 +54,22 @@ namespace LF.Fsm
         /// 获取有限状态机是否被销毁。
         /// </summary>
         bool IsDestroyed
+        {
+            get;
+        }
+
+        /// <summary>
+        /// 获取当前有限状态机状态名称。
+        /// </summary>
+        string CurrentStateName
+        {
+            get;
+        }
+
+        /// <summary>
+        /// 获取当前有限状态机状态持续时间。
+        /// </summary>
+        float CurrentStateTime
         {
             get;
         }

@@ -19,7 +19,17 @@ namespace LF.UI
         private readonly Dictionary<string, UIFormLogic> m_cachedForms = new Dictionary<string, UIFormLogic>();
         private readonly LinkedList<UIFormLogic> m_formList = new LinkedList<UIFormLogic>();
 
-        Transform rootTrans = null;
+        [SerializeField]
+        [HideInInspector]
+        private Transform m_InstanceRoot = null;
+
+        public int Count
+        {
+            get
+            {
+                return m_cachedForms.Count;
+            }
+        }
 
         /// <summary>
         /// 获取界面。
@@ -69,7 +79,7 @@ namespace LF.UI
                 GameObject prefab = Resources.Load<GameObject>(uiFormAssetName);
                 GameObject obj = GameObject.Instantiate(prefab);
                 obj.name = obj.name.Substring(0, obj.name.Length - 7);
-                obj.transform.SetParent(rootTrans);
+                obj.transform.SetParent(m_InstanceRoot);
                 obj.transform.localPosition = Vector3.zero;
                 obj.transform.localScale = Vector3.one;
                 uiFormInstanceObject = obj.GetComponent<UIFormLogic>();
@@ -234,7 +244,14 @@ namespace LF.UI
         {
             base.Awake();
 
-            rootTrans = transform.Find("Root");
+            if (m_InstanceRoot == null)
+            {
+                m_InstanceRoot = (new GameObject("UI Form Instances")).transform;
+                m_InstanceRoot.SetParent(gameObject.transform);
+                m_InstanceRoot.localScale = Vector3.one;
+            }
+
+            m_InstanceRoot.gameObject.layer = LayerMask.NameToLayer("UI");
         }
 
         internal override void Shutdown()

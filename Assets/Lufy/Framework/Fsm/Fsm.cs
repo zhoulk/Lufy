@@ -10,11 +10,12 @@ namespace LF.Fsm
 {
     internal sealed class Fsm<T> : IFsm<T> where T : class
     {
-        private string m_name;
+        private string m_Name;
         private T m_Owner;
         private readonly Dictionary<Type, FsmState<T>> m_States;
         private readonly Dictionary<string, object> m_Datas;
         private FsmState<T> m_CurrentState;
+        private float m_CurrentStateTime;
         private bool m_IsDestroyed;
 
         /// <summary>
@@ -22,11 +23,12 @@ namespace LF.Fsm
         /// </summary>
         public Fsm()
         {
-            m_name = string.Empty;
+            m_Name = string.Empty;
             m_Owner = null;
             m_States = new Dictionary<Type, FsmState<T>>();
             m_Datas = new Dictionary<string, object>();
             m_CurrentState = null;
+            m_CurrentStateTime = 0;
             m_IsDestroyed = true;
         }
 
@@ -39,11 +41,22 @@ namespace LF.Fsm
         {
             get
             {
-                return m_name;
+                return m_Name;
             }
             set
             {
-                m_name = value ?? string.Empty;
+                m_Name = value ?? string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// 获取有限状态机完整名称。
+        /// </summary>
+        public string FullName
+        {
+            get
+            {
+                return Utility.Text.Format("{0}.{1}", OwnerType.FullName, m_Name);
             }
         }
 
@@ -74,6 +87,28 @@ namespace LF.Fsm
         public bool IsRunning => m_CurrentState != null;
 
         public bool IsDestroyed => m_IsDestroyed;
+
+        /// <summary>
+        /// 获取当前有限状态机状态名称。
+        /// </summary>
+        public string CurrentStateName
+        {
+            get
+            {
+                return m_CurrentState != null ? m_CurrentState.GetType().FullName : null;
+            }
+        }
+
+        /// <summary>
+        /// 获取当前有限状态机状态持续时间。
+        /// </summary>
+        public float CurrentStateTime
+        {
+            get
+            {
+                return m_CurrentStateTime;
+            }
+        }
 
         public FsmState<T>[] GetAllStates()
         {
@@ -171,6 +206,7 @@ namespace LF.Fsm
                 throw new LufyException(Utility.Text.Format("FSM '{0}.{1}' can not start state '{2}' which is not exist.", typeof(T).FullName, Name, typeof(TState).FullName));
             }
 
+            m_CurrentStateTime = 0;
             m_CurrentState = state;
             m_CurrentState.OnEnter(this);
         }
@@ -198,8 +234,33 @@ namespace LF.Fsm
                 throw new LufyException(Utility.Text.Format("FSM '{0}.{1}' can not start state '{2}' which is not exist.", typeof(T).FullName, Name, stateType.FullName));
             }
 
+            m_CurrentStateTime = 0;
             m_CurrentState = state;
             m_CurrentState.OnEnter(this);
+        }
+
+        /// <summary>
+        /// 清理有限状态机。
+        /// </summary>
+        public void Clear()
+        {
+            if (m_CurrentState != null)
+            {
+                m_CurrentState.OnLeave(this, true);
+            }
+
+            foreach (KeyValuePair<Type, FsmState<T>> state in m_States)
+            {
+                state.Value.OnDestroy(this);
+            }
+
+            Name = null;
+            m_Owner = null;
+            m_States.Clear();
+            m_Datas.Clear();
+            m_CurrentState = null;
+            m_CurrentStateTime = 0f;
+            m_IsDestroyed = true;
         }
 
         /// <summary>
@@ -300,6 +361,7 @@ namespace LF.Fsm
                 return;
             }
 
+            m_CurrentStateTime += elapseSeconds;
             m_CurrentState.OnUpdate(this, elapseSeconds, realElapseSeconds);
         }
 
@@ -338,6 +400,7 @@ namespace LF.Fsm
             }
 
             m_CurrentState.OnLeave(this, false);
+            m_CurrentStateTime = 0;
             m_CurrentState = state;
             m_CurrentState.OnEnter(this);
         }

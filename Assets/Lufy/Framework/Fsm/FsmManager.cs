@@ -19,6 +19,17 @@ namespace LF.Fsm
         private readonly Dictionary<string, IFsm> m_Fsms = new Dictionary<string, IFsm>();
 
         /// <summary>
+        /// 获取有限状态机数量。
+        /// </summary>
+        public int Count
+        {
+            get
+            {
+                return m_Fsms.Count;
+            }
+        }
+
+        /// <summary>
         /// 检查是否存在有限状态机。
         /// </summary>
         /// <typeparam name="T">有限状态机持有者类型。</typeparam>
