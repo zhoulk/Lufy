@@ -43,9 +43,10 @@ public class Bullet : ObjectBase
     {
         base.OnUnspawn();
 
-        if (Target != null)
+        GameObject obj = Target as GameObject;
+
+        if (obj != null)
         {
-            GameObject obj = Target as GameObject;
             obj.SetActive(false);
         }
     }

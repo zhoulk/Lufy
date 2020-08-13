@@ -13,6 +13,7 @@ using LF.UINavi;
 using UnityEngine;
 using LF.Pool;
 using LF.Event;
+using LF.Sound;
 
 public class GameEntry : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class GameEntry : MonoBehaviour
     static TimerManager m_Timer;
     static ObjectPoolManager m_ObjectPool;
     static EventManager m_Event;
+    static SoundManager m_Sound;
 
     private void Start()
     {
@@ -102,6 +104,15 @@ public class GameEntry : MonoBehaviour
         set { }
     }
 
+    public static SoundManager Sound
+    {
+        get
+        {
+            return m_Sound;
+        }
+        set { }
+    }
+
     void initManagers()
     {
         m_Base = Lufy.GetManager<BaseManager>();
@@ -115,6 +126,8 @@ public class GameEntry : MonoBehaviour
 
         m_ObjectPool = Lufy.GetManager<ObjectPoolManager>();
         m_Event = Lufy.GetManager<EventManager>();
+
+        m_Sound = Lufy.GetManager<SoundManager>();
     }
 }
 

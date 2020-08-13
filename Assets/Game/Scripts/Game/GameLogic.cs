@@ -44,6 +44,8 @@ public class GameLogic : MonoBehaviour
         TestManager.Instance.Step1();
 
         GameEntry.Event.Subscribe(BulletReleaseEventArgs.EventId, OnBulletReleaseHandler);
+
+        GameEntry.Sound.PlayMusic(MusicId.bgm2);
     }
 
     // Update is called once per frame
@@ -64,6 +66,10 @@ public class GameLogic : MonoBehaviour
             GameObject obj = bullet.Target as GameObject;
             obj.transform.SetParent(bgTrans);
             obj.transform.position = mousePositionInWorld;
+
+            GameEntry.Sound.PlaySound(SoundId.UI_click);
+
+            GameEntry.Sound.ResumeMusic();
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -76,6 +82,9 @@ public class GameLogic : MonoBehaviour
                 BulletHelper.Instance.UnSpawn(bullet);
                 bullets.RemoveAt(0);
             }
+
+            GameEntry.Sound.PauseMusic();
+            GameEntry.Sound.MuteSound(true);
         }
     }
 
