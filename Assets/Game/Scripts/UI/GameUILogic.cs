@@ -37,37 +37,37 @@ public class GameUILogic : UIFormLogic
         obj.transform.Find("Selected1P").gameObject.SetActive(false);
     }
 
-    protected override void OnReveal()
+    protected internal override void OnReveal()
     {
         base.OnReveal();
         resumeUINavi();
     }
 
-    protected override void OnCover()
+    protected internal override void OnCover()
     {
         base.OnCover();
         pauseUINavi();
     }
 
-    protected override void OnResume()
+    protected internal override void OnResume()
     {
         base.OnResume();
         resumeUINavi();
     }
 
-    protected override void OnPause()
+    protected internal override void OnPause()
     {
         base.OnPause();
         pauseUINavi();
     }
 
-    protected override void OnOpen(object userData)
+    protected internal override void OnOpen(object userData)
     {
         base.OnOpen(userData);
         resumeUINavi();
     }
 
-    protected override void OnClose(object userData)
+    protected internal override void OnClose(object userData)
     {
         base.OnClose(userData);
         pauseUINavi();

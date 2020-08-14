@@ -262,7 +262,10 @@ namespace LF.UI
 
         internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
-
+            foreach (KeyValuePair<string, UIFormLogic> uiForm in m_cachedForms)
+            {
+                uiForm.Value.OnUpdate(elapseSeconds, realElapseSeconds);
+            }
         }
     }
 }

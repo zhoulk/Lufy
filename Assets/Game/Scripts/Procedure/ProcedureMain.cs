@@ -33,7 +33,7 @@ public class ProcedureMain : GameProcedure
 {
     int targetScene = -1;
 
-    protected override void OnInit(IFsm<ProcedureManager> procedureOwner)
+    protected internal override void OnInit(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnInit(procedureOwner);
 
@@ -42,7 +42,7 @@ public class ProcedureMain : GameProcedure
         GameEntry.Event.Subscribe(EnterGameEventArgs.EventId, EnterGameHandler);
     }
 
-    protected override void OnEnter(IFsm<ProcedureManager> procedureOwner)
+    protected internal override void OnEnter(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnEnter(procedureOwner);
 
@@ -58,27 +58,27 @@ public class ProcedureMain : GameProcedure
         }
     }
 
-    protected override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)
+    protected internal override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)
     {
         base.OnLeave(procedureOwner, isShutdown);
 
         //Log.Debug("procedure preload leave");
     }
 
-    protected override void OnUpdate(IFsm<ProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
+    protected internal override void OnUpdate(IFsm<ProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
         //Log.Debug("procedure preload update " + elapseSeconds + "  " + realElapseSeconds);
         if(targetScene != -1)
         {
-            SceneManager.LoadScene("Game", LoadSceneMode.Additive);
+            SceneManager.LoadScene("BasketBall", LoadSceneMode.Additive);
             ChangeState<ProcedureGame>(procedureOwner);
             targetScene = -1;
         }
     }
 
-    protected override void OnDestroy(IFsm<ProcedureManager> procedureOwner)
+    protected internal override void OnDestroy(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnDestroy(procedureOwner);
 

@@ -16,7 +16,7 @@ public class Bullet : ObjectBase
         return bulletInstanceObject;
     }
 
-    protected override void Release(bool isShutdown)
+    protected internal override void Release(bool isShutdown)
     {
         Log.Debug("bullet release");
 
@@ -28,7 +28,7 @@ public class Bullet : ObjectBase
         }
     }
 
-    protected override void OnSpawn()
+    protected internal override void OnSpawn()
     {
         base.OnSpawn();
 
@@ -39,7 +39,7 @@ public class Bullet : ObjectBase
         }
     }
 
-    protected override void OnUnspawn()
+    protected internal override void OnUnspawn()
     {
         base.OnUnspawn();
 

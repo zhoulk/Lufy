@@ -12,7 +12,7 @@ public class ShopForm : GameUILogic
 {
     public Button backBtn;
 
-    protected override void OnInit(object userData)
+    protected internal override void OnInit(object userData)
     {
         base.OnInit(userData);
 
@@ -30,56 +30,56 @@ public class ShopForm : GameUILogic
         });
     }
 
-    protected override void OnOpen(object userData)
+    protected internal override void OnOpen(object userData)
     {
         base.OnOpen(userData);
 
         //Log.Debug("shop open");
     }
 
-    protected override void OnClose(object userData)
+    protected internal override void OnClose(object userData)
     {
         base.OnClose(userData);
 
         //Log.Debug("shop close");
     }
 
-    protected override void OnResume()
+    protected internal override void OnResume()
     {
         base.OnResume();
 
         //Log.Debug("shop resume");
     }
 
-    protected override void OnPause()
+    protected internal override void OnPause()
     {
         base.OnPause();
 
         //Log.Debug("shop pause");
     }
 
-    protected override void OnReveal()
+    protected internal override void OnReveal()
     {
         base.OnReveal();
 
         //Log.Debug("shop reveal");
     }
 
-    protected override void OnRecycle()
+    protected internal override void OnRecycle()
     {
         base.OnRecycle();
 
         //Log.Debug("shop recycle");
     }
 
-    protected override void OnCover()
+    protected internal override void OnCover()
     {
         base.OnCover();
 
         //Log.Debug("shop cover");
     }
 
-    protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
+    protected internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 

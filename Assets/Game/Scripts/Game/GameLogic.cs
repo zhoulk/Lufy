@@ -6,6 +6,8 @@
 using LF;
 using LF.Event;
 using LF.Pool;
+using LT;
+using LT.Net;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -53,38 +55,44 @@ public class GameLogic : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 mousePositionInWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePositionInWorld.z = -1;
+            //Vector3 mousePositionInWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //mousePositionInWorld.z = -1;
 
-            Log.Debug("click {0}", mousePositionInWorld);
+            //Log.Debug("click {0}", mousePositionInWorld);
 
-            Bullet bullet = BulletHelper.Instance.Spawn();
-            bullets.Add(bullet);
+            //Bullet bullet = BulletHelper.Instance.Spawn();
+            //bullets.Add(bullet);
 
-            Debug.Log(bullet);
+            //Debug.Log(bullet);
 
-            GameObject obj = bullet.Target as GameObject;
-            obj.transform.SetParent(bgTrans);
-            obj.transform.position = mousePositionInWorld;
+            //GameObject obj = bullet.Target as GameObject;
+            //obj.transform.SetParent(bgTrans);
+            //obj.transform.position = mousePositionInWorld;
 
-            GameEntry.Sound.PlaySound(SoundId.UI_click);
+            //GameEntry.Sound.PlaySound(SoundId.UI_click);
 
-            GameEntry.Sound.ResumeMusic();
+            //GameEntry.Sound.ResumeMusic();
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            //IMessage msg = MessagesFactory.BasketBall(1, 10, 90);
+            //UDPManager.Instance.Send(msg);
         }
 
         if (Input.GetMouseButtonDown(1))
         {
-            Log.Debug("click right");
+            //Log.Debug("click right");
 
-            if(bullets.Count > 0)
-            {
-                Bullet bullet = bullets[0];
-                BulletHelper.Instance.UnSpawn(bullet);
-                bullets.RemoveAt(0);
-            }
+            //if(bullets.Count > 0)
+            //{
+            //    Bullet bullet = bullets[0];
+            //    BulletHelper.Instance.UnSpawn(bullet);
+            //    bullets.RemoveAt(0);
+            //}
 
-            GameEntry.Sound.PauseMusic();
-            GameEntry.Sound.MuteSound(true);
+            //GameEntry.Sound.PauseMusic();
+            //GameEntry.Sound.MuteSound(true);
         }
     }
 

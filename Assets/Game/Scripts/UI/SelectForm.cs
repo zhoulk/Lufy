@@ -12,7 +12,7 @@ public class SelectForm : GameUILogic
     public Button P1Btn;
     public Button P2Btn;
 
-    protected override void OnInit(object userData)
+    protected internal override void OnInit(object userData)
     {
         base.OnInit(userData);
 
@@ -29,56 +29,56 @@ public class SelectForm : GameUILogic
         });
     }
 
-    protected override void OnOpen(object userData)
+    protected internal override void OnOpen(object userData)
     {
         base.OnOpen(userData);
 
         //Log.Debug("select open");
     }
 
-    protected override void OnClose(object userData)
+    protected internal override void OnClose(object userData)
     {
         base.OnClose(userData);
 
         //Log.Debug("select close");
     }
 
-    protected override void OnResume()
+    protected internal override void OnResume()
     {
         base.OnResume();
 
         //Log.Debug("select resume");
     }
 
-    protected override void OnPause()
+    protected internal override void OnPause()
     {
         base.OnPause();
 
         //Log.Debug("select pause");
     }
 
-    protected override void OnReveal()
+    protected internal override void OnReveal()
     {
         base.OnReveal();
 
         //Log.Debug("select reveal");
     }
 
-    protected override void OnRecycle()
+    protected internal override void OnRecycle()
     {
         base.OnRecycle();
 
         //Log.Debug("select recycle");
     }
 
-    protected override void OnCover()
+    protected internal override void OnCover()
     {
         base.OnCover();
 
         //Log.Debug("select cover");
     }
 
-    protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
+    protected internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 

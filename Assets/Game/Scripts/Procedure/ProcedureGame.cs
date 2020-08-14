@@ -33,7 +33,7 @@ public class ProcedureGame : GameProcedure
 {
     bool exitGame = false;
 
-    protected override void OnInit(IFsm<ProcedureManager> procedureOwner)
+    protected internal override void OnInit(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnInit(procedureOwner);
 
@@ -42,7 +42,7 @@ public class ProcedureGame : GameProcedure
         GameEntry.Event.Subscribe(ExitGameEventArgs.EventId, ExitGameHandler);
     }
 
-    protected override void OnEnter(IFsm<ProcedureManager> procedureOwner)
+    protected internal override void OnEnter(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnEnter(procedureOwner);
 
@@ -51,14 +51,14 @@ public class ProcedureGame : GameProcedure
         Open(UIFormId.Fight);
     }
 
-    protected override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)
+    protected internal override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)
     {
         base.OnLeave(procedureOwner, isShutdown);
 
         //Log.Debug("procedure preload leave");
     }
 
-    protected override void OnUpdate(IFsm<ProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
+    protected internal override void OnUpdate(IFsm<ProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
@@ -72,7 +72,7 @@ public class ProcedureGame : GameProcedure
         }
     }
 
-    protected override void OnDestroy(IFsm<ProcedureManager> procedureOwner)
+    protected internal override void OnDestroy(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnDestroy(procedureOwner);
 

@@ -11,7 +11,7 @@ public class DetailForm : GameUILogic
     public Button fightBtn;
     public Button backBtn;
 
-    protected override void OnInit(object userData)
+    protected internal override void OnInit(object userData)
     {
         base.OnInit(userData);
 
@@ -28,56 +28,56 @@ public class DetailForm : GameUILogic
         });
     }
 
-    protected override void OnOpen(object userData)
+    protected internal override void OnOpen(object userData)
     {
         base.OnOpen(userData);
 
         //Log.Debug("detail open");
     }
 
-    protected override void OnClose(object userData)
+    protected internal override void OnClose(object userData)
     {
         base.OnClose(userData);
 
         //Log.Debug("detail close");
     }
 
-    protected override void OnResume()
+    protected internal override void OnResume()
     {
         base.OnResume();
 
         //Log.Debug("detail resume");
     }
 
-    protected override void OnPause()
+    protected internal override void OnPause()
     {
         base.OnPause();
 
         //Log.Debug("detail pause");
     }
 
-    protected override void OnReveal()
+    protected internal override void OnReveal()
     {
         base.OnReveal();
 
         //Log.Debug("detail reveal");
     }
 
-    protected override void OnRecycle()
+    protected internal override void OnRecycle()
     {
         base.OnRecycle();
 
         //Log.Debug("detail recycle");
     }
 
-    protected override void OnCover()
+    protected internal override void OnCover()
     {
         base.OnCover();
 
         //Log.Debug("detail cover");
     }
 
-    protected override void OnUpdate(float elapseSeconds, float realElapseSeconds)
+    protected internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 

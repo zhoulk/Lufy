@@ -10,14 +10,14 @@ using LF.Procedure;
 
 public class ProcedurePreload : GameProcedure
 {
-    protected override void OnInit(IFsm<ProcedureManager> procedureOwner)
+    protected internal override void OnInit(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnInit(procedureOwner);
 
         Log.Debug("procedure preload init");
     }
 
-    protected override void OnEnter(IFsm<ProcedureManager> procedureOwner)
+    protected internal override void OnEnter(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnEnter(procedureOwner);
 
@@ -27,21 +27,21 @@ public class ProcedurePreload : GameProcedure
         ChangeState<ProcedureMain>(procedureOwner);
     }
 
-    protected override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)
+    protected internal override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)
     {
         base.OnLeave(procedureOwner, isShutdown);
 
         Log.Debug("procedure preload leave");
     }
 
-    protected override void OnUpdate(IFsm<ProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
+    protected internal override void OnUpdate(IFsm<ProcedureManager> procedureOwner, float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
         //Log.Debug("procedure preload update " + elapseSeconds + "  " + realElapseSeconds);
     }
 
-    protected override void OnDestroy(IFsm<ProcedureManager> procedureOwner)
+    protected internal override void OnDestroy(IFsm<ProcedureManager> procedureOwner)
     {
         base.OnDestroy(procedureOwner);
 

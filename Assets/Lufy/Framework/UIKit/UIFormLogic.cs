@@ -187,7 +187,7 @@ namespace LF.UI
         /// 设置界面的可见性。
         /// </summary>
         /// <param name="visible">界面的可见性。</param>
-        protected virtual void InternalSetVisible(bool visible)
+        protected void InternalSetVisible(bool visible)
         {
             gameObject.SetActive(visible);
             m_CanvasGroup.alpha = visible ? 1 : 0;
