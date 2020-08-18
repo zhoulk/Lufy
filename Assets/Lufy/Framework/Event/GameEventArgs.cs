@@ -16,7 +16,7 @@ namespace LF.Event
             get;
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             
         }

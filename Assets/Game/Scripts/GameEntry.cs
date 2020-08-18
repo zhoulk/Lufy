@@ -14,6 +14,7 @@ using UnityEngine;
 using LF.Pool;
 using LF.Event;
 using LF.Sound;
+using LF.Scene;
 
 public class GameEntry : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class GameEntry : MonoBehaviour
     static ObjectPoolManager m_ObjectPool;
     static EventManager m_Event;
     static SoundManager m_Sound;
+    static SceneManager m_Scene;
 
     private void Start()
     {
@@ -113,6 +115,15 @@ public class GameEntry : MonoBehaviour
         set { }
     }
 
+    public static SceneManager Scene
+    {
+        get
+        {
+            return m_Scene;
+        }
+        set { }
+    }
+
     void initManagers()
     {
         m_Base = Lufy.GetManager<BaseManager>();
@@ -128,6 +139,7 @@ public class GameEntry : MonoBehaviour
         m_Event = Lufy.GetManager<EventManager>();
 
         m_Sound = Lufy.GetManager<SoundManager>();
+        m_Scene = Lufy.GetManager<SceneManager>();
     }
 }
 

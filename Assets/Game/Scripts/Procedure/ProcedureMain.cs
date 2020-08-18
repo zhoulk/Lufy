@@ -8,6 +8,7 @@ using LF;
 using LF.Event;
 using LF.Fsm;
 using LF.Procedure;
+using LF.Scene;
 using UnityEngine.SceneManagement;
 
 public class EnterGameEventArgs : GameEventArgs
@@ -40,6 +41,8 @@ public class ProcedureMain : GameProcedure
         Log.Debug("procedure main init");
 
         GameEntry.Event.Subscribe(EnterGameEventArgs.EventId, EnterGameHandler);
+        GameEntry.Event.Subscribe(LoadSceneSuccessEventArgs.EventId, LoadSceneSuccessHandler);
+        GameEntry.Event.Subscribe(LoadSceneUpdateEventArgs.EventId, LoadSceneUpdateHandler);
     }
 
     protected internal override void OnEnter(IFsm<ProcedureManager> procedureOwner)
@@ -73,9 +76,12 @@ public class ProcedureMain : GameProcedure
         if(targetScene != -1)
         {
             //SceneManager.LoadScene("BasketBall", LoadSceneMode.Additive);
-            SceneManager.LoadScene("Game", LoadSceneMode.Additive);
-            ChangeState<ProcedureGame>(procedureOwner);
+            //SceneManager.LoadScene("Game", LoadSceneMode.Additive);
             targetScene = -1;
+
+            GameEntry.Scene.LoadScene(SceneId.Game);
+
+            ChangeState<ProcedureGame>(procedureOwner);
         }
     }
 
@@ -93,5 +99,17 @@ public class ProcedureMain : GameProcedure
         {
             targetScene = ne.Level;
         }
+    }
+
+    void LoadSceneSuccessHandler(object sender, GameEventArgs e)
+    {
+        LoadSceneSuccessEventArgs ne = e as LoadSceneSuccessEventArgs;
+        Log.Debug("load scene {0} complete", ne.SceneAssetName);
+    }
+
+    void LoadSceneUpdateHandler(object sender, GameEventArgs e)
+    {
+        LoadSceneUpdateEventArgs ne = e as LoadSceneUpdateEventArgs;
+        Log.Debug("load scene progress {0}", ne.Progress);
     }
 }
