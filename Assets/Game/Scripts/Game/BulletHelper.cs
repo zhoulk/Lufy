@@ -17,16 +17,16 @@ public class BulletHelper : Singleton<BulletHelper>
 
     public override void OnSingletonInit()
     {
-        m_BulletPool = GameEntry.ObjectPool.CreateSingleSpawnObjectPool<Bullet>("bullet", 10, 3);
+        m_BulletPool = GameEntry.ObjectPool.CreateSingleSpawnObjectPool<Bullet>("bullet", 10, 100);
         m_prefab = Resources.Load<GameObject>("bullet/bullet");
 
-        GameEntry.Event.Subscribe(BulletReleaseEventArgs.EventId, OnBulletReleaseHandler);
+        //GameEntry.Event.Subscribe(BulletReleaseEventArgs.EventId, OnBulletReleaseHandler);
     }
 
     public Bullet Spawn()
     {
         Bullet bullet = m_BulletPool.Spawn();
-        if(bullet == null)
+        if (bullet == null)
         {
             string name = "bullet" + m_serial++;
             GameObject obj = GameObject.Instantiate(m_prefab);
@@ -42,12 +42,12 @@ public class BulletHelper : Singleton<BulletHelper>
         m_BulletPool.Unspawn(bullet);
     }
 
-    void OnBulletReleaseHandler(object sender, GameEventArgs args)
-    {
-        BulletReleaseEventArgs ne = args as BulletReleaseEventArgs;
-        if (ne != null)
-        {
-            Log.Debug("helper release bullet {0}", ne.bullet.Name);
-        }
-    }
+    //void OnBulletReleaseHandler(object sender, GameEventArgs args)
+    //{
+    //    BulletReleaseEventArgs ne = args as BulletReleaseEventArgs;
+    //    if (ne != null)
+    //    {
+    //        Log.Debug("helper release bullet {0}", ne.bullet.Name);
+    //    }
+    //}
 }

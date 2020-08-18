@@ -239,12 +239,15 @@ namespace LF.Pool
 
                 m_AutoReleaseTime = 0f;
                 GetCanReleaseObjects(m_CachedCanReleaseObjects);
+                Log.Debug("m_CachedCanReleaseObjects.size {0} ", m_CachedCanReleaseObjects.Count);
+
                 List<T> toReleaseObjects = releaseObjectFilterCallback(m_CachedCanReleaseObjects, toReleaseCount, expireTime);
                 if (toReleaseObjects == null || toReleaseObjects.Count <= 0)
                 {
                     return;
                 }
 
+                Log.Debug("toReleaseObjects.size {0} ", toReleaseObjects.Count);
                 foreach (T toReleaseObject in toReleaseObjects)
                 {
                     ReleaseObject(toReleaseObject);
@@ -305,17 +308,20 @@ namespace LF.Pool
                 {
                     foreach (Object<T> internalObject in objectRange)
                     {
+                        Log.Debug("spawn {0} {1} {2}", name, m_AllowMultiSpawn, internalObject.IsInUse);
+
                         if (m_AllowMultiSpawn || !internalObject.IsInUse)
                         {
                             return internalObject.Spawn();
                         }
                     }
                 }
-
-                foreach(var kv in m_Objects)
+                foreach (var kv in m_Objects)
                 {
                     Log.Debug("{0} {1}", kv.Key, kv.Value);
                 }
+
+                Log.Debug("spawn {0}", name);
 
                 return null;
             }
@@ -357,6 +363,7 @@ namespace LF.Pool
                 foreach (KeyValuePair<object, Object<T>> objectInMap in m_ObjectMap)
                 {
                     objectInMap.Value.Release(true);
+                    //ReferencePool.Release(objectInMap.Value);
                 }
 
                 m_Objects.Clear();
@@ -411,12 +418,15 @@ namespace LF.Pool
                     objectRange.Remove(internalObject);
                 }
 
-                if (objectRange.Count <= 0)
-                {
+                //if (objectRange.Count <= 0)
+                //{
                     m_ObjectMap.Remove(obj.Target);
-                }
+                //}
+
+                Log.Debug("m_ObjectMap.Size {0} ", m_ObjectMap.Count);
 
                 internalObject.Release(false);
+                //ReferencePool.Release(internalObject);
             }
 
             private void GetCanReleaseObjects(List<T> results)

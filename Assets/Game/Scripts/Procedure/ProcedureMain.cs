@@ -72,7 +72,8 @@ public class ProcedureMain : GameProcedure
         //Log.Debug("procedure preload update " + elapseSeconds + "  " + realElapseSeconds);
         if(targetScene != -1)
         {
-            SceneManager.LoadScene("BasketBall", LoadSceneMode.Additive);
+            //SceneManager.LoadScene("BasketBall", LoadSceneMode.Additive);
+            SceneManager.LoadScene("Game", LoadSceneMode.Additive);
             ChangeState<ProcedureGame>(procedureOwner);
             targetScene = -1;
         }

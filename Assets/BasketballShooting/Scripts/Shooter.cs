@@ -41,6 +41,7 @@ public class Shooter : MonoBehaviour {
 	float startTime;
 
 	Vector2 touchPos;
+    Vector2 startTouchPos;
 	
 	enum ShotState {
 		Charging,					//before shot (rolling)
@@ -53,7 +54,7 @@ public class Shooter : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        GameEntry.Event.Subscribe(BasketBallEventArgs.EventId, OnBasketBallHandler);
+        //GameEntry.Event.Subscribe(BasketBallEventArgs.EventId, OnBasketBallHandler);
 
         touchPos.x = -1.0f;
 	}
@@ -62,28 +63,29 @@ public class Shooter : MonoBehaviour {
 	void Update () {
         Debug.Log(state);
 
-		if (state == ShotState.Charging) {
-			ChargeBall();
-			CheckTrigger();
+        if (state == ShotState.Charging)
+        {
+            ChargeBall();
+            CheckTrigger();
 
-		} else if (state == ShotState.Ready) {
-			CheckTrigger();
-
-		} else if (state == ShotState.DirectionAndPower) {
-			CheckShot();
-		}
-	}
-
-
+        }
+        else if (state == ShotState.Ready)
+        {
+            CheckTrigger();
+        }
+        else if (state == ShotState.DirectionAndPower)
+        {
+            CheckShot();
+        }
+    }
 
 	void FixedUpdate () {
-		if (state != ShotState.Charging) {
-			ballRigidbody.velocity = Vector3.zero;
-			ballRigidbody.angularVelocity = Vector3.zero;
-		}
-	}
-
-
+        if (state != ShotState.Charging)
+        {
+            ballRigidbody.velocity = Vector3.zero;
+            ballRigidbody.angularVelocity = Vector3.zero;
+        }
+    }
 	
 	void ChargeBall () {
 		if (objBall == null) {
@@ -119,6 +121,7 @@ public class Shooter : MonoBehaviour {
 					if (sb != null && !sb.isActive) {
 						sb.ChangeActive();
 						touchPos = Input.mousePosition;
+                        startTouchPos = Input.mousePosition;
 						shotPower = 0.0f;
 					}
 				}
@@ -154,36 +157,53 @@ public class Shooter : MonoBehaviour {
 
 	void ShootBall (float elapseTime) {
 
-		if (elapseTime < shotTimeMin) {
-			shotPower = shotPowerMax;
-		} else if (shotTimeMax < elapseTime) {
-			shotPower = shotPowerMin;
-		} else {
-			float tmin100 = shotTimeMin * 10000.0f;
-			float tmax100 = shotTimeMax * 10000.0f;
-			float ep100 = elapseTime * 10000.0f;
-			float rate = (ep100 - tmin100) / (tmax100 - tmin100);
-			shotPower = shotPowerMax - ((shotPowerMax - shotPowerMin) * rate);
-		}
+        //if (elapseTime < shotTimeMin)
+        //{
+        //    shotPower = shotPowerMax;
+        //}
+        //else if (shotTimeMax < elapseTime)
+        //{
+        //    shotPower = shotPowerMin;
+        //}
+        //else
+        //{
+        //    float tmin100 = shotTimeMin * 10000.0f;
+        //    float tmax100 = shotTimeMax * 10000.0f;
+        //    float ep100 = elapseTime * 10000.0f;
+        //    float rate = (ep100 - tmin100) / (tmax100 - tmin100);
+        //    shotPower = shotPowerMax - ((shotPowerMax - shotPowerMin) * rate);
+        //}
 
-		Vector3 screenPoint = Input.mousePosition;
+        float len = ((Vector2)Input.mousePosition - startTouchPos).magnitude;
+        Debug.Log(len + " " + Input.mousePosition + "  " + startTouchPos);
+        float rate = len / 750;
+        shotPower = shotPowerMin + ((shotPowerMax - shotPowerMin) * rate);
+
+        Vector3 screenPoint = Input.mousePosition;
 		screenPoint.z = targetZ;
 		Vector3 worldPoint = cameraForShooter.ScreenToWorldPoint (screenPoint);
 
 		worldPoint.y += (offsetY / shotPower);
 
-		direction = (worldPoint - shotPoint.transform.position).normalized;
+        //float tmax100 = shotTimeMax * 10000.0f;
+        //float ep100 = elapseTime * 10000.0f;
+        //rate = ep100 / tmax100;
+        //worldPoint.y += (offsetY / 5) * rate;
 
-        //ballRigidbody.velocity = direction * shotPower;
-        //ballRigidbody.AddTorque(-shotPoint.transform.right * torque);
+        direction = (worldPoint - shotPoint.transform.position).normalized;
+
+        Debug.Log(direction + " " + worldPoint + "  " + shotPoint.transform.position + "  " + rate);
+
+        ballRigidbody.velocity = direction * shotPower;
+        ballRigidbody.AddTorque(-shotPoint.transform.right * torque);
 
         Vector3 velocity = direction * shotPower;
         Vector3 _torque = -shotPoint.transform.right * torque;
 
         Log.Debug("first {0} {1}", velocity, _torque);
 
-        //IMessage msg = MessagesFactory.BasketBall(1, velocity, _torque);
-        //UDPManager.Instance.Send(msg);
+        IMessage msg = MessagesFactory.BasketBall(1, velocity, _torque);
+        UDPManager.Instance.Send(msg);
     }
 
     void OnBasketBallHandler(object sender, GameEventArgs args)
@@ -195,6 +215,9 @@ public class Shooter : MonoBehaviour {
 
             ballRigidbody.velocity = ne.msg.Velocity;
             ballRigidbody.AddTorque(ne.msg.Torque);
+
+            state = ShotState.Charging;
+            objBall = null;
         }
     }
 }

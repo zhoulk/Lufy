@@ -10,6 +10,7 @@ using LT.Net;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LoadingForm : GameUILogic
 {
@@ -20,6 +21,8 @@ public class LoadingForm : GameUILogic
     public GameObject connectBtn;
     public GameObject disConnectBtn;
     public GameObject basketBallBtn;
+
+    public Text statusText;
 
     IPEndPoint targetEndPoint;
 
@@ -48,6 +51,7 @@ public class LoadingForm : GameUILogic
 
         GameEntry.UIEvent.AddOnClickHandler(searchBtn, (obj) =>
         {
+            statusText.text = "搜索中...";
             UdpRecv.Instance.Init(new IPEndPoint(IPAddress.Any, 7777));
             UdpRecv.Instance.ReceiveEventHandler = (bytes, endPoint) =>
             {
@@ -65,6 +69,10 @@ public class LoadingForm : GameUILogic
                     targetEndPoint = new IPEndPoint(IPAddress.Parse(ip), int.Parse(port));
 
                     Log.Debug("search finish");
+                    Loom.QueueOnMainThread(() =>
+                    {
+                        statusText.text = "搜索成功";
+                    });
                     UdpRecv.Instance.Dispose();
                 }
             };
@@ -72,6 +80,7 @@ public class LoadingForm : GameUILogic
 
         GameEntry.UIEvent.AddOnClickHandler(connectBtn, (obj) =>
         {
+            statusText.text = "";
             UDPManager.Instance.Connect(targetEndPoint);
         });
 

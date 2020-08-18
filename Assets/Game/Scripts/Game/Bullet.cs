@@ -11,8 +11,8 @@ public class Bullet : ObjectBase
 {
     public static Bullet Create(string name, object uiFormInstance)
     {
-        Bullet bulletInstanceObject = new Bullet();
-        bulletInstanceObject.Initialize(name, uiFormInstance);
+        Bullet bulletInstanceObject = ReferencePool.Acquire<Bullet>();
+        bulletInstanceObject.Initialize(uiFormInstance);
         return bulletInstanceObject;
     }
 
@@ -20,12 +20,16 @@ public class Bullet : ObjectBase
     {
         Log.Debug("bullet release");
 
-        GameEntry.Event.Fire(this, BulletReleaseEventArgs.Create(this));
+        BulletReleaseEventArgs args = BulletReleaseEventArgs.Create(this);
+        GameEntry.Event.Fire(this, args);
+        ReferencePool.Release(args);
 
         if(Target != null)
         {
             GameObject.Destroy(Target as GameObject);
         }
+
+        ReferencePool.Release(this);
     }
 
     protected internal override void OnSpawn()

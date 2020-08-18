@@ -1,4 +1,4 @@
-// ========================================================
+﻿// ========================================================
 // 描述：
 // 作者：Lufy 
 // 创建时间：2020-08-13 15:58:03
@@ -132,7 +132,7 @@ public class Loom : MonoBehaviour
     List<Action> _currentActions = new List<Action>();
 
     // Update is called once per frame  
-    void Update()
+    public void Update()
     {
         lock (_actions)
         {

@@ -6,7 +6,7 @@
 
 namespace LF.Event
 {
-    public abstract class GameEventArgs
+    public abstract class GameEventArgs : IReference
     {
         /// <summary>
         /// 获取类型编号。
@@ -14,6 +14,11 @@ namespace LF.Event
         public abstract int Id
         {
             get;
+        }
+
+        public void Clear()
+        {
+            
         }
     }
 }

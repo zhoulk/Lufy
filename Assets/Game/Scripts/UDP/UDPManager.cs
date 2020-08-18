@@ -44,5 +44,7 @@ public class UDPManager : MonoSingleton<UDPManager>
         {
             session.Update();
         }
+
+        Loom.Current.Update();
     }
 }

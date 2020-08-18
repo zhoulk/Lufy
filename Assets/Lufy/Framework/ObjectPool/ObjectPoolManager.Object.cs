@@ -14,7 +14,7 @@ namespace LF.Pool
         /// 池中对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        private sealed class Object<T> where T : ObjectBase
+        private sealed class Object<T> : IReference where T : ObjectBase
         {
             private T m_Object;
             private int m_SpawnCount;
@@ -111,7 +111,7 @@ namespace LF.Pool
                     throw new LufyException("Object is invalid.");
                 }
 
-                Object<T> internalObject = new Object<T>();
+                Object<T> internalObject = new Object<T>(); //ReferencePool.Acquire<Object<T>>();
                 internalObject.m_Object = obj;
                 internalObject.m_SpawnCount = spawned ? 1 : 0;
                 if (spawned)
@@ -173,6 +173,7 @@ namespace LF.Pool
             public void Release(bool isShutdown)
             {
                 m_Object.Release(isShutdown);
+                //ReferencePool.Release(m_Object);
             }
         }
     }

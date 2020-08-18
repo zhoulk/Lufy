@@ -11,7 +11,7 @@ namespace LF.Pool
     /// <summary>
     /// 池对象基类
     /// </summary>
-    public abstract class ObjectBase
+    public abstract class ObjectBase : IReference
     {
         private string m_Name;
         private object m_Target;
