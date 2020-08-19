@@ -101,6 +101,13 @@ public class LoadingForm : GameUILogic
             //IMessage msg = MessagesFactory.BasketBall(1, 10, 90);
             //UDPManager.Instance.Send(msg);
         });
+
+        string str = GameEntry.Setting.GetString("key", "abc");
+        Log.Debug(str);
+        GameEntry.Setting.SetString("key", "bcd");
+        GameEntry.Setting.Save();
+
+        Log.Debug("{0}", ES3.GetKeys());
     }
 
     protected internal override void OnOpen(object userData)

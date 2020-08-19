@@ -11,10 +11,13 @@ public class GoalPrefab : MonoBehaviour
 {
     int direct = 1;
     float speed = 0.4f;
+    float delay = 1f;
 
     public Transform goalArea;
 
     bool isPause = false;
+
+    float delayTimer = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -53,11 +56,23 @@ public class GoalPrefab : MonoBehaviour
         goalPos.x = pos.x;
         if (pos.x >= 3)
         {
-            direct = -1;
+            direct = 0;
+            delayTimer += Time.deltaTime;
+            if(delayTimer > delay)
+            {
+                delayTimer = 0;
+                direct = -1;
+            }
         }
         if (pos.x <= -3)
         {
-            direct = 1;
+            direct = 0;
+            delayTimer += Time.deltaTime;
+            if (delayTimer > delay)
+            {
+                delayTimer = 0;
+                direct = 1;
+            }
         }
         transform.position = pos;
         goalArea.position = goalPos;
