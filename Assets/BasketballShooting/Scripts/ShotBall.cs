@@ -17,4 +17,15 @@ public class ShotBall : MonoBehaviour {
 	public void ChangeActive () {
 		isActive = true;
 	}
+
+    public void DestroyDelay()
+    {
+        GameEntry.Timer.doOnce(5000, () =>
+        {
+            if(gameObject != null)
+            {
+                Destroy(gameObject);
+            }
+        });
+    }
 }

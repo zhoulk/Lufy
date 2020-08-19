@@ -12,10 +12,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using UnityEngine;
-using LT.Net;
+using LF.Net;
 using LF;
 
-namespace LT.GamepadServer
+namespace LF.GamepadServer
 {
     /// <summary>
     /// 手柄Server

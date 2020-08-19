@@ -13,7 +13,7 @@ using System.Net.NetworkInformation;
 
 using System.Runtime.InteropServices;
 
-namespace LT
+namespace LF
 {
     public static class NetworkHelper
     {

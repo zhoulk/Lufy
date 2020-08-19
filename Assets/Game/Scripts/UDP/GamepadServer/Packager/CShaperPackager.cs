@@ -8,7 +8,7 @@
 
 using UnityEngine;
 
-namespace LT.Net
+namespace LF.Net
 {
     public class CShaperPackager : IPackager
     {
@@ -19,7 +19,6 @@ namespace LT.Net
         MessageHeart heart;
         MessageConnect connect;
         MessageMsg msg;
-        MessageBasketBall basket;
 
         public CShaperPackager()
         {
@@ -30,7 +29,6 @@ namespace LT.Net
             heart = new MessageHeart();
             connect = new MessageConnect();
             msg = new MessageMsg();
-            basket = new MessageBasketBall();
         }
 
         public virtual IMessage Decode(byte[] bytes)
@@ -69,11 +67,6 @@ namespace LT.Net
                     msg.Clear();
                     msg.Decode(bytes, 0);
                     return msg;
-
-                case MessageType.BasketBall:
-                    basket.Clear();
-                    basket.Decode(bytes, 0);
-                    return basket;
             }
 
             return null;

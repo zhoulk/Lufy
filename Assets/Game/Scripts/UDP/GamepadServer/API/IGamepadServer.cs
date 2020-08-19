@@ -6,7 +6,7 @@
  * 
  * ------------------------------------------------------------------------------*/
 
-namespace LT.GamepadServer
+namespace LF.GamepadServer
 {
     /// <summary>
     /// 手柄Server接口

@@ -79,7 +79,7 @@ public class ProcedureMain : GameProcedure
             //SceneManager.LoadScene("Game", LoadSceneMode.Additive);
             targetScene = -1;
 
-            GameEntry.Scene.LoadScene(SceneId.Game);
+            GameEntry.Scene.LoadScene(SceneId.BasketBall);
 
             ChangeState<ProcedureGame>(procedureOwner);
         }

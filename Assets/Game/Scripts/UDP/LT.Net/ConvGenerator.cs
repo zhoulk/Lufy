@@ -8,7 +8,7 @@
 
 using System;
 
-namespace LT
+namespace LF
 {
     /// <summary>
     /// 32位唯一生成器

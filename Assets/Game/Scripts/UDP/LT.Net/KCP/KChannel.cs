@@ -14,7 +14,7 @@ using System.IO;
 using UnityEngine;
 using LT;
 
-namespace LT.Net
+namespace LF.Net
 {
     /// <summary>
     /// kcp信道

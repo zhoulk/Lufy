@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LT.Net
+namespace LF.Net
 {
     public class KCP
     {

@@ -3,27 +3,26 @@
 // 作者：Lufy 
 // 创建时间：2020-08-07 15:19:04
 // ========================================================
-using LF;
-using LF.UI;
-using UnityEngine.UI;
+using UnityEngine;
 
 public class SelectForm : GameUILogic
 {
-    public Button P1Btn;
-    public Button P2Btn;
+    public GameObject P1Btn;
+    public GameObject P2Btn;
 
     protected internal override void OnInit(object userData)
     {
         base.OnInit(userData);
 
-        //Log.Debug("select init");
+        P1Btn.AddNaviRight(P2Btn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
+        P2Btn.AddNaviLeft(P1Btn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
 
-        P1Btn.onClick.AddListener(() =>
+        GameEntry.UIEvent.AddOnClickHandler(P1Btn, (obj) =>
         {
             Open(UIFormId.Detail);
         });
 
-        P2Btn.onClick.AddListener(() =>
+        GameEntry.UIEvent.AddOnClickHandler(P2Btn, (obj) =>
         {
             Close();
         });
@@ -34,6 +33,8 @@ public class SelectForm : GameUILogic
         base.OnOpen(userData);
 
         //Log.Debug("select open");
+
+        P1Btn.SetAsDefaultNavi();
     }
 
     protected internal override void OnClose(object userData)

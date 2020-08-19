@@ -7,7 +7,7 @@
  * ------------------------------------------------------------------------------*/
 using UnityEngine;
 
-namespace LT.GamepadServer
+namespace LF.GamepadServer
 {
     /// <summary>
     /// 游戏手柄服务

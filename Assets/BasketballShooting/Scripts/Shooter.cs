@@ -8,8 +8,8 @@
 
 using UnityEngine;
 using System.Collections;
-using LT.Net;
-using LT;
+using LF.Net;
+using LF;
 using LF.Event;
 using LF;
 
@@ -54,14 +54,14 @@ public class Shooter : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        //GameEntry.Event.Subscribe(BasketBallEventArgs.EventId, OnBasketBallHandler);
+        GameEntry.Event.Subscribe(BasketBallEventArgs.EventId, OnBasketBallHandler);
 
         touchPos.x = -1.0f;
 	}
 
 	// Update is called once per frame
 	void Update () {
-        Debug.Log(state);
+        //Debug.Log(state);
 
         if (state == ShotState.Charging)
         {
@@ -194,6 +194,8 @@ public class Shooter : MonoBehaviour {
 
         Debug.Log(direction + " " + worldPoint + "  " + shotPoint.transform.position + "  " + rate);
 
+        //direction = new Vector3(0, 0.82f, 0.58f);
+
         ballRigidbody.velocity = direction * shotPower;
         ballRigidbody.AddTorque(-shotPoint.transform.right * torque);
 
@@ -217,6 +219,7 @@ public class Shooter : MonoBehaviour {
             ballRigidbody.AddTorque(ne.msg.Torque);
 
             state = ShotState.Charging;
+            ballRigidbody.GetComponent<ShotBall>().DestroyDelay();
             objBall = null;
         }
     }

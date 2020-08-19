@@ -4,25 +4,26 @@
 // 创建时间：2020-08-07 15:19:04
 // ========================================================
 
-using UnityEngine.UI;
+using UnityEngine;
 
 public class DetailForm : GameUILogic
 {
-    public Button fightBtn;
-    public Button backBtn;
+    public GameObject fightBtn;
+    public GameObject backBtn;
 
     protected internal override void OnInit(object userData)
     {
         base.OnInit(userData);
 
-        //Log.Debug("detail init");
+        fightBtn.AddNaviRight(backBtn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
+        backBtn.AddNaviLeft(fightBtn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
 
-        fightBtn.onClick.AddListener(() =>
+        GameEntry.UIEvent.AddOnClickHandler(fightBtn, (obj) =>
         {
             GameEntry.Event.Fire(this, EnterGameEventArgs.Create(1));
         });
 
-        backBtn.onClick.AddListener(() =>
+        GameEntry.UIEvent.AddOnClickHandler(backBtn, (obj) =>
         {
             Close();
         });
@@ -33,6 +34,8 @@ public class DetailForm : GameUILogic
         base.OnOpen(userData);
 
         //Log.Debug("detail open");
+
+        fightBtn.SetAsDefaultNavi();
     }
 
     protected internal override void OnClose(object userData)

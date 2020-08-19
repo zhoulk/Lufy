@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace LT.Net
+namespace LF.Net
 {
     /// <summary>
     /// 消息类型

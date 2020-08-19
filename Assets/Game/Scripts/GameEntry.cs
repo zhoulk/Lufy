@@ -152,7 +152,9 @@ class GameInput : IUIInput
 
     public bool ClickEnterDown()
     {
-        return Input.GetKeyDown(KeyCode.Return);
+        return Input.GetKeyDown(KeyCode.Return) || 
+                Input.GetKeyDown((KeyCode)10) ||
+                Input.GetKeyDown(KeyCode.Joystick1Button0);
     }
 
     public bool ClickLeftDown()

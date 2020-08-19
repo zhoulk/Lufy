@@ -1,4 +1,4 @@
-/*-------------------------------------------------------------------------------
+﻿/*-------------------------------------------------------------------------------
  * 创建者：huangyechuan
  * 修改者列表：
  * 创建日期：2018/11/28
@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
 
-namespace LT.Net
+namespace LF.Net
 {
     public class KService : IDisposable
     {

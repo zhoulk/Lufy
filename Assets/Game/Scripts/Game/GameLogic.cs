@@ -6,8 +6,8 @@
 using LF;
 using LF.Event;
 using LF.Pool;
-using LT;
-using LT.Net;
+using LF;
+using LF.Net;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -111,7 +111,7 @@ public class GameLogic : MonoBehaviour
         BulletReleaseEventArgs ne = args as BulletReleaseEventArgs;
         if (ne != null)
         {
-            Log.Debug("release bullet {0}", ne.bullet.Name);
+            //Log.Debug("release bullet {0}", ne.bullet.Name);
         }
     }
 }

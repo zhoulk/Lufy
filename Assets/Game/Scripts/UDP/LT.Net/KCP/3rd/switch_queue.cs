@@ -1,7 +1,7 @@
-using System;
+﻿using System;
 using System.Collections;
 
-namespace LT.KCP
+namespace LF.KCP
 {
     public class Utility
     {

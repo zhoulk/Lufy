@@ -5,8 +5,8 @@
 // ========================================================
 using LF;
 using LF.UDP;
-using LT;
-using LT.Net;
+using LF;
+using LF.Net;
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
@@ -21,6 +21,8 @@ public class LoadingForm : GameUILogic
     public GameObject connectBtn;
     public GameObject disConnectBtn;
     public GameObject basketBallBtn;
+
+    public InputField targetInput;
 
     public Text statusText;
 
@@ -58,7 +60,12 @@ public class LoadingForm : GameUILogic
                 string info = System.Text.Encoding.UTF8.GetString(bytes);
                 Log.Debug("{0} {1} ----- {2}", endPoint.Address.ToString(), endPoint, info);
 
-                if (endPoint.Address.ToString().Equals("172.16.4.112"))
+                string targetIp = "172.16.4.112";
+                if(targetInput.text.Length > 0)
+                {
+                    targetIp = targetInput.text;
+                }
+                if (endPoint.Address.ToString().Equals(targetIp))
                 {
                     string[] array = info.Split('-');
 

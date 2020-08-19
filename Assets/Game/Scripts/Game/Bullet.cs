@@ -18,7 +18,7 @@ public class Bullet : ObjectBase
 
     protected internal override void Release(bool isShutdown)
     {
-        Log.Debug("bullet release");
+        //Log.Debug("bullet release");
 
         BulletReleaseEventArgs args = BulletReleaseEventArgs.Create(this);
         GameEntry.Event.Fire(this, args);
