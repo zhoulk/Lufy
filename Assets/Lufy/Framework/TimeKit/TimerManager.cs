@@ -5,7 +5,6 @@
 // ========================================================
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace LF.Timer
@@ -176,12 +175,15 @@ namespace LF.Timer
 
         private void clear(Delegate method)
         {
-            TimerHandler handler = m_Handlers.FirstOrDefault(t => t.method == method);
-            if (handler != null)
+            for(int i=m_Handlers.Count-1; i>=0; i--)
             {
-                m_Handlers.Remove(handler);
-                handler.clear();
-                m_Pool.Add(handler);
+                TimerHandler handler = m_Handlers[i];
+                if (handler != null && handler.method == method)
+                {
+                    m_Handlers.Remove(handler);
+                    handler.clear();
+                    m_Pool.Add(handler);
+                }
             }
         }
 
@@ -209,13 +211,27 @@ namespace LF.Timer
                         while (t >= handler.exeTime)
                         {
                             handler.exeTime += handler.delay;
-                            method.DynamicInvoke(args);
+                            if (args.Length == 0)
+                            {
+                                ((Handler)method)();
+                            }
+                            else
+                            {
+                                method.DynamicInvoke(args);
+                            }
                         }
                     }
                     else
                     {
                         clear(handler.method);
-                        method.DynamicInvoke(args);
+                        if (args.Length == 0)
+                        {
+                            ((Handler)method)();
+                        }
+                        else
+                        {
+                            method.DynamicInvoke(args);
+                        }
                     }
                 }
             }
