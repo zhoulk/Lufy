@@ -54,7 +54,7 @@ public class Shooter : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        GameEntry.Event.Subscribe(BasketBallEventArgs.EventId, OnBasketBallHandler);
+        //GameEntry.Event.Subscribe(BasketBallEventArgs.EventId, OnBasketBallHandler);
 
         touchPos.x = -1.0f;
 	}
