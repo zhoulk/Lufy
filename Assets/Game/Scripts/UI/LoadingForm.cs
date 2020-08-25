@@ -14,12 +14,8 @@ using UnityEngine.UI;
 
 public class LoadingForm : GameUILogic
 {
-    public GameObject shopBtn;
-    public GameObject selectBtn;
-
     public GameObject searchBtn;
     public GameObject connectBtn;
-    public GameObject disConnectBtn;
     public GameObject basketBallBtn;
 
     public InputField targetInput;
@@ -33,23 +29,6 @@ public class LoadingForm : GameUILogic
         base.OnInit(userData);
 
         //Log.Debug("loading init");
-
-        shopBtn.AddNaviRight(selectBtn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
-        selectBtn.AddNaviLeft(shopBtn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
-
-        GameEntry.UIEvent.AddOnClickHandler(shopBtn, (obj) =>
-        {
-            Dictionary<string, object> param = new Dictionary<string, object>();
-            param.Add("key1", 100);
-            param.Add("key2", "23232");
-            param.Add("key3", this);
-            Open(UIFormId.Shop, param);
-        });
-
-        GameEntry.UIEvent.AddOnClickHandler(selectBtn, (obj) =>
-        {
-            Open(UIFormId.Select);
-        });
 
         GameEntry.UIEvent.AddOnClickHandler(searchBtn, (obj) =>
         {
@@ -91,30 +70,15 @@ public class LoadingForm : GameUILogic
             UDPManager.Instance.Connect(targetEndPoint);
         });
 
-        GameEntry.UIEvent.AddOnClickHandler(disConnectBtn, (obj) =>
-        {
-            UDPManager.Instance.DisConnect();
-        });
-
         GameEntry.UIEvent.AddOnClickHandler(basketBallBtn, (obj) =>
         {
-            //IMessage msg = MessagesFactory.BasketBall(1, 10, 90);
-            //UDPManager.Instance.Send(msg);
+            GameEntry.Event.Fire(this, EnterGameEventArgs.Create(SceneId.BasketBall));
         });
-
-        string str = GameEntry.Setting.GetString("key", "abc");
-        Log.Debug(str);
-        GameEntry.Setting.SetString("key", "bcd");
-        GameEntry.Setting.Save();
-
-        Log.Debug("{0}", ES3.GetKeys());
     }
 
     protected internal override void OnOpen(object userData)
     {
         base.OnOpen(userData);
-
-        shopBtn.SetAsDefaultNavi();
 
         //Log.Debug("loading open");
 
@@ -163,8 +127,6 @@ public class LoadingForm : GameUILogic
     protected internal override void OnReveal()
     {
         base.OnReveal();
-
-        shopBtn.SetAsDefaultNavi();
 
         //Log.Debug("loading reveal");
     }

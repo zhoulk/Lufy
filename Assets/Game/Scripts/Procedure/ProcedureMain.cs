@@ -20,9 +20,9 @@ public class EnterGameEventArgs : GameEventArgs
     /// <summary>
     /// 游戏等级
     /// </summary>
-    public int Level;
+    public SceneId Level;
 
-    public static EnterGameEventArgs Create(int level)
+    public static EnterGameEventArgs Create(SceneId level)
     {
         EnterGameEventArgs e = new EnterGameEventArgs();
         e.Level = level;
@@ -32,7 +32,7 @@ public class EnterGameEventArgs : GameEventArgs
 
 public class ProcedureMain : GameProcedure
 {
-    int targetScene = -1;
+    SceneId targetScene = SceneId.None;
 
     protected internal override void OnInit(IFsm<ProcedureManager> procedureOwner)
     {
@@ -73,15 +73,12 @@ public class ProcedureMain : GameProcedure
         base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
         //Log.Debug("procedure preload update " + elapseSeconds + "  " + realElapseSeconds);
-        if(targetScene != -1)
+        if(targetScene != SceneId.None)
         {
-            //SceneManager.LoadScene("BasketBall", LoadSceneMode.Additive);
-            //SceneManager.LoadScene("Game", LoadSceneMode.Additive);
-            targetScene = -1;
-
-            GameEntry.Scene.LoadScene(SceneId.BasketBall);
-
+            GameEntry.Scene.LoadScene(targetScene);
             ChangeState<ProcedureGame>(procedureOwner);
+
+            targetScene = SceneId.None;
         }
     }
 

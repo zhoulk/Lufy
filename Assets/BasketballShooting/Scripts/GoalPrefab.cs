@@ -7,74 +7,80 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoalPrefab : MonoBehaviour
+namespace BasketBall
 {
-    int direct = 1;
-    float speed = 0.4f;
-    float delay = 1f;
-
-    public Transform goalArea;
-
-    bool isPause = false;
-
-    float delayTimer = 0;
-
-    // Start is called before the first frame update
-    void Start()
+    public class GoalPrefab : MonoBehaviour
     {
-        
-    }
+        int direct = 1;
+        float speed = 0.4f;
+        float delay = 1f;
 
-    // Update is called once per frame
-    void Update()
-    {
-        // 暂停
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            isPause = !isPause;
-        }
-        // 居中
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            Vector3 _pos = transform.position;
-            Vector3 _goalPos = goalArea.transform.position;
-            _pos.x = 0;
-            _goalPos.x = 0;
-            transform.position = _pos;
-            goalArea.position = _goalPos;
-            return;
-        }
+        public Transform goalArea;
 
-        if (isPause)
-        {
-            return;
-        }
+        bool isPause = false;
 
-        Vector3 pos = transform.position;
-        Vector3 goalPos = goalArea.transform.position;
-        pos.x += direct * speed * Time.deltaTime;
-        goalPos.x = pos.x;
-        if (pos.x >= 3)
+        float delayTimer = 0;
+
+        // Start is called before the first frame update
+        void Start()
         {
-            direct = 0;
-            delayTimer += Time.deltaTime;
-            if(delayTimer > delay)
+            if (Define.platForm.Equals(PlatForm.Phone))
             {
-                delayTimer = 0;
-                direct = -1;
+                gameObject.SetActive(false);
             }
         }
-        if (pos.x <= -3)
+
+        // Update is called once per frame
+        void Update()
         {
-            direct = 0;
-            delayTimer += Time.deltaTime;
-            if (delayTimer > delay)
+            // 暂停
+            if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                delayTimer = 0;
-                direct = 1;
+                isPause = !isPause;
             }
+            // 居中
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                Vector3 _pos = transform.position;
+                Vector3 _goalPos = goalArea.transform.position;
+                _pos.x = 0;
+                _goalPos.x = 0;
+                transform.position = _pos;
+                goalArea.position = _goalPos;
+                return;
+            }
+
+            if (isPause)
+            {
+                return;
+            }
+
+            Vector3 pos = transform.position;
+            Vector3 goalPos = goalArea.transform.position;
+            pos.x += direct * speed * Time.deltaTime;
+            goalPos.x = pos.x;
+            if (pos.x >= 3)
+            {
+                direct = 0;
+                delayTimer += Time.deltaTime;
+                if (delayTimer > delay)
+                {
+                    delayTimer = 0;
+                    direct = -1;
+                }
+            }
+            if (pos.x <= -3)
+            {
+                direct = 0;
+                delayTimer += Time.deltaTime;
+                if (delayTimer > delay)
+                {
+                    delayTimer = 0;
+                    direct = 1;
+                }
+            }
+            transform.position = pos;
+            goalArea.position = goalPos;
         }
-        transform.position = pos;
-        goalArea.position = goalPos;
     }
 }

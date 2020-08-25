@@ -15,6 +15,7 @@ public class FightForm : GameUILogic
     {
         base.OnInit(userData);
 
+        backBtn.gameObject.SetActive(false);
         backBtn.onClick.AddListener(() =>
         {
             Close();

@@ -6,6 +6,7 @@
 
 public enum SceneId
 {
+    None,
     Game,
     BasketBall
 }

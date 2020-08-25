@@ -214,8 +214,6 @@ public class CreateTweener : MonoBehaviour
         //m_Text.DOColor(Color.white, 5);
         //m_Text.DOFade(0, 5);
         //m_Text.DOText("dfjklsdfjklsdjflksdjfkldsjfklsdjfkldjflkd", 5);
-
-
     }
 
     // Update is called once per frame

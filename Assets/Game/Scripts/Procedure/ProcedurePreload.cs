@@ -23,7 +23,14 @@ public class ProcedurePreload : GameProcedure
 
         Log.Debug("procedure preload enter");
 
-        Open(UIFormId.Loading);
+        if (BasketBall.Define.platForm.Equals(BasketBall.PlatForm.TV))
+        {
+            Open(UIFormId.loading_TV);
+        }
+        else
+        {
+            Open(UIFormId.Loading);
+        }
         ChangeState<ProcedureMain>(procedureOwner);
     }
 

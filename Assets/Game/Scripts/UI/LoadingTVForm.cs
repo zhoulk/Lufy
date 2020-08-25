@@ -3,29 +3,28 @@
 // 作者：Lufy 
 // 创建时间：2020-08-07 15:19:04
 // ========================================================
-
+using LF;
+using LF.UDP;
+using LF;
+using LF.Net;
+using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class DetailForm : GameUILogic
+public class LoadingTVForm : GameUILogic
 {
-    public GameObject fightBtn;
-    public GameObject backBtn;
+    public GameObject basketBallBtn;
 
     protected internal override void OnInit(object userData)
     {
         base.OnInit(userData);
 
-        fightBtn.AddNaviRight(backBtn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
-        backBtn.AddNaviLeft(fightBtn).AddSelected(OnBtnSelected).AddUnSelected(OnBtnUnSelected);
+        basketBallBtn.AddUnSelected(OnBtnUnSelected).AddSelected(OnBtnSelected);
 
-        GameEntry.UIEvent.AddOnClickHandler(fightBtn, (obj) =>
+        GameEntry.UIEvent.AddOnClickHandler(basketBallBtn, (obj) =>
         {
-            GameEntry.Event.Fire(this, EnterGameEventArgs.Create(SceneId.Game));
-        });
-
-        GameEntry.UIEvent.AddOnClickHandler(backBtn, (obj) =>
-        {
-            Close();
+            GameEntry.Event.Fire(this, EnterGameEventArgs.Create(SceneId.BasketBall));
         });
     }
 
@@ -33,57 +32,57 @@ public class DetailForm : GameUILogic
     {
         base.OnOpen(userData);
 
-        //Log.Debug("detail open");
-
-        fightBtn.SetAsDefaultNavi();
+        basketBallBtn.SetAsDefaultNavi();
     }
 
     protected internal override void OnClose(object userData)
     {
         base.OnClose(userData);
 
-        //Log.Debug("detail close");
+        //Log.Debug("loading close");
     }
 
     protected internal override void OnResume()
     {
         base.OnResume();
 
-        //Log.Debug("detail resume");
+        //Log.Debug("loading resume");
     }
 
     protected internal override void OnPause()
     {
         base.OnPause();
 
-        //Log.Debug("detail pause");
+        //Log.Debug("loading pause");
     }
 
     protected internal override void OnReveal()
     {
         base.OnReveal();
 
-        //Log.Debug("detail reveal");
+        basketBallBtn.SetAsDefaultNavi();
+
+        Log.Debug("loading reveal");
     }
 
     protected internal override void OnRecycle()
     {
         base.OnRecycle();
 
-        //Log.Debug("detail recycle");
+        //Log.Debug("loading recycle");
     }
 
     protected internal override void OnCover()
     {
         base.OnCover();
 
-        //Log.Debug("detail cover");
+        //Log.Debug("loading cover");
     }
 
     protected internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
     {
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 
-        //Log.Debug("detail update " + elapseSeconds);
+        //Log.Debug("loading update " + elapseSeconds);
     }
 }

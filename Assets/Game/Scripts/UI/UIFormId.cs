@@ -10,6 +10,7 @@ public enum UIFormId
     /// 加载
     /// </summary>
     Loading = 1,
+    loading_TV,
     /// <summary>
     /// 商店
     /// </summary>
