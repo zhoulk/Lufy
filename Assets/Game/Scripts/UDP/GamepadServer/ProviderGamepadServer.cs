@@ -5,6 +5,7 @@
  * 模块描述：游戏手柄服务
  * 
  * ------------------------------------------------------------------------------*/
+using BasketBall;
 using UnityEngine;
 
 namespace LF.GamepadServer
@@ -18,7 +19,10 @@ namespace LF.GamepadServer
 
         private void Awake()
         {
-            Init();
+            if (Define.platForm.Equals(PlatForm.TV))
+            {
+                Init();
+            }
         }
 
         private void Update()
@@ -44,6 +48,11 @@ namespace LF.GamepadServer
         {
             //App.Make<IGamepadServer>();
             server = new GamepadServer(this);
+        }
+
+        private void OnDestroy()
+        {
+            
         }
     }
 }

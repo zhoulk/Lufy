@@ -1,0 +1,7 @@
+ManifestFileVersion: 0
+CRC: 250409501
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: loading
+      Dependencies: {}

@@ -15,8 +15,8 @@ namespace BasketBall
     public static class Define
     {
         // 运行环境
-        public static PlatForm platForm = PlatForm.TV;
-        //public static PlatForm platForm = PlatForm.Phone;
+        //public static PlatForm platForm = PlatForm.TV;
+        public static PlatForm platForm = PlatForm.Phone;
     }
 }
 

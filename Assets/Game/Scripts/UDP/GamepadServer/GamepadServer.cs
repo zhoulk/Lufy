@@ -136,7 +136,7 @@ namespace LF.GamepadServer
         /// <param name="msg">消息</param>
         private void OnGamepadMessage(IMessage msg)
         {
-            Log.Debug("msgType = {0}", msg.GetMessageType());
+            //Log.Debug("msgType = {0}", msg.GetMessageType());
 
             switch (msg.GetMessageType())
             {

@@ -44,9 +44,8 @@ namespace BasketBall
         }
     }
 
-    public class Shooter : MonoBehaviour
+    public class Shooter : MonoSingleton<Shooter>
     {
-
         public Camera cameraForShooter;
         public GameObject ballPrefab;
         public Transform shotPoint;
@@ -117,7 +116,7 @@ namespace BasketBall
         // Update is called once per frame
         void Update()
         {
-            //Debug.Log(state);
+            //Debug.Log(state + "  " +touchPos);
 
             if (state == ShotState.Charging)
             {
@@ -195,18 +194,25 @@ namespace BasketBall
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-                    Ray ray = cameraForShooter.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
-                    if (Physics.Raycast(ray, out hit, 100))
+                    //Ray ray = cameraForShooter.ScreenPointToRay(Input.mousePosition);
+                    //RaycastHit hit;
+                    //if (Physics.Raycast(ray, out hit, 100))
+                    //{
+                    //    ShotBall sb = hit.collider.transform.GetComponent<ShotBall>();
+                    //    if (sb != null && !sb.isActive)
+                    //    {
+                    //        sb.ChangeActive();
+                    //        touchPos = Input.mousePosition;
+                    //        startTouchPos = Input.mousePosition;
+                    //        shotPower = 0.0f;
+                    //    }
+                    //}
+
+                    if (state == ShotState.Ready)
                     {
-                        ShotBall sb = hit.collider.transform.GetComponent<ShotBall>();
-                        if (sb != null && !sb.isActive)
-                        {
-                            sb.ChangeActive();
-                            touchPos = Input.mousePosition;
-                            startTouchPos = Input.mousePosition;
-                            shotPower = 0.0f;
-                        }
+                        touchPos = Input.mousePosition;
+                        startTouchPos = Input.mousePosition;
+                        shotPower = 0.0f;
                     }
                 }
             }
@@ -287,11 +293,19 @@ namespace BasketBall
 
             //direction = new Vector3(0, 0.82f, 0.58f);
 
-            ballRigidbody.velocity = direction * shotPower;
-            ballRigidbody.AddTorque(-shotPoint.transform.right * torque);
-
             Vector3 velocity = direction * shotPower;
             Vector3 _torque = -shotPoint.transform.right * torque;
+
+            if (Define.platForm.Equals(PlatForm.Phone))
+            {
+                ballRigidbody.velocity = velocity * 3;
+                ballRigidbody.AddTorque(_torque);
+            }
+            else
+            {
+                ballRigidbody.velocity = velocity;
+                ballRigidbody.AddTorque(_torque);
+            }
 
             //Log.Debug("first {0} {1}", velocity, _torque);
 
