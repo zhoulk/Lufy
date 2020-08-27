@@ -43,8 +43,11 @@ namespace LF.UDP
 
         public void Dispose()
         {
-            client.Close();
-            client = null;
+            if(client != null)
+            {
+                client.Close();
+                client = null;
+            }
         }
 
         public Action<byte[], IPEndPoint> ReceiveEventHandler { get; set; }

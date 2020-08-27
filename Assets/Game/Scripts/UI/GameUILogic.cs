@@ -73,6 +73,12 @@ public class GameUILogic : UIFormLogic
         pauseUINavi();
     }
 
+    protected internal override void OnRecycle()
+    {
+        base.OnRecycle();
+        //Debug.Log(this + "  recycle");
+    }
+
     void pauseUINavi()
     {
         if (m_CurrentObj != null)

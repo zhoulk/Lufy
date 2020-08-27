@@ -4,6 +4,8 @@
 // 创建时间：2020-08-06 16:31:35
 // ========================================================
 
+using LF.Pool;
+using LF.Res;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,10 +20,27 @@ namespace LF.UI
     {
         private readonly Dictionary<string, UIFormLogic> m_cachedForms = new Dictionary<string, UIFormLogic>();
         private readonly LinkedList<UIFormLogic> m_formList = new LinkedList<UIFormLogic>();
+        private readonly Queue<UIFormLogic> m_RecycleQueue = new Queue<UIFormLogic>();
+
+        private List<string> removeKeyList = new List<string>();
 
         [SerializeField]
         [HideInInspector]
         private Transform m_InstanceRoot = null;
+
+        [SerializeField]
+        [HideInInspector]
+        private int m_InstanceCapacity = 16;
+        [SerializeField]
+        [HideInInspector]
+        private float m_InstanceExpireTime = 60f;
+
+        private IResManager m_ResManager = null;
+
+        private ObjectPoolManager m_PoolManager = null;
+        private IObjectPool<UIFormObject> m_InstancePool = null;
+
+        private LoadAssetCallbacks m_LoadAssetCallbacks;
 
         public int Count
         {
@@ -29,6 +48,52 @@ namespace LF.UI
             {
                 return m_cachedForms.Count;
             }
+        }
+
+        /// <summary>
+        /// 获取或设置界面实例对象池的容量。
+        /// </summary>
+        public int InstanceCapacity
+        {
+            get
+            {
+                return m_InstanceCapacity;
+            }
+            set
+            {
+                m_InstanceCapacity = value;
+            }
+        }
+
+        /// <summary>
+        /// 获取或设置界面实例对象池对象过期秒数。
+        /// </summary>
+        public float InstanceExpireTime
+        {
+            get
+            {
+                return m_InstanceExpireTime;
+            }
+            set
+            {
+                m_InstanceExpireTime = value;
+            }
+        }
+
+        public void SetResManager(IResManager resManager)
+        {
+            m_ResManager = resManager;
+        }
+
+        public void SetObjectPoolManager(ObjectPoolManager objectPoolManager)
+        {
+            m_PoolManager = objectPoolManager;
+            m_InstancePool = m_PoolManager.CreateSingleSpawnObjectPool<UIFormObject>("UIDefault", InstanceCapacity, InstanceExpireTime);
+        }
+
+        public UIManager()
+        {
+            m_LoadAssetCallbacks = new LoadAssetCallbacks(LoadAssetSuccess, LoadAssetFail);
         }
 
         /// <summary>
@@ -72,30 +137,42 @@ namespace LF.UI
                 throw new LufyException("UI form asset name is invalid.");
             }
 
+            if (m_ResManager == null)
+            {
+                throw new LufyException("ResManager is invalid.");
+            }
+
+            if (m_PoolManager == null)
+            {
+                throw new LufyException("ObjectPoolManager is invalid.");
+            }
+
             UIFormLogic uiFormInstanceObject = null;
             m_cachedForms.TryGetValue(uiFormAssetName, out uiFormInstanceObject);
             if (uiFormInstanceObject == null)
             {
-                GameObject prefab = Resources.Load<GameObject>(uiFormAssetName);
-                GameObject obj = GameObject.Instantiate(prefab);
-                obj.name = obj.name.Substring(0, obj.name.Length - 7);
-                obj.transform.SetParent(m_InstanceRoot);
-                obj.transform.localPosition = Vector3.zero;
-                obj.transform.localScale = Vector3.one;
-                uiFormInstanceObject = obj.GetComponent<UIFormLogic>();
-                m_cachedForms.Add(uiFormAssetName, uiFormInstanceObject);
+                UIFormObject obj = m_InstancePool.Spawn(uiFormAssetName);
+                uiFormInstanceObject = obj?.Target as UIFormLogic;
+                if(uiFormInstanceObject == null)
+                {
+                    m_ResManager.LoadAsset(uiFormAssetName, m_LoadAssetCallbacks);
+                }
+                else
+                {
+                    m_cachedForms.Add(uiFormAssetName, uiFormInstanceObject);
 
-                uiFormInstanceObject.OnInit(userData);
+                    uiFormInstanceObject.OnOpen(userData);
+                    m_formList.AddFirst(uiFormInstanceObject);
+                    Refresh();
+                }
             }
             else
             {
                 m_formList.Remove(uiFormInstanceObject);
+                uiFormInstanceObject.OnOpen(userData);
+                m_formList.AddFirst(uiFormInstanceObject);
+                Refresh();
             }
-            uiFormInstanceObject.OnOpen(userData);
-
-            m_formList.AddFirst(uiFormInstanceObject);
-
-            Refresh();
         }
 
         /// <summary>
@@ -147,6 +224,20 @@ namespace LF.UI
             uiForm.OnClose(userData);
 
             m_formList.Remove(uiForm);
+
+            removeKeyList.Clear();
+            foreach (var kv in m_cachedForms)
+            {
+                if(kv.Value == uiForm)
+                {
+                    removeKeyList.Add(kv.Key);
+                }
+            }
+            foreach(var key in removeKeyList)
+            {
+                m_cachedForms.Remove(key);
+            }
+            m_RecycleQueue.Enqueue(uiForm);
 
             Refresh();
         }
@@ -240,6 +331,28 @@ namespace LF.UI
             }
         }
 
+        void LoadAssetSuccess(string assetName, object asset, float duration, object userData){
+            GameObject obj = GameObject.Instantiate(asset as GameObject);
+            obj.name = obj.name.Substring(0, obj.name.Length - 7);
+            obj.transform.SetParent(m_InstanceRoot);
+            obj.transform.localPosition = Vector3.zero;
+            obj.transform.localScale = Vector3.one;
+            UIFormLogic uiFormInstanceObject = obj.GetComponent<UIFormLogic>();
+            m_cachedForms.Add(assetName, uiFormInstanceObject);
+            m_InstancePool.Register(UIFormObject.Create(assetName, uiFormInstanceObject), true);
+
+            uiFormInstanceObject.OnInit(userData);
+
+            uiFormInstanceObject.OnOpen(userData);
+            m_formList.AddFirst(uiFormInstanceObject);
+            Refresh();
+        }
+
+        void LoadAssetFail(string assetName, LoadResourceStatus status, string errorMessage, object userData)
+        {
+
+        }
+
         protected override void Awake()
         {
             base.Awake();
@@ -258,13 +371,21 @@ namespace LF.UI
         {
             m_cachedForms.Clear();
             m_formList.Clear();
+            removeKeyList.Clear();
         }
 
         internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
-            foreach (KeyValuePair<string, UIFormLogic> uiForm in m_cachedForms)
+            while (m_RecycleQueue.Count > 0)
             {
-                uiForm.Value.OnUpdate(elapseSeconds, realElapseSeconds);
+                UIFormLogic obj = m_RecycleQueue.Dequeue();
+                obj.OnRecycle();
+                m_InstancePool.Unspawn(obj);
+            }
+
+            foreach (var uiForm in m_formList)
+            {
+                uiForm.OnUpdate(elapseSeconds, realElapseSeconds);
             }
         }
     }

@@ -5,9 +5,6 @@
 // ========================================================
 using LF;
 using LF.Event;
-using LF.Pool;
-using LF;
-using LF.Net;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,8 +26,6 @@ public sealed class BulletReleaseEventArgs : GameEventArgs
 
 public class GameLogic : MonoBehaviour
 {
-    private IObjectPool<Bullet> m_BulletPool;
-
     List<Bullet> bullets = new List<Bullet>();
 
     Transform bgTrans;

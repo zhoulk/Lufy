@@ -3,6 +3,7 @@
 // 作者：Lufy 
 // 创建时间：2020-08-06 16:59:12
 // ========================================================
+using LF.Pool;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -25,6 +26,8 @@ namespace LF.UI
         private CanvasScaler m_CanvasScaler = null;
         private Canvas m_CachedCanvas = null;
         private List<Canvas> m_CachedCanvasContainer = new List<Canvas>();
+
+        public object Handler;
 
         public int OriginalDepth
         {
@@ -205,6 +208,11 @@ namespace LF.UI
             }
 
             m_CachedCanvasContainer.Clear();
+        }
+
+        public void Clear()
+        {
+            
         }
     }
 }

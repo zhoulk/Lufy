@@ -390,6 +390,11 @@ namespace LF.Pool
                     throw new LufyException("Target is invalid.");
                 }
 
+                //foreach(var kv in m_ObjectMap)
+                //{
+                //    Log.Debug("{0} {1}", kv.Key, kv.Value);
+                //}
+
                 Object<T> internalObject = null;
                 if (m_ObjectMap.TryGetValue(target, out internalObject))
                 {

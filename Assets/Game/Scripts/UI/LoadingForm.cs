@@ -107,7 +107,9 @@ public class LoadingForm : GameUILogic
     {
         base.OnClose(userData);
 
-        //Log.Debug("loading close");
+        Log.Debug("loading close");
+
+        UdpRecv.Instance.Dispose();
     }
 
     protected internal override void OnResume()
@@ -135,7 +137,7 @@ public class LoadingForm : GameUILogic
     {
         base.OnRecycle();
 
-        //Log.Debug("loading recycle");
+        Log.Debug("loading recycle");
     }
 
     protected internal override void OnCover()
@@ -150,5 +152,10 @@ public class LoadingForm : GameUILogic
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 
         //Log.Debug("loading update " + elapseSeconds);
+    }
+
+    private void OnDestroy()
+    {
+        UdpRecv.Instance.Dispose();
     }
 }

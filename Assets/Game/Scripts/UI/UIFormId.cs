@@ -12,6 +12,10 @@ public enum UIFormId
     Loading = 1,
     loading_TV,
     /// <summary>
+    /// 
+    /// </summary>
+    Game,
+    /// <summary>
     /// 商店
     /// </summary>
     Shop,

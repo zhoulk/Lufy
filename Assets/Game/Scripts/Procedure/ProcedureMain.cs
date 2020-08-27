@@ -101,12 +101,12 @@ public class ProcedureMain : GameProcedure
     void LoadSceneSuccessHandler(object sender, GameEventArgs e)
     {
         LoadSceneSuccessEventArgs ne = e as LoadSceneSuccessEventArgs;
-        Log.Debug("load scene {0} complete", ne.SceneAssetName);
+        //Log.Debug("load scene {0} complete", ne.SceneAssetName);
     }
 
     void LoadSceneUpdateHandler(object sender, GameEventArgs e)
     {
         LoadSceneUpdateEventArgs ne = e as LoadSceneUpdateEventArgs;
-        Log.Debug("load scene progress {0}", ne.Progress);
+        //Log.Debug("load scene progress {0}", ne.Progress);
     }
 }

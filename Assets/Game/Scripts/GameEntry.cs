@@ -16,6 +16,7 @@ using LF.Event;
 using LF.Sound;
 using LF.Scene;
 using LF.Setting;
+using LF.Res;
 
 public class GameEntry : MonoBehaviour
 {
@@ -30,16 +31,18 @@ public class GameEntry : MonoBehaviour
     static SoundManager m_Sound;
     static SceneManager m_Scene;
     static SettingManager m_Setting;
+    static ResManager m_Res;
 
     private void Start()
     {
         initManagers();
 
-        ProcedureBase[] procedures = new ProcedureBase[4];
+        ProcedureBase[] procedures = new ProcedureBase[5];
         procedures[0] = new ProcedureLaunch();
         procedures[1] = new ProcedurePreload();
         procedures[2] = new ProcedureMain();
         procedures[3] = new ProcedureGame();
+        procedures[4] = new ProcedureBasketball();
 
         m_Procedure.Initialize(m_Fsm, procedures);
         m_Procedure.StartProcedure(typeof(ProcedureLaunch));
@@ -138,7 +141,13 @@ public class GameEntry : MonoBehaviour
     void initManagers()
     {
         m_Base = Lufy.GetManager<BaseManager>();
+        m_Res = Lufy.GetManager<ResManager>();
+        m_ObjectPool = Lufy.GetManager<ObjectPoolManager>();
+
         m_UI = Lufy.GetManager<UIManager>();
+        m_UI.SetResManager(m_Res);
+        m_UI.SetObjectPoolManager(m_ObjectPool);
+
         m_Procedure = Lufy.GetManager<ProcedureManager>();
         m_Fsm = Lufy.GetManager<FsmManager>();
         m_Timer = Lufy.GetManager<TimerManager>();
@@ -146,7 +155,6 @@ public class GameEntry : MonoBehaviour
         m_UIEvent = Lufy.GetManager<UIEventManager>();
         m_UIEvent.Initialize(new GameInput());
 
-        m_ObjectPool = Lufy.GetManager<ObjectPoolManager>();
         m_Event = Lufy.GetManager<EventManager>();
 
         m_Sound = Lufy.GetManager<SoundManager>();
