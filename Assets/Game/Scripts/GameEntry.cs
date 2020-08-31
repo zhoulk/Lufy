@@ -138,11 +138,24 @@ public class GameEntry : MonoBehaviour
         set { }
     }
 
+    public static ResManager Res
+    {
+        get
+        {
+            return m_Res;
+        }
+        set { }
+    }
+
     void initManagers()
     {
         m_Base = Lufy.GetManager<BaseManager>();
-        m_Res = Lufy.GetManager<ResManager>();
         m_ObjectPool = Lufy.GetManager<ObjectPoolManager>();
+        m_Res = Lufy.GetManager<ResManager>();
+        AssetBundleLoader assetBundleLoader = new AssetBundleLoader();
+        assetBundleLoader.SetObjectPoolManager(m_ObjectPool);
+        m_Res.SetResLoader(assetBundleLoader);
+        m_Res.Init();
 
         m_UI = Lufy.GetManager<UIManager>();
         m_UI.SetResManager(m_Res);

@@ -339,7 +339,7 @@ namespace LF.UI
             obj.transform.localScale = Vector3.one;
             UIFormLogic uiFormInstanceObject = obj.GetComponent<UIFormLogic>();
             m_cachedForms.Add(assetName, uiFormInstanceObject);
-            m_InstancePool.Register(UIFormObject.Create(assetName, uiFormInstanceObject), true);
+            m_InstancePool.Register(UIFormObject.Create(assetName, uiFormInstanceObject, asset), true);
 
             uiFormInstanceObject.OnInit(userData);
 

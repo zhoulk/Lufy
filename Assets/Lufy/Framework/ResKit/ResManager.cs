@@ -24,6 +24,11 @@ namespace LF.Res
             m_ResLoader = resLoader;
         }
 
+        public void Init()
+        {
+            m_ResLoader.Init();
+        }
+
         public void LoadAsset(string assetName, LoadAssetCallbacks loadAssetCallbacks)
         {
             if (string.IsNullOrEmpty(assetName))
@@ -56,7 +61,7 @@ namespace LF.Res
 
         public void UnloadAsset(object asset)
         {
-            
+            m_ResLoader.UnLoadAsset(asset);
         }
 
         internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)

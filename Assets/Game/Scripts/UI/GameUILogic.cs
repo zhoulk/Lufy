@@ -13,12 +13,12 @@ public class GameUILogic : UIFormLogic
 
     public void Open(UIFormId formId, Dictionary<string, object> param = null)
     {
-        GameEntry.UI.OpenUIForm(formId.ToString().ToLower(), param);
+        GameEntry.UI.OpenUIForm(formId, param);
     }
 
     public void Close(UIFormId formId)
     {
-        GameEntry.UI.CloseUIForm(formId.ToString().ToLower());
+        GameEntry.UI.CloseUIForm(formId);
     }
 
     public void Close()
@@ -77,6 +77,14 @@ public class GameUILogic : UIFormLogic
     {
         base.OnRecycle();
         //Debug.Log(this + "  recycle");
+    }
+
+    protected internal override void OnRealse(object uiFormAsset, object uiFormInstance)
+    {
+        base.OnRealse(uiFormAsset, uiFormInstance);
+
+        GameEntry.Res.UnloadAsset(uiFormAsset);
+        GameObject.Destroy((GameObject)uiFormInstance);
     }
 
     void pauseUINavi()

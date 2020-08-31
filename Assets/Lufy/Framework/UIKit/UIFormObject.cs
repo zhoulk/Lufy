@@ -10,11 +10,18 @@ namespace LF.UI
 {
     public class UIFormObject : ObjectBase
     {
-        public static UIFormObject Create(string name, object uiFormInstance)
+        private object m_UIFormAsset;
+
+        public static UIFormObject Create(string name, object uiFormInstance, object uiFormAsset)
         {
+            if (uiFormAsset == null)
+            {
+                throw new LufyException("UI form asset is invalid.");
+            }
+
             UIFormObject uiInstanceObject = ReferencePool.Acquire<UIFormObject>();
             uiInstanceObject.Initialize(name, uiFormInstance);
-            ((UIFormLogic)uiFormInstance).Handler = uiInstanceObject;
+            uiInstanceObject.m_UIFormAsset = uiFormAsset;
             return uiInstanceObject;
         }
 
@@ -24,7 +31,7 @@ namespace LF.UI
             if (Target != null)
             {
                 UIFormLogic t = Target as UIFormLogic;
-                GameObject.Destroy(t.gameObject);
+                t.OnRealse(m_UIFormAsset, t.gameObject);
             }
             ReferencePool.Release(this);
         }

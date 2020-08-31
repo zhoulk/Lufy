@@ -9,6 +9,8 @@ namespace LF.Res
 {
     public interface IResLoader
     {
+        void Init();
+
         /// <summary>
         /// 异步加载资源。
         /// </summary>
@@ -17,6 +19,12 @@ namespace LF.Res
         /// <param name="loadAssetCallbacks">加载资源回调函数集。</param>
         /// <param name="userData">用户自定义数据。</param>
         void LoadAsset(string assetName, Type assetType, LoadAssetCallbacks loadAssetCallbacks);
+
+        /// <summary>
+        /// 卸载资源
+        /// </summary>
+        /// <param name="assetName"></param>
+        void UnLoadAsset(object asset);
     }
 }
 

@@ -10,6 +10,11 @@ namespace LF.Res
 {
     public class ResourcesLoader : IResLoader
     {
+        public void Init()
+        {
+
+        }
+
         /// <summary>
         /// 异步加载资源。
         /// </summary>
@@ -35,6 +40,11 @@ namespace LF.Res
                     loadAssetCallbacks.LoadAssetSuccessCallback(assetName, resourceRequest.asset, 0, null);
                 }
             };
+        }
+
+        public void UnLoadAsset(object asset)
+        {
+            
         }
     }
 }

@@ -27,8 +27,6 @@ namespace LF.UI
         private Canvas m_CachedCanvas = null;
         private List<Canvas> m_CachedCanvasContainer = new List<Canvas>();
 
-        public object Handler;
-
         public int OriginalDepth
         {
             get;
@@ -183,6 +181,13 @@ namespace LF.UI
         /// <param name="elapseSeconds">逻辑流逝时间，以秒为单位。</param>
         /// <param name="realElapseSeconds">真实流逝时间，以秒为单位。</param>
         protected internal virtual void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        {
+        }
+
+        /// <summary>
+        /// 界面被销毁。
+        /// </summary>
+        protected internal virtual void OnRealse(object uiFormAsset, object uiFormInstance)
         {
         }
 

@@ -1,0 +1,27 @@
+ManifestFileVersion: 0
+CRC: 2875076178
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4d3192877ace71ef1016b400c8530350
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c14c144446a0d5e7633ca1d79f4d7b01
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Game/Res/Prefabs/bullet/bullet.prefab
+Dependencies:
+- E:/gitHub/Lufy/Assets/../AssetBundle/Android/sprite

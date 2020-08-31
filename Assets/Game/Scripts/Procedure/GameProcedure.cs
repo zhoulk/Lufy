@@ -9,11 +9,11 @@ public class GameProcedure : ProcedureBase
 {
     public void Open(UIFormId formId)
     {
-        GameEntry.UI.OpenUIForm(formId.ToString().ToLower());
+        GameEntry.UI.OpenUIForm(formId);
     }
 
     public void Close(UIFormId formId)
     {
-        GameEntry.UI.CloseUIForm(formId.ToString().ToLower());
+        GameEntry.UI.CloseUIForm(formId);
     }
 }

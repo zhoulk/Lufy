@@ -1,0 +1,38 @@
+ManifestFileVersion: 0
+CRC: 2124175935
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: sound
+      Dependencies: {}
+    Info_1:
+      Name: sprite
+      Dependencies: {}
+    Info_2:
+      Name: bullet
+      Dependencies:
+        Dependency_0: sprite
+    Info_3:
+      Name: detail
+      Dependencies: {}
+    Info_4:
+      Name: fight
+      Dependencies: {}
+    Info_5:
+      Name: game
+      Dependencies: {}
+    Info_6:
+      Name: loading
+      Dependencies: {}
+    Info_7:
+      Name: loading_tv
+      Dependencies: {}
+    Info_8:
+      Name: select
+      Dependencies: {}
+    Info_9:
+      Name: shop
+      Dependencies: {}
+    Info_10:
+      Name: assetbundleconfig
+      Dependencies: {}
