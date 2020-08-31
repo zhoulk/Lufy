@@ -1,6 +1,4 @@
-﻿using LF.Pool;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
@@ -14,8 +12,6 @@ namespace LF.Res
         protected Dictionary<uint, ResouceItem> m_ResouceItemDic = new Dictionary<uint, ResouceItem>();
         private Dictionary<uint, AssetBundleItem> m_AssetBundleItemDic = new Dictionary<uint, AssetBundleItem>();
 
-        IObjectPool<AssetBundleItem> m_AssetBundleItemPool = null;
-
         protected string ABLoadPath
         {
             get
@@ -26,7 +22,7 @@ namespace LF.Res
 
         public AssetBundleManager()
         {
-            m_AssetBundleItemPool = Lufy.GetManager<ObjectPoolManager>().CreateMultiSpawnObjectPool<AssetBundleItem>("AssetBundle", 512);
+
         }
 
         /// <summary>
@@ -123,12 +119,7 @@ namespace LF.Res
                     Debug.LogError(" Load AssetBundle Error:" + fullPath);
                 }
 
-                item = m_AssetBundleItemPool.Spawn();
-                if(item == null)
-                {
-                    item = AssetBundleItem.Create(assetBundle);
-                    m_AssetBundleItemPool.Register(item, true);
-                }
+                item = ReferencePool.Acquire<AssetBundleItem>();
                 item.assetBundle = assetBundle;
                 item.RefCount++;
                 m_AssetBundleItemDic.Add(crc, item);
@@ -139,24 +130,54 @@ namespace LF.Res
             }
             return item.assetBundle;
         }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        /// <param name="item"></param>
+        public void ReleaseAsset(ResouceItem item)
+        {
+            if (item == null)
+            {
+                return;
+            }
+
+            if (item.m_DependAssetBundle != null && item.m_DependAssetBundle.Count > 0)
+            {
+                for (int i = 0; i < item.m_DependAssetBundle.Count; i++)
+                {
+                    UnLoadAssetBundle(item.m_DependAssetBundle[i]);
+                }
+            }
+            UnLoadAssetBundle(item.m_ABName);
+        }
+
+        private void UnLoadAssetBundle(string name)
+        {
+            AssetBundleItem item = null;
+            uint crc = Crc32.GetCrc32(name);
+            if (m_AssetBundleItemDic.TryGetValue(crc, out item) && item != null)
+            {
+                item.RefCount--;
+                if (item.RefCount <= 0 && item.assetBundle != null)
+                {
+                    item.assetBundle.Unload(true);
+                    ReferencePool.Release(item);
+                    m_AssetBundleItemDic.Remove(crc);
+                }
+            }
+        }
     }
 
-    public class AssetBundleItem : ObjectBase
+    public class AssetBundleItem : IReference
     {
         public AssetBundle assetBundle;
         public int RefCount;
 
-        public static AssetBundleItem Create(AssetBundle assetBundle)
+        public void Clear()
         {
-            AssetBundleItem item = ReferencePool.Acquire<AssetBundleItem>();
-            item.Initialize(assetBundle);
-            item.assetBundle = assetBundle;
-            return item;
-        }
-
-        protected internal override void Release(bool isShutdown)
-        {
-            
+            assetBundle = null;
+            RefCount = 0;
         }
     }
 
