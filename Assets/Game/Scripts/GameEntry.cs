@@ -153,7 +153,6 @@ public class GameEntry : MonoBehaviour
         m_ObjectPool = Lufy.GetManager<ObjectPoolManager>();
         m_Res = Lufy.GetManager<ResManager>();
         AssetBundleLoader assetBundleLoader = new AssetBundleLoader();
-        assetBundleLoader.SetObjectPoolManager(m_ObjectPool);
         m_Res.SetResLoader(assetBundleLoader);
         m_Res.Init();
 
