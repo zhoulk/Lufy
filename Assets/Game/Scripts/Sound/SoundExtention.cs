@@ -10,13 +10,13 @@ public static class SoundExtention
 {
     public static void PlayMusic(this SoundManager sound, MusicId musicId)
     {
-        string path = Utility.Text.Format("Music/{0}", musicId.ToString());
+        string path = Utility.Text.Format("Assets/Game/Res/Sounds/Music/{0}.mp3", musicId.ToString());
         GameEntry.Sound.PlaySound(path, false);
     }
 
     public static void PlaySound(this SoundManager sound, SoundId soundId)
     {
-        string path = Utility.Text.Format("Sound/{0}", soundId.ToString());
+        string path = Utility.Text.Format("Assets/Game/Res/Sounds/Sound/{0}.mp3", soundId.ToString());
         GameEntry.Sound.PlaySound(path, true);
     }
 

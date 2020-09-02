@@ -29,9 +29,9 @@ public class ProcedureBasketball : GameProcedure
         }
         else
         {
-            Open(UIFormId.Loading);
+            Open(UIFormId.loading);
         }
-        ChangeState<ProcedureMain>(procedureOwner);
+        ChangeState<ProcedureMMain>(procedureOwner);
     }
 
     protected internal override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)

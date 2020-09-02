@@ -18,7 +18,7 @@ namespace LF.Res
         /// <param name="assetType">要加载资源的类型。</param>
         /// <param name="loadAssetCallbacks">加载资源回调函数集。</param>
         /// <param name="userData">用户自定义数据。</param>
-        void LoadAsset(string assetName, Type assetType, LoadAssetCallbacks loadAssetCallbacks);
+        void LoadAsset(string assetName, Type assetType, LoadAssetCallbacks loadAssetCallbacks, object userData = null);
 
         /// <summary>
         /// 卸载资源

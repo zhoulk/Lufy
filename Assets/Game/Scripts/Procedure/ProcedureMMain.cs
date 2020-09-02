@@ -30,7 +30,7 @@ public class EnterGameEventArgs : GameEventArgs
     }
 }
 
-public class ProcedureMain : GameProcedure
+public class ProcedureMMain : GameProcedure
 {
     SceneId targetScene = SceneId.None;
 
@@ -56,7 +56,7 @@ public class ProcedureMain : GameProcedure
             bool fromGame = procedureOwner.GetData<bool>("fromGame");
             if (fromGame)
             {
-                Open(UIFormId.Detail);
+                Open(UIFormId.detail);
             }
         }
     }
@@ -73,7 +73,7 @@ public class ProcedureMain : GameProcedure
         base.OnUpdate(procedureOwner, elapseSeconds, realElapseSeconds);
 
         //Log.Debug("procedure preload update " + elapseSeconds + "  " + realElapseSeconds);
-        if(targetScene != SceneId.None)
+        if (targetScene != SceneId.None)
         {
             GameEntry.Scene.LoadScene(targetScene);
             ChangeState<ProcedureGame>(procedureOwner);

@@ -20,6 +20,7 @@ namespace LF.Net
         MessageConnect connect;
         MessageMsg msg;
         MessageBasketBall basketBall;
+        MessageBowlingBall bowlingBall;
 
         public CShaperPackager()
         {
@@ -31,6 +32,7 @@ namespace LF.Net
             connect = new MessageConnect();
             msg = new MessageMsg();
             basketBall = new MessageBasketBall();
+            bowlingBall = new MessageBowlingBall();
         }
 
         public virtual IMessage Decode(byte[] bytes)
@@ -74,6 +76,11 @@ namespace LF.Net
                     basketBall.Clear();
                     basketBall.Decode(bytes, 0);
                     return basketBall;
+
+                case MessageType.BowlingBall:
+                    bowlingBall.Clear();
+                    bowlingBall.Decode(bytes, 0);
+                    return bowlingBall;
             }
 
             return null;

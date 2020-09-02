@@ -48,7 +48,7 @@ public class ProcedureGame : GameProcedure
 
         //Log.Debug("procedure preload enter");
 
-        Open(UIFormId.Fight);
+        Open(UIFormId.fight);
     }
 
     protected internal override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)
@@ -67,7 +67,7 @@ public class ProcedureGame : GameProcedure
         {
             exitGame = false;
             procedureOwner.SetData<bool>("fromGame", true);
-            ChangeState<ProcedureMain>(procedureOwner);
+            ChangeState<ProcedureMMain>(procedureOwner);
             //SceneManager.UnloadSceneAsync("Game");
 
             GameEntry.Scene.UnloadScene(SceneId.Game);

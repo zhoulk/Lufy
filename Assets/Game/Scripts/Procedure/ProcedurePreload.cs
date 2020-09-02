@@ -23,8 +23,8 @@ public class ProcedurePreload : GameProcedure
 
         Log.Debug("procedure preload enter");
 
-        Open(UIFormId.Game);
-        ChangeState<ProcedureMain>(procedureOwner);
+        Open(UIFormId.game);
+        ChangeState<ProcedureMMain>(procedureOwner);
     }
 
     protected internal override void OnLeave(IFsm<ProcedureManager> procedureOwner, bool isShutdown)

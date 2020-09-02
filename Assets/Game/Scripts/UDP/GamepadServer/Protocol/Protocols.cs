@@ -50,6 +50,11 @@ namespace LF.Net
         BasketBall = 5,
 
         /// <summary>
+        /// 保龄球
+        /// </summary>
+        BowlingBall = 6,
+
+        /// <summary>
         /// 修改样式
         /// </summary>
         ChangeStyle = 100,
@@ -511,6 +516,74 @@ namespace LF.Net
         public MessageBasketBall() : base()
         {
             MsgType = MessageType.BasketBall;
+        }
+
+        public override byte[] Encode()
+        {
+            base.Encode();
+
+            byte[] vx = BitConverter.GetBytes(Velocity.x);
+            byte[] vy = BitConverter.GetBytes(Velocity.y);
+            byte[] vz = BitConverter.GetBytes(Velocity.z);
+
+            byte[] tx = BitConverter.GetBytes(Torque.x);
+            byte[] ty = BitConverter.GetBytes(Torque.y);
+            byte[] tz = BitConverter.GetBytes(Torque.z);
+
+            buf.AddRange(vx);
+            buf.AddRange(vy);
+            buf.AddRange(vz);
+
+            buf.AddRange(tx);
+            buf.AddRange(ty);
+            buf.AddRange(tz);
+
+            //更新长度信息
+            Refresh();
+
+            return buf.ToArray();
+        }
+
+        public override int Decode(byte[] value, int startIndex)
+        {
+            startIndex = base.Decode(value, startIndex);
+
+            Velocity.x = BitConverter.ToSingle(value, startIndex);
+            startIndex += 4;
+            Velocity.y = BitConverter.ToSingle(value, startIndex);
+            startIndex += 4;
+            Velocity.z = BitConverter.ToSingle(value, startIndex);
+            startIndex += 4;
+
+            Torque.x = BitConverter.ToSingle(value, startIndex);
+            startIndex += 4;
+            Torque.y = BitConverter.ToSingle(value, startIndex);
+            startIndex += 4;
+            Torque.z = BitConverter.ToSingle(value, startIndex);
+            startIndex += 4;
+
+            return startIndex;
+        }
+    }
+
+    /// <summary>
+    /// 保龄球消息
+    /// </summary>
+    public class MessageBowlingBall : MessageHeader
+    {
+        /// <summary>
+        /// 速度
+        /// </summary>
+        public Vector3 Velocity;
+
+        /// <summary>
+        /// 旋转
+        /// </summary>
+        public Vector3 Torque;
+
+        public MessageBowlingBall() : base()
+        {
+            MsgType = MessageType.BowlingBall;
         }
 
         public override byte[] Encode()

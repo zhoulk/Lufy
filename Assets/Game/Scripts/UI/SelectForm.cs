@@ -19,7 +19,7 @@ public class SelectForm : GameUILogic
 
         GameEntry.UIEvent.AddOnClickHandler(P1Btn, (obj) =>
         {
-            Open(UIFormId.Detail);
+            Open(UIFormId.detail);
         });
 
         GameEntry.UIEvent.AddOnClickHandler(P2Btn, (obj) =>

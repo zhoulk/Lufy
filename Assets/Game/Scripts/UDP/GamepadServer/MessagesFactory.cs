@@ -118,6 +118,20 @@ namespace LF
         }
 
         /// <summary>
+        /// 保龄球消息
+        /// </summary>
+        public static IMessage BowlingBall(byte hid, Vector3 velocity, Vector3 torque)
+        {
+            MessageBowlingBall msg = new MessageBowlingBall();
+            msg.TimeStamp = SystemTime.LowClientNow();
+            msg.Hid = hid;
+            msg.Velocity = velocity;
+            msg.Torque = torque;
+
+            return msg;
+        }
+
+        /// <summary>
         /// 自定义消息
         /// </summary>
         /// <param name="data"></param>

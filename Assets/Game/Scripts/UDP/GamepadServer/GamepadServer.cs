@@ -15,6 +15,7 @@ using UnityEngine;
 using LF.Net;
 using LF;
 using BasketBall;
+using Bowling;
 
 namespace LF.GamepadServer
 {
@@ -136,7 +137,7 @@ namespace LF.GamepadServer
         /// <param name="msg">消息</param>
         private void OnGamepadMessage(IMessage msg)
         {
-            //Log.Debug("msgType = {0}", msg.GetMessageType());
+            Log.Debug("msgType = {0}", msg.GetMessageType());
 
             switch (msg.GetMessageType())
             {
@@ -176,6 +177,14 @@ namespace LF.GamepadServer
 
                     GameEntry.Event.Fire(this, BasketBallEventArgs.Create(b));
 
+                    break;
+
+                case MessageType.BowlingBall:
+                    MessageBowlingBall bo = msg as MessageBowlingBall;
+
+                    //Log.Debug("power = {0} XAngle = {1}", b.Velocity, b.Torque);
+
+                    GameEntry.Event.Fire(this, BowlingBallEventArgs.Create(bo));
                     break;
             }
         }

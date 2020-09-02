@@ -12,12 +12,12 @@ public static class UIExtention
 {
     public static void OpenUIForm(this UIManager ui, UIFormId formId, Dictionary<string, object> param = null)
     {
-        string path = Utility.Text.Format("Assets/Game/Res/Prefabs/{0}.prefab", formId.ToString().ToLower());
+        string path = Utility.Text.Format("Assets/Game/Res/Prefabs/{0}.prefab", formId.ToString());
         GameEntry.UI.OpenUIForm(path, param);
     }
 
     public static void CloseUIForm(this UIManager ui, UIFormId formId)
     {
-        GameEntry.UI.CloseUIForm(formId.ToString().ToLower());
+        GameEntry.UI.CloseUIForm(formId.ToString());
     }
 }

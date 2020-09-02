@@ -9,26 +9,29 @@ public enum UIFormId
     /// <summary>
     /// 加载
     /// </summary>
-    Loading = 1,
+    loading = 1,
     loading_TV,
+
+    loading_bowling,
+    loading_bowling_TV,
     /// <summary>
     /// 
     /// </summary>
-    Game,
+    game,
     /// <summary>
     /// 商店
     /// </summary>
-    Shop,
+    shop,
     /// <summary>
     /// 选择页面
     /// </summary>
-    Select,
+    select,
     /// <summary>
     /// 详情
     /// </summary>
-    Detail,
+    detail,
     /// <summary>
     /// 战斗
     /// </summary>
-    Fight
+    fight
 }

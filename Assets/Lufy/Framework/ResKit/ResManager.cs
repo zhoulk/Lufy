@@ -14,6 +14,8 @@ namespace LF.Res
     {
         private IResLoader m_ResLoader;
 
+        public bool EditorResource = false;
+
         public ResManager()
         {
             m_ResLoader = new ResourcesLoader();
@@ -29,7 +31,7 @@ namespace LF.Res
             m_ResLoader.Init();
         }
 
-        public void LoadAsset(string assetName, LoadAssetCallbacks loadAssetCallbacks)
+        public void LoadAsset(string assetName, LoadAssetCallbacks loadAssetCallbacks, object userData = null)
         {
             if (string.IsNullOrEmpty(assetName))
             {
@@ -41,10 +43,10 @@ namespace LF.Res
                 throw new LufyException("Load asset callbacks is invalid.");
             }
 
-            m_ResLoader.LoadAsset(assetName, null, loadAssetCallbacks);
+            m_ResLoader.LoadAsset(assetName, null, loadAssetCallbacks, userData);
         }
 
-        public void LoadAsset(string assetName, Type assetType, LoadAssetCallbacks loadAssetCallbacks)
+        public void LoadAsset(string assetName, Type assetType, LoadAssetCallbacks loadAssetCallbacks, object userData = null)
         {
             if (string.IsNullOrEmpty(assetName))
             {
@@ -56,7 +58,7 @@ namespace LF.Res
                 throw new LufyException("Load asset callbacks is invalid.");
             }
 
-            m_ResLoader.LoadAsset(assetName, assetType, loadAssetCallbacks);
+            m_ResLoader.LoadAsset(assetName, assetType, loadAssetCallbacks, userData);
         }
 
         public void UnloadAsset(object asset)

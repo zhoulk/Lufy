@@ -15,34 +15,39 @@ namespace LF.Res
 {
     public class AssetBundleLoader : IResLoader
     {
-        private AssetBundleManager m_AssetBundleManager = null;
+        private ResourceManager m_ResourceManager = null;
 
         public void Init()
         {
-            m_AssetBundleManager = new AssetBundleManager();
-            m_AssetBundleManager.LoadAssetBundleConfig();
+            m_ResourceManager = new ResourceManager();
         }
 
-        public void LoadAsset(string assetName, Type assetType, LoadAssetCallbacks loadAssetCallbacks)
+        public void LoadAsset(string assetName, Type assetType, LoadAssetCallbacks loadAssetCallbacks, object userData)
         {
-            uint crc = Crc32.GetCrc32(assetName);
-            ResouceItem resouceItem = m_AssetBundleManager.LoadResouceAssetBundle(crc);
-            AssetBundleRequest bundleRequest = null;
-            if(assetType != null)
+            Log.Debug("Load asset {0}", assetName);
+            //uint crc = Crc32.GetCrc32(assetName);
+            //ResouceItem resouceItem = m_AssetBundleManager.LoadResouceAssetBundle(crc);
+            //AssetBundleRequest bundleRequest = null;
+            //if(assetType != null)
+            //{
+            //    bundleRequest = resouceItem.m_AssetBundle.LoadAssetAsync(assetName, assetType);
+            //}
+            //else
+            //{
+            //    bundleRequest = resouceItem.m_AssetBundle.LoadAssetAsync(assetName);
+            //}
+            //bundleRequest.completed += (op) =>
+            //{
+            //    if (loadAssetCallbacks.LoadAssetSuccessCallback != null)
+            //    {
+            //        loadAssetCallbacks.LoadAssetSuccessCallback(assetName, bundleRequest.asset, 0, null);
+            //    }
+            //};
+            UnityEngine.Object obj = m_ResourceManager.LoadResource<UnityEngine.Object>(assetName);
+            if (loadAssetCallbacks.LoadAssetSuccessCallback != null)
             {
-                bundleRequest = resouceItem.m_AssetBundle.LoadAssetAsync(assetName, assetType);
+                loadAssetCallbacks.LoadAssetSuccessCallback(assetName, obj, 0, userData);
             }
-            else
-            {
-                bundleRequest = resouceItem.m_AssetBundle.LoadAssetAsync(assetName);
-            }
-            bundleRequest.completed += (op) =>
-            {
-                if (loadAssetCallbacks.LoadAssetSuccessCallback != null)
-                {
-                    loadAssetCallbacks.LoadAssetSuccessCallback(assetName, bundleRequest.asset, 0, null);
-                }
-            };
         }
 
         public void UnLoadAsset(object asset)

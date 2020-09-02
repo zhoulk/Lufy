@@ -20,7 +20,7 @@ namespace LF.Res
         /// </summary>
         /// <param name="assetName">要加载资源的名称。</param>
         /// <param name="loadAssetCallbacks">加载资源回调函数集。</param>
-        void LoadAsset(string assetName, LoadAssetCallbacks loadAssetCallbacks);
+        void LoadAsset(string assetName, LoadAssetCallbacks loadAssetCallbacks, object userData = null);
 
         /// <summary>
         /// 异步加载资源。
@@ -28,7 +28,7 @@ namespace LF.Res
         /// <param name="assetName">要加载资源的名称。</param>
         /// <param name="assetType">要加载资源的类型。</param>
         /// <param name="loadAssetCallbacks">加载资源回调函数集。</param>
-        void LoadAsset(string assetName, Type assetType, LoadAssetCallbacks loadAssetCallbacks);
+        void LoadAsset(string assetName, Type assetType, LoadAssetCallbacks loadAssetCallbacks, object userData = null);
 
         /// <summary>
         /// 卸载资源。

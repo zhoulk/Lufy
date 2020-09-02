@@ -37,12 +37,13 @@ public class GameEntry : MonoBehaviour
     {
         initManagers();
 
-        ProcedureBase[] procedures = new ProcedureBase[5];
+        ProcedureBase[] procedures = new ProcedureBase[6];
         procedures[0] = new ProcedureLaunch();
         procedures[1] = new ProcedurePreload();
-        procedures[2] = new ProcedureMain();
+        procedures[2] = new ProcedureMMain();
         procedures[3] = new ProcedureGame();
         procedures[4] = new ProcedureBasketball();
+        procedures[5] = new ProcedureBowling();
 
         m_Procedure.Initialize(m_Fsm, procedures);
         m_Procedure.StartProcedure(typeof(ProcedureLaunch));
@@ -170,6 +171,8 @@ public class GameEntry : MonoBehaviour
         m_Event = Lufy.GetManager<EventManager>();
 
         m_Sound = Lufy.GetManager<SoundManager>();
+        m_Sound.SetResManager(m_Res);
+
         m_Scene = Lufy.GetManager<SceneManager>();
 
         m_Setting = Lufy.GetManager<SettingManager>();

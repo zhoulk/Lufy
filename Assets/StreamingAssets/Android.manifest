@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 2124175935
+CRC: 1969387117
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -25,14 +25,20 @@ AssetBundleManifest:
       Name: loading
       Dependencies: {}
     Info_7:
-      Name: loading_tv
+      Name: loading_bowling
       Dependencies: {}
     Info_8:
-      Name: select
+      Name: loading_bowling_tv
       Dependencies: {}
     Info_9:
-      Name: shop
+      Name: loading_tv
       Dependencies: {}
     Info_10:
+      Name: select
+      Dependencies: {}
+    Info_11:
+      Name: shop
+      Dependencies: {}
+    Info_12:
       Name: assetbundleconfig
       Dependencies: {}

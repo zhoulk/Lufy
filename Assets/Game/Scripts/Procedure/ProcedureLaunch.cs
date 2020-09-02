@@ -38,6 +38,7 @@ public class ProcedureLaunch : GameProcedure
 
         ChangeState<ProcedurePreload>(procedureOwner);
         //ChangeState<ProcedureBasketball>(procedureOwner);
+        //ChangeState<ProcedureBowling>(procedureOwner);
     }
 
     protected internal override void OnDestroy(IFsm<ProcedureManager> procedureOwner)

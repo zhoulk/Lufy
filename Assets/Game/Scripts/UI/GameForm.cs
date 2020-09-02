@@ -25,18 +25,20 @@ public class GameForm : GameUILogic
 
         GameEntry.UIEvent.AddOnClickHandler(shopBtn, (obj) =>
         {
-            Open(UIFormId.Shop);
+            Open(UIFormId.shop);
         });
 
         GameEntry.UIEvent.AddOnClickHandler(selectBtn, (obj) =>
         {
-            Open(UIFormId.Select);
+            Open(UIFormId.select);
         });
     }
 
     protected internal override void OnOpen(object userData)
     {
         base.OnOpen(userData);
+
+        GameEntry.Sound.PlayMusic(MusicId.bgm2);
 
         //Log.Debug("loading open");
 
@@ -110,6 +112,10 @@ public class GameForm : GameUILogic
         base.OnUpdate(elapseSeconds, realElapseSeconds);
 
         //Log.Debug("loading update " + elapseSeconds);
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameEntry.Sound.PlaySound(SoundId.UI_click);
+        }
     }
 
     private void OnDestroy()

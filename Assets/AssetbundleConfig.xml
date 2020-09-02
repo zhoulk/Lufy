@@ -7,6 +7,8 @@
   <ABList Path="Assets/Game/Res/Prefabs/fight.prefab" Crc="770944382" ABName="fight" AssetName="fight.prefab" />
   <ABList Path="Assets/Game/Res/Prefabs/game.prefab" Crc="4034599388" ABName="game" AssetName="game.prefab" />
   <ABList Path="Assets/Game/Res/Prefabs/loading.prefab" Crc="3228890013" ABName="loading" AssetName="loading.prefab" />
+  <ABList Path="Assets/Game/Res/Prefabs/loading_bowling.prefab" Crc="2479677723" ABName="loading_bowling" AssetName="loading_bowling.prefab" />
+  <ABList Path="Assets/Game/Res/Prefabs/loading_bowling_TV.prefab" Crc="993751149" ABName="loading_bowling_tv" AssetName="loading_bowling_TV.prefab" />
   <ABList Path="Assets/Game/Res/Prefabs/loading_TV.prefab" Crc="1674402913" ABName="loading_tv" AssetName="loading_TV.prefab" />
   <ABList Path="Assets/Game/Res/Prefabs/select.prefab" Crc="1621182142" ABName="select" AssetName="select.prefab" />
   <ABList Path="Assets/Game/Res/Prefabs/shop.prefab" Crc="149721750" ABName="shop" AssetName="shop.prefab" />

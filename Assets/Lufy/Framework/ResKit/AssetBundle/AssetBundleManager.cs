@@ -28,7 +28,7 @@ namespace LF.Res
         /// <summary>
         /// 加载配置表
         /// </summary>
-        public bool LoadAssetBundleConfig()
+        protected internal bool LoadAssetBundleConfig()
         {
             m_ResouceItemDic.Clear();
             string configPath = ABLoadPath + m_ABConfigABName;
@@ -71,7 +71,7 @@ namespace LF.Res
         /// </summary>
         /// <param name="crc"></param>
         /// <returns></returns>
-        public ResouceItem LoadResouceAssetBundle(uint crc)
+        protected internal ResouceItem LoadResouceAssetBundle(uint crc)
         {
             ResouceItem item = null;
             if (!m_ResouceItemDic.TryGetValue(crc, out item) || item == null)
@@ -135,7 +135,7 @@ namespace LF.Res
         /// 释放资源
         /// </summary>
         /// <param name="item"></param>
-        public void ReleaseAsset(ResouceItem item)
+        protected internal void ReleaseAsset(ResouceItem item)
         {
             if (item == null)
             {
@@ -193,6 +193,28 @@ namespace LF.Res
         public List<string> m_DependAssetBundle = null;
         //该资源加载完的AB包
         public AssetBundle m_AssetBundle = null;
+
+        //资源对象
+        public Object m_Obj = null;
+        //资源唯一标识
+        public int m_Guid = 0;
+        //资源最后所使用的时间
+        public float m_LastUseTime = 0.0f;
+        //引用计数
+        protected int m_RefCount = 0;
+
+        public int RefCount
+        {
+            get { return m_RefCount; }
+            set
+            {
+                m_RefCount = value;
+                if (m_RefCount < 0)
+                {
+                    Debug.LogError("refcount < 0" + m_RefCount + " ," + (m_Obj != null ? m_Obj.name : "name is null"));
+                }
+            }
+        }
     }
 }
 
