@@ -161,6 +161,7 @@ namespace LF.Res
                 item.RefCount--;
                 if (item.RefCount <= 0 && item.assetBundle != null)
                 {
+                    Debug.Log("release " + name);
                     item.assetBundle.Unload(true);
                     ReferencePool.Release(item);
                     m_AssetBundleItemDic.Remove(crc);

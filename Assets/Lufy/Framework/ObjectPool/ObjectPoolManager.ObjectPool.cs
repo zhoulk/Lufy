@@ -198,6 +198,7 @@ namespace LF.Pool
                 }
                 m_ObjectMap.Add(obj.Target, internalObject);
 
+                Log.Debug(Count + "  " + m_Capacity);
                 if (Count > m_Capacity)
                 {
                     Release();
@@ -242,12 +243,13 @@ namespace LF.Pool
                 //Log.Debug("m_CachedCanReleaseObjects.size {0} ", m_CachedCanReleaseObjects.Count);
 
                 List<T> toReleaseObjects = releaseObjectFilterCallback(m_CachedCanReleaseObjects, toReleaseCount, expireTime);
+                //Log.Debug("toReleaseObjects.size {0} ", toReleaseObjects.Count);
+
                 if (toReleaseObjects == null || toReleaseObjects.Count <= 0)
                 {
                     return;
                 }
 
-                //Log.Debug("toReleaseObjects.size {0} ", toReleaseObjects.Count);
                 foreach (T toReleaseObject in toReleaseObjects)
                 {
                     ReleaseObject(toReleaseObject);

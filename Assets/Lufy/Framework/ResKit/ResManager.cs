@@ -16,6 +16,8 @@ namespace LF.Res
 
         public bool EditorResource = false;
 
+        public int MaxCacheCount = 500;
+
         public ResManager()
         {
             m_ResLoader = new ResourcesLoader();

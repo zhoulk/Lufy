@@ -3,7 +3,9 @@
   <ABList Path="Assets/Game/Res/Prefabs/bullet/bullet.prefab" Crc="3629371293" ABName="bullet" AssetName="bullet.prefab">
     <ABDependce>sprite</ABDependce>
   </ABList>
-  <ABList Path="Assets/Game/Res/Prefabs/detail.prefab" Crc="2390475720" ABName="detail" AssetName="detail.prefab" />
+  <ABList Path="Assets/Game/Res/Prefabs/detail.prefab" Crc="2390475720" ABName="detail" AssetName="detail.prefab">
+    <ABDependce>sprite</ABDependce>
+  </ABList>
   <ABList Path="Assets/Game/Res/Prefabs/fight.prefab" Crc="770944382" ABName="fight" AssetName="fight.prefab" />
   <ABList Path="Assets/Game/Res/Prefabs/game.prefab" Crc="4034599388" ABName="game" AssetName="game.prefab" />
   <ABList Path="Assets/Game/Res/Prefabs/loading.prefab" Crc="3228890013" ABName="loading" AssetName="loading.prefab" />
@@ -14,5 +16,6 @@
   <ABList Path="Assets/Game/Res/Prefabs/shop.prefab" Crc="149721750" ABName="shop" AssetName="shop.prefab" />
   <ABList Path="Assets/Game/Res/Sounds/Music/bgm2.mp3" Crc="3609407856" ABName="sound" AssetName="bgm2.mp3" />
   <ABList Path="Assets/Game/Res/Sounds/Sound/UI_click.mp3" Crc="1238234610" ABName="sound" AssetName="UI_click.mp3" />
+  <ABList Path="Assets/Game/Res/Sprites/forest_bg.jpg" Crc="3113675346" ABName="sprite" AssetName="forest_bg.jpg" />
   <ABList Path="Assets/Game/Res/Sprites/r1.png" Crc="3802245939" ABName="sprite" AssetName="r1.png" />
 </AssetBundleConfig>

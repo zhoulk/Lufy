@@ -83,6 +83,7 @@ public class GameUILogic : UIFormLogic
     {
         base.OnRealse(uiFormAsset, uiFormInstance);
 
+        Debug.Log(this + "  release");
         GameEntry.Res.UnloadAsset(uiFormAsset);
         GameObject.Destroy((GameObject)uiFormInstance);
     }

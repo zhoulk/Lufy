@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1969387117
+CRC: 3819566968
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -14,7 +14,8 @@ AssetBundleManifest:
         Dependency_0: sprite
     Info_3:
       Name: detail
-      Dependencies: {}
+      Dependencies:
+        Dependency_0: sprite
     Info_4:
       Name: fight
       Dependencies: {}

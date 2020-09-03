@@ -52,7 +52,7 @@ namespace LF.Res
 
         public void UnLoadAsset(object asset)
         {
-            
+            m_ResourceManager.ReleaseResouce((UnityEngine.Object)asset);
         }
     }
 }

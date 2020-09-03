@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3786895056
+CRC: 3312242780
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f373e4b3be71802ed5e3dadca3d09a61
+    Hash: 84e53b199066b2fbc47e8f41eaeb851c
   TypeTreeHash:
     serializedVersion: 2
     Hash: ea5a42e0fd8ea905efa7aa926a3b8944
@@ -14,5 +14,6 @@ ClassTypes:
 - Class: 213
   Script: {instanceID: 0}
 Assets:
+- Assets/Game/Res/Sprites/forest_bg.jpg
 - Assets/Game/Res/Sprites/r1.png
 Dependencies: []

@@ -12,7 +12,7 @@ public class Bullet : ObjectBase
     public static Bullet Create(string name, object uiFormInstance)
     {
         Bullet bulletInstanceObject = ReferencePool.Acquire<Bullet>();
-        bulletInstanceObject.Initialize(uiFormInstance);
+        bulletInstanceObject.Initialize(name,uiFormInstance);
         return bulletInstanceObject;
     }
 

@@ -61,7 +61,7 @@ namespace LF
             switch (level)
             {
                 case LufyLogLevel.Debug:
-                    UnityEngine.Debug.Log(Utility.Text.Format("<color=#000000>{0}</color>", message.ToString()));
+                    UnityEngine.Debug.Log(Utility.Text.Format("<color=#ffffff>{0}</color>", message.ToString()));
                     break;
 
                 case LufyLogLevel.Info:

@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 778674452
+CRC: 477355308
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e3c3d010eb08c83d3a90b910aaa55ceb
+    Hash: 4bedd68cbd27757dc2a3ba512031f138
   TypeTreeHash:
     serializedVersion: 2
     Hash: fb7b2e139ed209da948536f33e21af67
@@ -37,4 +37,5 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/Game/Res/Prefabs/detail.prefab
-Dependencies: []
+Dependencies:
+- E:/gitHub/Lufy/Assets/../AssetBundle/Android/sprite
