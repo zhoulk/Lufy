@@ -106,13 +106,14 @@ namespace LF
         /// <summary>
         /// 篮球消息
         /// </summary>
-        public static IMessage BasketBall(byte hid, Vector3 velocity, Vector3 torque)
+        public static IMessage BasketBall(byte hid, Vector3 startPos, Vector3 endPos, float rate)
         {
             MessageBasketBall msg = new MessageBasketBall();
             msg.TimeStamp = SystemTime.LowClientNow();
             msg.Hid = hid;
-            msg.Velocity = velocity;
-            msg.Torque = torque;
+            msg.StartPos = startPos;
+            msg.EndPos = endPos;
+            msg.Rate = rate;
 
             return msg;
         }

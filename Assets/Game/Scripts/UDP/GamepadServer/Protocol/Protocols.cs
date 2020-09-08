@@ -504,14 +504,19 @@ namespace LF.Net
     public class MessageBasketBall : MessageHeader
     {
         /// <summary>
-        /// 速度
+        /// 起点
         /// </summary>
-        public Vector3 Velocity;
+        public Vector3 StartPos;
 
         /// <summary>
-        /// 旋转
+        /// 终点
         /// </summary>
-        public Vector3 Torque;
+        public Vector3 EndPos;
+
+        /// <summary>
+        /// 力量比例
+        /// </summary>
+        public float Rate;
 
         public MessageBasketBall() : base()
         {
@@ -522,13 +527,15 @@ namespace LF.Net
         {
             base.Encode();
 
-            byte[] vx = BitConverter.GetBytes(Velocity.x);
-            byte[] vy = BitConverter.GetBytes(Velocity.y);
-            byte[] vz = BitConverter.GetBytes(Velocity.z);
+            byte[] vx = BitConverter.GetBytes(StartPos.x);
+            byte[] vy = BitConverter.GetBytes(StartPos.y);
+            byte[] vz = BitConverter.GetBytes(StartPos.z);
 
-            byte[] tx = BitConverter.GetBytes(Torque.x);
-            byte[] ty = BitConverter.GetBytes(Torque.y);
-            byte[] tz = BitConverter.GetBytes(Torque.z);
+            byte[] tx = BitConverter.GetBytes(EndPos.x);
+            byte[] ty = BitConverter.GetBytes(EndPos.y);
+            byte[] tz = BitConverter.GetBytes(EndPos.z);
+
+            byte[] rate = BitConverter.GetBytes(Rate);
 
             buf.AddRange(vx);
             buf.AddRange(vy);
@@ -537,6 +544,8 @@ namespace LF.Net
             buf.AddRange(tx);
             buf.AddRange(ty);
             buf.AddRange(tz);
+
+            buf.AddRange(rate);
 
             //更新长度信息
             Refresh();
@@ -548,18 +557,21 @@ namespace LF.Net
         {
             startIndex = base.Decode(value, startIndex);
 
-            Velocity.x = BitConverter.ToSingle(value, startIndex);
+            StartPos.x = BitConverter.ToSingle(value, startIndex);
             startIndex += 4;
-            Velocity.y = BitConverter.ToSingle(value, startIndex);
+            StartPos.y = BitConverter.ToSingle(value, startIndex);
             startIndex += 4;
-            Velocity.z = BitConverter.ToSingle(value, startIndex);
+            StartPos.z = BitConverter.ToSingle(value, startIndex);
             startIndex += 4;
 
-            Torque.x = BitConverter.ToSingle(value, startIndex);
+            EndPos.x = BitConverter.ToSingle(value, startIndex);
             startIndex += 4;
-            Torque.y = BitConverter.ToSingle(value, startIndex);
+            EndPos.y = BitConverter.ToSingle(value, startIndex);
             startIndex += 4;
-            Torque.z = BitConverter.ToSingle(value, startIndex);
+            EndPos.z = BitConverter.ToSingle(value, startIndex);
+            startIndex += 4;
+
+            Rate = BitConverter.ToSingle(value, startIndex);
             startIndex += 4;
 
             return startIndex;

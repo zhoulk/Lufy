@@ -171,11 +171,6 @@ namespace LF.GamepadServer
                     break;
 
                 case MessageType.BasketBall:
-                    MessageBasketBall b = msg as MessageBasketBall;
-
-                    //Log.Debug("power = {0} XAngle = {1}", b.Velocity, b.Torque);
-
-                    GameEntry.Event.Fire(this, BasketBallEventArgs.Create(b));
 
                     break;
 

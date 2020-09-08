@@ -36,8 +36,8 @@ public class ProcedureLaunch : GameProcedure
 
         //Log.Debug("procedure main update " + elapseSeconds + "  " + realElapseSeconds);
 
-        ChangeState<ProcedurePreload>(procedureOwner);
-        //ChangeState<ProcedureBasketball>(procedureOwner);
+        //ChangeState<ProcedurePreload>(procedureOwner);
+        ChangeState<ProcedureBasketball>(procedureOwner);
         //ChangeState<ProcedureBowling>(procedureOwner);
     }
 

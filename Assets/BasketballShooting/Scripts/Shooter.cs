@@ -90,14 +90,6 @@ namespace BasketBall
         // Use this for initialization
         void Start()
         {
-            if (Define.platForm.Equals(PlatForm.TV))
-            {
-                GameEntry.Event.Subscribe(BasketBallEventArgs.EventId, OnBasketBallHandler);
-                Vector3 pos = cameraForShooter.transform.localPosition;
-                pos.y = 1.1f;
-                cameraForShooter.transform.localPosition = pos;
-            }
-
             if (Define.platForm.Equals(PlatForm.Phone))
             {
                 targetZ = ShooterParam.Portriat.targetZ;
@@ -274,12 +266,15 @@ namespace BasketBall
             float len = ((Vector2)Input.mousePosition - startTouchPos).magnitude;
             //Debug.Log(len + " " + Input.mousePosition + "  " + startTouchPos);
             float rate = len / 750;
-            shotPower = shotPowerMin + ((shotPowerMax - shotPowerMin) * rate);
-
             Vector3 screenPoint = Input.mousePosition;
             screenPoint.z = targetZ;
             Vector3 worldPoint = cameraForShooter.ScreenToWorldPoint(screenPoint);
 
+            // 发送消息
+            IMessage msg = MessagesFactory.BasketBall(1, shotPoint.transform.position, worldPoint, rate);
+            UDPManager.Instance.Send(msg);
+
+            shotPower = shotPowerMin + ((shotPowerMax - shotPowerMin) * rate);
             worldPoint.y += (offsetY / shotPower);
 
             //float tmax100 = shotTimeMax * 10000.0f;
@@ -306,45 +301,6 @@ namespace BasketBall
                 ballRigidbody.velocity = velocity;
                 ballRigidbody.AddTorque(_torque);
             }
-
-            //Log.Debug("first {0} {1}", velocity, _torque);
-
-            IMessage msg = MessagesFactory.BasketBall(1, velocity, _torque);
-            UDPManager.Instance.Send(msg);
-        }
-
-        void OnBasketBallHandler(object sender, GameEventArgs args)
-        {
-            BasketBallEventArgs ne = args as BasketBallEventArgs;
-            if (ne != null)
-            {
-                Log.Debug("second {0} {1}", ne.msg.Velocity, ne.msg.Torque);
-
-                ballRigidbody.velocity = ne.msg.Velocity;
-                ballRigidbody.AddTorque(ne.msg.Torque);
-
-                state = ShotState.Charging;
-                ballRigidbody.GetComponent<ShotBall>().DestroyDelay();
-                objBall = null;
-            }
-        }
-    }
-
-    public sealed class BasketBallEventArgs : GameEventArgs
-    {
-        public static readonly int EventId = typeof(BasketBallEventArgs).GetHashCode();
-
-        public override int Id => EventId;
-
-        public MessageBasketBall msg;
-
-        public static BasketBallEventArgs Create(MessageBasketBall msg)
-        {
-            //Log.Debug("middle {0} {1}", msg.Velocity, msg.Torque);
-
-            BasketBallEventArgs e = new BasketBallEventArgs();
-            e.msg = msg;
-            return e;
         }
     }
 }
