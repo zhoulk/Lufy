@@ -15,11 +15,11 @@ namespace LF.Res
 {
     public class AssetBundleLoader : IResLoader
     {
-        private ResourceManager m_ResourceManager = null;
+        private AssetManager m_AssetManager = null;
 
         public void Init()
         {
-            m_ResourceManager = new ResourceManager();
+            m_AssetManager = new AssetManager();
         }
 
         public void LoadAsset(string assetName, Type assetType, LoadAssetCallbacks loadAssetCallbacks, object userData)
@@ -43,16 +43,23 @@ namespace LF.Res
             //        loadAssetCallbacks.LoadAssetSuccessCallback(assetName, bundleRequest.asset, 0, null);
             //    }
             //};
-            UnityEngine.Object obj = m_ResourceManager.LoadResource<UnityEngine.Object>(assetName);
-            if (loadAssetCallbacks.LoadAssetSuccessCallback != null)
+            m_AssetManager.LoadAsset(assetName, (path, obj)=>
             {
-                loadAssetCallbacks.LoadAssetSuccessCallback(assetName, obj, 0, userData);
-            }
+                if (loadAssetCallbacks.LoadAssetSuccessCallback != null)
+                {
+                    loadAssetCallbacks.LoadAssetSuccessCallback(assetName, obj, 0, userData);
+                }
+            });
+        }
+
+        public void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        {
+            m_AssetManager.OnUpdate(elapseSeconds, realElapseSeconds);
         }
 
         public void UnLoadAsset(object asset)
         {
-            m_ResourceManager.ReleaseResouce((UnityEngine.Object)asset);
+            m_AssetManager.ReleaseResouce((UnityEngine.Object)asset);
         }
     }
 }

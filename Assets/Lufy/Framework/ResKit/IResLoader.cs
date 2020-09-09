@@ -25,6 +25,8 @@ namespace LF.Res
         /// </summary>
         /// <param name="assetName"></param>
         void UnLoadAsset(object asset);
+
+        void OnUpdate(float elapseSeconds, float realElapseSeconds);
     }
 }
 

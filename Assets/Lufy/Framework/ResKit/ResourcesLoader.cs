@@ -42,6 +42,11 @@ namespace LF.Res
             };
         }
 
+        public void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        {
+            
+        }
+
         public void UnLoadAsset(object asset)
         {
             

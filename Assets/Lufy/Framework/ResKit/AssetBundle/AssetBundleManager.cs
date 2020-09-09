@@ -5,11 +5,8 @@ using UnityEngine;
 
 namespace LF.Res
 {
-    public class AssetBundleManager
+    public partial class AssetBundleManager
     {
-        protected string m_ABConfigABName = "assetbundleconfig";
-        //资源关系依赖配表，可以根据crc来找到对应资源块
-        protected Dictionary<uint, ResouceItem> m_ResouceItemDic = new Dictionary<uint, ResouceItem>();
         private Dictionary<uint, AssetBundleItem> m_AssetBundleItemDic = new Dictionary<uint, AssetBundleItem>();
 
         protected string ABLoadPath
@@ -26,76 +23,34 @@ namespace LF.Res
         }
 
         /// <summary>
-        /// 加载配置表
-        /// </summary>
-        protected internal bool LoadAssetBundleConfig()
-        {
-            m_ResouceItemDic.Clear();
-            string configPath = ABLoadPath + m_ABConfigABName;
-            AssetBundle configAB = AssetBundle.LoadFromFile(configPath);
-            TextAsset textAsset = configAB.LoadAsset<TextAsset>(m_ABConfigABName);
-            if (textAsset == null)
-            {
-                Log.Error("AssetBundleConfig is no exist!");
-                return false;
-            }
-
-            MemoryStream stream = new MemoryStream(textAsset.bytes);
-            BinaryFormatter bf = new BinaryFormatter();
-            AssetBundleConfig config = (AssetBundleConfig)bf.Deserialize(stream);
-            stream.Close();
-
-            for (int i = 0; i < config.ABList.Count; i++)
-            {
-                ABBase abBase = config.ABList[i];
-                ResouceItem item = new ResouceItem();
-                item.m_Crc = abBase.Crc;
-                item.m_AssetName = abBase.AssetName;
-                item.m_ABName = abBase.ABName;
-                item.m_DependAssetBundle = abBase.ABDependce;
-                if (m_ResouceItemDic.ContainsKey(item.m_Crc))
-                {
-                    Debug.LogError("重复的Crc 资源名:" + item.m_AssetName + " ab包名：" + item.m_ABName);
-                }
-                else
-                {
-                    m_ResouceItemDic.Add(item.m_Crc, item);
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// 根据路径的crc加载中间类ResoucItem
         /// </summary>
         /// <param name="crc"></param>
         /// <returns></returns>
-        protected internal ResouceItem LoadResouceAssetBundle(uint crc)
+        protected internal AssetBundle LoadAssetBundle(uint crc)
         {
-            ResouceItem item = null;
-            if (!m_ResouceItemDic.TryGetValue(crc, out item) || item == null)
+            ConfigItem configItem = null;
+            if (!m_ConfigItemDic.TryGetValue(crc, out configItem) || configItem == null)
             {
                 Log.Error("LoadResourceAssetBundle error: can not find crc {0} in AssetBundleConfig", crc.ToString());
-                return item;
+                return null;
             }
 
-            if (item.m_AssetBundle != null)
+            AssetBundleItem bundleItem = null;
+            if (m_AssetBundleItemDic.TryGetValue(crc, out bundleItem))
             {
-                return item;
+                return bundleItem.AssetBundle;
             }
 
-            item.m_AssetBundle = LoadAssetBundle(item.m_ABName);
-
-            if (item.m_DependAssetBundle != null)
+            AssetBundle bundle = LoadAssetBundle(configItem.ABName);
+            if (configItem.DependAssetBundle != null)
             {
-                for (int i = 0; i < item.m_DependAssetBundle.Count; i++)
+                for (int i = 0; i < configItem.DependAssetBundle.Count; i++)
                 {
-                    LoadAssetBundle(item.m_DependAssetBundle[i]);
+                    LoadAssetBundle(configItem.DependAssetBundle[i]);
                 }
             }
-
-            return item;
+            return bundle;
         }
 
         /// <summary>
@@ -120,7 +75,7 @@ namespace LF.Res
                 }
 
                 item = ReferencePool.Acquire<AssetBundleItem>();
-                item.assetBundle = assetBundle;
+                item.AssetBundle = assetBundle;
                 item.RefCount++;
                 m_AssetBundleItemDic.Add(crc, item);
             }
@@ -128,7 +83,7 @@ namespace LF.Res
             {
                 item.RefCount++;
             }
-            return item.assetBundle;
+            return item.AssetBundle;
         }
 
         /// <summary>
@@ -159,25 +114,30 @@ namespace LF.Res
             if (m_AssetBundleItemDic.TryGetValue(crc, out item) && item != null)
             {
                 item.RefCount--;
-                if (item.RefCount <= 0 && item.assetBundle != null)
+                if (item.RefCount <= 0 && item.AssetBundle != null)
                 {
                     Debug.Log("release " + name);
-                    item.assetBundle.Unload(true);
+                    item.AssetBundle.Unload(true);
                     ReferencePool.Release(item);
                     m_AssetBundleItemDic.Remove(crc);
                 }
             }
         }
+
+        public void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        {
+            
+        }
     }
 
     public class AssetBundleItem : IReference
     {
-        public AssetBundle assetBundle;
+        public AssetBundle AssetBundle;
         public int RefCount;
 
         public void Clear()
         {
-            assetBundle = null;
+            AssetBundle = null;
             RefCount = 0;
         }
     }

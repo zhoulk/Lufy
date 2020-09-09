@@ -9,21 +9,46 @@ using UnityEngine;
 
 namespace LF.Res
 {
-    public class ResourceManager
+    public delegate void OnAssetLoadComplete(string path, object obj);
+
+    public class AssetLoadAsyncOp : IReference
+    {
+        public string Path;
+        public string AssetName;
+        public OnAssetLoadComplete CompleteAction;
+        public bool isLoading;
+        public AssetBundleRequest Oper;
+        public AssetBundle AssetBundle;
+
+        public void Clear()
+        {
+            Path = string.Empty;
+            AssetName = string.Empty;
+            CompleteAction = null;
+            isLoading = false;
+            Oper = null;
+            AssetBundle = null;
+        }
+    }
+
+    public class AssetManager
     {
         private AssetBundleManager m_AssetBundleManager = null;
 
         //缓存使用的资源列表
-        public Dictionary<uint, ResouceItem> AssetDic { get; set; } = new Dictionary<uint, ResouceItem>();
+        public Dictionary<uint, AssetItem> AssetDic { get; set; } = new Dictionary<uint, AssetItem>();
         //缓存引用计数为零的资源列表，达到缓存最大的时候释放这个列表里面最早没用的资源
         protected CMapList<ResouceItem> m_NoRefrenceAssetMapList = new CMapList<ResouceItem>();
+
+        protected List<AssetLoadAsyncOp> waitingList = new List<AssetLoadAsyncOp>();
+        protected List<AssetLoadAsyncOp> loadingList = new List<AssetLoadAsyncOp>();
 
         private bool m_EditorResource = false;
 
         //最大缓存个数
         private int m_MaxCacheCount = 500;
 
-        public ResourceManager()
+        public AssetManager()
         {
             m_AssetBundleManager = new AssetBundleManager();
             m_AssetBundleManager.LoadAssetBundleConfig();
@@ -33,20 +58,23 @@ namespace LF.Res
         }
 
         /// <summary>
-        /// 同步资源加载，外部直接调用，仅加载不需要实例化的资源，例如Texture,音频等等
+        /// 异步资源加载，外部直接调用，仅加载不需要实例化的资源，例如Texture,音频等等
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        public T LoadResource<T>(string path) where T : UnityEngine.Object
+        public void LoadAsset(string path, OnAssetLoadComplete complete)
         {
             if (m_EditorResource)
             {
-                return LoadResourceFromEditor<T>(path);
+                LoadAssetFromEditor(path, complete);
             }
             else
             {
-                return LoadResourceFromAssetBundle<T>(path);
+                //LoadAssetFromAssetBundle(path, complete);
+                AssetLoadAsyncOp op = ReferencePool.Acquire<AssetLoadAsyncOp>();
+                op.Path = path;
+                op.CompleteAction = complete;
+                waitingList.Add(op);
             }
         }
 
@@ -58,29 +86,29 @@ namespace LF.Res
         /// <returns></returns>
         public bool ReleaseResouce(Object obj, bool destoryObj = false)
         {
-            if (obj == null)
-            {
-                return false;
-            }
+            //if (obj == null)
+            //{
+            //    return false;
+            //}
 
-            ResouceItem item = null;
-            foreach (ResouceItem res in AssetDic.Values)
-            {
-                if (res.m_Guid == obj.GetInstanceID())
-                {
-                    item = res;
-                }
-            }
+            //ResouceItem item = null;
+            //foreach (ResouceItem res in AssetDic.Values)
+            //{
+            //    if (res.m_Guid == obj.GetInstanceID())
+            //    {
+            //        item = res;
+            //    }
+            //}
 
-            if (item == null)
-            {
-                Debug.LogError("AssetDic里不存在改资源：" + obj.name + "  可能释放了多次");
-                return false;
-            }
+            //if (item == null)
+            //{
+            //    Debug.LogError("AssetDic里不存在改资源：" + obj.name + "  可能释放了多次");
+            //    return false;
+            //}
 
-            item.RefCount--;
+            //item.RefCount--;
 
-            DestoryResouceItem(item, destoryObj);
+            //DestoryResouceItem(item, destoryObj);
             return true;
         }
 
@@ -90,71 +118,73 @@ namespace LF.Res
         /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        private T LoadResourceFromEditor<T>(string path) where T : UnityEngine.Object
+        private void LoadAssetFromEditor(string path, OnAssetLoadComplete complete)
         {
             if (string.IsNullOrEmpty(path))
             {
-                return null;
+                if(complete != null)
+                {
+                    complete(path, null);
+                }
+                return;
             }
             uint crc = Crc32.GetCrc32(path);
-            ResouceItem item = GetCacheResouceItem(crc);
+            AssetItem item = GetCacheAssetItem(crc);
             if (item == null)
             {
-                item = new ResouceItem();
-                item.m_Crc = crc;
-                T obj = LoadAssetByEditor<T>(path);
-                item.m_Obj = obj;
+                item = ReferencePool.Acquire<AssetItem>();
+                object obj = UnityEditor.AssetDatabase.LoadAssetAtPath<Object>(path);
+                item.Asset = obj;
             }
 
-            CacheResource(path, item);
-            return item.m_Obj as T;
+            CacheAsset(path, item);
+            if (complete != null)
+            {
+                complete(path, item.Asset);
+            }
         }
 
         /// <summary>
         /// 从AssetBundle读取资源
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="path"></param>
         /// <returns></returns>
-        private T LoadResourceFromAssetBundle<T>(string path) where T : UnityEngine.Object
+        private void LoadAssetFromAssetBundle(string path, OnAssetLoadComplete complete)
         {
             if (string.IsNullOrEmpty(path))
             {
-                return null;
+                if (complete != null)
+                {
+                    complete(path, null);
+                }
+                return;
             }
+
             uint crc = Crc32.GetCrc32(path);
-            ResouceItem item = GetCacheResouceItem(crc);
-            if (item != null)
+            AssetItem item = GetCacheAssetItem(crc);
+            if (item != null && item.Asset != null)
             {
-                return item.m_Obj as T;
+                if (complete != null)
+                {
+                    complete(path, item.Asset);
+                }
+                return;
             }
 
-            T obj = null;
-            item = m_AssetBundleManager.LoadResouceAssetBundle(crc);
-            if (item != null && item.m_AssetBundle != null)
+            ConfigItem configItem = m_AssetBundleManager.LoadConfigItem(crc);
+            AssetBundle bundle = m_AssetBundleManager.LoadAssetBundle(crc);
+            if (bundle != null)
             {
-                if (item.m_Obj != null)
-                {
-                    obj = item.m_Obj as T;
-                }
-                else
-                {
-                    obj = item.m_AssetBundle.LoadAsset<T>(item.m_AssetName);
-                }
-                item.m_Crc = crc;
-                item.m_Obj = obj;
+                //bundle.LoadAssetAsync(configItem.AssetName);
+                AssetLoadAsyncOp op = ReferencePool.Acquire<AssetLoadAsyncOp>();
+                op.AssetBundle = bundle;
+                op.CompleteAction = complete;
+                op.isLoading = false;
+                op.Oper = null;
+                op.Path = path;
+                op.AssetName = configItem.AssetName;
+                loadingList.Add(op);
             }
-            CacheResource(path, item);
-            return obj;
-        }
-
-        protected T LoadAssetByEditor<T>(string path) where T : UnityEngine.Object
-        {
-#if UNITY_EDITOR
-            return UnityEditor.AssetDatabase.LoadAssetAtPath<T>(path);
-#else
-            return null;
-#endif
         }
 
         /// <summary>
@@ -163,32 +193,32 @@ namespace LF.Res
         /// <param name="path"></param>
         /// <param name="item"></param>
         /// <param name="addrefcount"></param>
-        void CacheResource(string path, ResouceItem item, int addrefcount = 1)
+        void CacheAsset(string path, AssetItem item, int addrefcount = 1)
         {
             //缓存太多，清除最早没有使用的资源
-            WashOut();
+            //WashOut();
 
-            if (item == null)
-            {
-                Debug.LogError("ResouceItem is null, path: " + path);
-            }
+            //if (item == null)
+            //{
+            //    Debug.LogError("ResouceItem is null, path: " + path);
+            //}
 
-            if (item.m_Obj == null)
-            {
-                Debug.LogError("object is null, path: " + path);
-            }
+            //if (item.Asset == null)
+            //{
+            //    Debug.LogError("object is null, path: " + path);
+            //}
 
-            item.m_Guid = item.m_Obj.GetInstanceID();
-            item.m_LastUseTime = Time.realtimeSinceStartup;
-            item.RefCount += addrefcount;
-            if (AssetDic.ContainsKey(item.m_Crc))
-            {
-                AssetDic[item.m_Crc] = item;
-            }
-            else
-            {
-                AssetDic.Add(item.m_Crc, item);
-            }
+            //item.m_Guid = item.m_Obj.GetInstanceID();
+            //item.LastUseTime = Time.realtimeSinceStartup;
+            //item.RefCount += addrefcount;
+            //if (AssetDic.ContainsKey(item.m_Crc))
+            //{
+            //    AssetDic[item.m_Crc] = item;
+            //}
+            //else
+            //{
+            //    AssetDic.Add(item.m_Crc, item);
+            //}
         }
 
         /// <summary>
@@ -197,15 +227,15 @@ namespace LF.Res
         /// <param name="crc"></param>
         /// <param name="addrefcount"></param>
         /// <returns></returns>
-        ResouceItem GetCacheResouceItem(uint crc, int addrefcount = 1)
+        AssetItem GetCacheAssetItem(uint crc, int addrefcount = 1)
         {
-            ResouceItem item = null;
+            AssetItem item = null;
             if (AssetDic.TryGetValue(crc, out item))
             {
                 if (item != null)
                 {
                     item.RefCount += addrefcount;
-                    item.m_LastUseTime = Time.realtimeSinceStartup;
+                    item.LastUseTime = Time.realtimeSinceStartup;
                 }
             }
 
@@ -263,6 +293,64 @@ namespace LF.Res
                     ResouceItem item = m_NoRefrenceAssetMapList.Back();
                     DestoryResouceItem(item, true);
                 }
+            }
+        }
+
+        public void OnUpdate(float elapseSeconds, float realElapseSeconds)
+        {
+            m_AssetBundleManager.OnUpdate(elapseSeconds, realElapseSeconds);
+
+            Debug.Log(loadingList.Count + "  " + waitingList.Count);
+
+            if(loadingList.Count > 0)
+            {
+                AssetLoadAsyncOp op = loadingList[0];
+                if(op.isLoading == true)
+                {
+                    if (op.Oper.isDone)
+                    {
+                        AssetItem item = ReferencePool.Acquire<AssetItem>();
+                        item.Asset = op.Oper.asset;
+                        CacheAsset(op.Path, item);
+                        if(op.CompleteAction != null)
+                        {
+                            op.CompleteAction(op.Path, op.Oper.asset);
+                        }
+
+                        loadingList.RemoveAt(0);
+                        ReferencePool.Release(op);
+                    }
+                }
+                else
+                {
+                    op.isLoading = true;
+                    Debug.Log("load asset " + op.AssetName + "  " + op.AssetBundle);
+                    op.Oper = op.AssetBundle.LoadAssetAsync(op.AssetName);
+                }
+            }
+            else
+            {
+                if(waitingList.Count > 0)
+                {
+                    AssetLoadAsyncOp op = waitingList[0];
+                    LoadAssetFromAssetBundle(op.Path, op.CompleteAction);
+                    waitingList.RemoveAt(0);
+                }
+            }
+        }
+
+        public class AssetItem : IReference
+        {
+            public object Asset;
+            public int RefCount;
+            //资源最后所使用的时间
+            public float LastUseTime;
+
+            public void Clear()
+            {
+                Asset = null;
+                RefCount = 0;
+                LastUseTime = 0;
             }
         }
     }

@@ -15,11 +15,14 @@ public class ResTest : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_ResManager.SetResLoader(new AssetBundleLoader());
+        m_ResManager.Init();
+
         m_LoadAssetCallbacks = new LoadAssetCallbacks((string assetName, object asset, float duration, object userData) =>
         {
-
+            Debug.Log(asset);
         });
-        m_ResManager.LoadAsset("Music/bgm2", m_LoadAssetCallbacks);
+        m_ResManager.LoadAsset("Assets/Game/Res/Sounds/Music/bgm2.mp3", m_LoadAssetCallbacks);
     }
 
     // Update is called once per frame

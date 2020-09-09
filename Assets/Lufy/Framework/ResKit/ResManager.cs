@@ -70,7 +70,7 @@ namespace LF.Res
 
         internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
-            
+            m_ResLoader.OnUpdate(elapseSeconds, realElapseSeconds);
         }
 
         internal override void Shutdown()
