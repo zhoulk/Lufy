@@ -24,25 +24,7 @@ namespace LF.Res
 
         public void LoadAsset(string assetName, Type assetType, LoadAssetCallbacks loadAssetCallbacks, object userData)
         {
-            Log.Debug("Load asset {0}", assetName);
-            //uint crc = Crc32.GetCrc32(assetName);
-            //ResouceItem resouceItem = m_AssetBundleManager.LoadResouceAssetBundle(crc);
-            //AssetBundleRequest bundleRequest = null;
-            //if(assetType != null)
-            //{
-            //    bundleRequest = resouceItem.m_AssetBundle.LoadAssetAsync(assetName, assetType);
-            //}
-            //else
-            //{
-            //    bundleRequest = resouceItem.m_AssetBundle.LoadAssetAsync(assetName);
-            //}
-            //bundleRequest.completed += (op) =>
-            //{
-            //    if (loadAssetCallbacks.LoadAssetSuccessCallback != null)
-            //    {
-            //        loadAssetCallbacks.LoadAssetSuccessCallback(assetName, bundleRequest.asset, 0, null);
-            //    }
-            //};
+            //Log.Debug("Load asset {0}", assetName);
             m_AssetManager.LoadAsset(assetName, (path, obj)=>
             {
                 if (loadAssetCallbacks.LoadAssetSuccessCallback != null)
@@ -59,7 +41,7 @@ namespace LF.Res
 
         public void UnLoadAsset(object asset)
         {
-            m_AssetManager.ReleaseResouce((UnityEngine.Object)asset);
+            m_AssetManager.ReleaseAsset(asset);
         }
     }
 }

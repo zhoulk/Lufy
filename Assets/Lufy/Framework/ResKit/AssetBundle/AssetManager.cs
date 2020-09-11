@@ -38,15 +38,15 @@ namespace LF.Res
         //缓存使用的资源列表
         public Dictionary<uint, AssetItem> AssetDic { get; set; } = new Dictionary<uint, AssetItem>();
         //缓存引用计数为零的资源列表，达到缓存最大的时候释放这个列表里面最早没用的资源
-        protected CMapList<ResouceItem> m_NoRefrenceAssetMapList = new CMapList<ResouceItem>();
-
+        protected CMapList<AssetItem> m_NoRefrenceAssetMapList = new CMapList<AssetItem>();
+        
         protected List<AssetLoadAsyncOp> waitingList = new List<AssetLoadAsyncOp>();
         protected List<AssetLoadAsyncOp> loadingList = new List<AssetLoadAsyncOp>();
 
         private bool m_EditorResource = false;
 
         //最大缓存个数
-        private int m_MaxCacheCount = 500;
+        private int m_MaxCacheCount = 0;
 
         public AssetManager()
         {
@@ -54,7 +54,7 @@ namespace LF.Res
             m_AssetBundleManager.LoadAssetBundleConfig();
 
             m_EditorResource = Lufy.GetManager<ResManager>().EditorResource;
-            m_MaxCacheCount = Lufy.GetManager<ResManager>().MaxCacheCount;
+            //m_MaxCacheCount = Lufy.GetManager<ResManager>().MaxCacheCount;
         }
 
         /// <summary>
@@ -82,33 +82,32 @@ namespace LF.Res
         /// 不需要实例化的资源的卸载，根据对象
         /// </summary>
         /// <param name="obj"></param>
-        /// <param name="destoryObj"></param>
         /// <returns></returns>
-        public bool ReleaseResouce(Object obj, bool destoryObj = false)
+        public bool ReleaseAsset(object obj)
         {
-            //if (obj == null)
-            //{
-            //    return false;
-            //}
+            if (obj == null)
+            {
+                return false;
+            }
 
-            //ResouceItem item = null;
-            //foreach (ResouceItem res in AssetDic.Values)
-            //{
-            //    if (res.m_Guid == obj.GetInstanceID())
-            //    {
-            //        item = res;
-            //    }
-            //}
+            AssetItem item = null;
+            foreach (AssetItem res in AssetDic.Values)
+            {
+                if (res.Asset == obj)
+                {
+                    item = res;
+                }
+            }
 
-            //if (item == null)
-            //{
-            //    Debug.LogError("AssetDic里不存在改资源：" + obj.name + "  可能释放了多次");
-            //    return false;
-            //}
+            if (item == null)
+            {
+                Log.Error("AssetDic里不存在改资源：" + obj + "  可能释放了多次");
+                return false;
+            }
 
-            //item.RefCount--;
+            item.RefCount--;
 
-            //DestoryResouceItem(item, destoryObj);
+            DestoryAssetItem(item);
             return true;
         }
 
@@ -195,30 +194,27 @@ namespace LF.Res
         /// <param name="addrefcount"></param>
         void CacheAsset(string path, AssetItem item, int addrefcount = 1)
         {
-            //缓存太多，清除最早没有使用的资源
-            //WashOut();
+            if (item == null)
+            {
+                Log.Error("ResouceItem is null, path: " + path);
+            }
 
-            //if (item == null)
-            //{
-            //    Debug.LogError("ResouceItem is null, path: " + path);
-            //}
+            if (item.Asset == null)
+            {
+                Log.Error("object is null, path: " + path);
+            }
 
-            //if (item.Asset == null)
-            //{
-            //    Debug.LogError("object is null, path: " + path);
-            //}
-
-            //item.m_Guid = item.m_Obj.GetInstanceID();
-            //item.LastUseTime = Time.realtimeSinceStartup;
-            //item.RefCount += addrefcount;
-            //if (AssetDic.ContainsKey(item.m_Crc))
-            //{
-            //    AssetDic[item.m_Crc] = item;
-            //}
-            //else
-            //{
-            //    AssetDic.Add(item.m_Crc, item);
-            //}
+            item.Crc = Crc32.GetCrc32(path);
+            item.LastUseTime = Time.realtimeSinceStartup;
+            item.RefCount += addrefcount;
+            if (AssetDic.ContainsKey(item.Crc))
+            {
+                AssetDic[item.Crc] = item;
+            }
+            else
+            {
+                AssetDic.Add(item.Crc, item);
+            }
         }
 
         /// <summary>
@@ -246,33 +242,30 @@ namespace LF.Res
         /// 回收一个资源
         /// </summary>
         /// <param name="item"></param>
-        /// <param name="destroy"></param>
-        protected void DestoryResouceItem(ResouceItem item, bool destroyCache = false)
+        protected void DestoryAssetItem(AssetItem item)
         {
+            Debug.Log(item + " count = " + item.RefCount);
+            // 判断计数
             if (item == null || item.RefCount > 0)
             {
                 return;
             }
-
-            if (!destroyCache)
-            {
-                m_NoRefrenceAssetMapList.InsertToHead(item);
-                return;
-            }
-
-            if (!AssetDic.Remove(item.m_Crc))
+            // 移除缓存
+            if (!AssetDic.Remove(item.Crc))
             {
                 return;
             }
 
+            // 施放
             m_NoRefrenceAssetMapList.Remove(item);
 
             //释放assetbundle引用
-            m_AssetBundleManager.ReleaseAsset(item);
+            ConfigItem configItem = m_AssetBundleManager.LoadConfigItem(item.Crc);
+            m_AssetBundleManager.ReleaseAsset(configItem);
 
-            if (item.m_Obj != null)
+            if (item.Asset != null)
             {
-                item.m_Obj = null;
+                item.Asset = null;
 #if UNITY_EDITOR
                 Resources.UnloadUnusedAssets();
 #endif
@@ -282,25 +275,23 @@ namespace LF.Res
         /// <summary>
         /// 缓存太多，清除最早没有使用的资源
         /// </summary>
-        protected void WashOut()
-        {
-            //当大于缓存个数时，进行一半释放
-            Debug.Log("washout " + m_NoRefrenceAssetMapList.Size() + "  " + m_MaxCacheCount);
-            while (m_NoRefrenceAssetMapList.Size() >= m_MaxCacheCount)
-            {
-                for (int i = 0; i < m_MaxCacheCount / 2; i++)
-                {
-                    ResouceItem item = m_NoRefrenceAssetMapList.Back();
-                    DestoryResouceItem(item, true);
-                }
-            }
-        }
+        //protected void WashOut()
+        //{
+        //    //当大于缓存个数时，进行一半释放
+        //    Debug.Log("washout " + m_NoRefrenceAssetMapList.Size() + "  " + m_MaxCacheCount);
+        //    while (m_NoRefrenceAssetMapList.Size() >= m_MaxCacheCount)
+        //    {
+        //        for (int i = 0; i < m_MaxCacheCount / 2; i++)
+        //        {
+        //            AssetItem item = m_NoRefrenceAssetMapList.Back();
+        //            DestoryAssetItem(item, true);
+        //        }
+        //    }
+        //}
 
         public void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             m_AssetBundleManager.OnUpdate(elapseSeconds, realElapseSeconds);
-
-            Debug.Log(loadingList.Count + "  " + waitingList.Count);
 
             if(loadingList.Count > 0)
             {
@@ -324,7 +315,7 @@ namespace LF.Res
                 else
                 {
                     op.isLoading = true;
-                    Debug.Log("load asset " + op.AssetName + "  " + op.AssetBundle);
+                    //Debug.Log("load asset " + op.AssetName + "  " + op.AssetBundle);
                     op.Oper = op.AssetBundle.LoadAssetAsync(op.AssetName);
                 }
             }
@@ -341,6 +332,7 @@ namespace LF.Res
 
         public class AssetItem : IReference
         {
+            public uint Crc;
             public object Asset;
             public int RefCount;
             //资源最后所使用的时间
@@ -348,6 +340,7 @@ namespace LF.Res
 
             public void Clear()
             {
+                Crc = 0;
                 Asset = null;
                 RefCount = 0;
                 LastUseTime = 0;

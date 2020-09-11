@@ -90,21 +90,21 @@ namespace LF.Res
         /// 释放资源
         /// </summary>
         /// <param name="item"></param>
-        protected internal void ReleaseAsset(ResouceItem item)
+        protected internal void ReleaseAsset(ConfigItem item)
         {
             if (item == null)
             {
                 return;
             }
 
-            if (item.m_DependAssetBundle != null && item.m_DependAssetBundle.Count > 0)
+            if (item.DependAssetBundle != null && item.DependAssetBundle.Count > 0)
             {
-                for (int i = 0; i < item.m_DependAssetBundle.Count; i++)
+                for (int i = 0; i < item.DependAssetBundle.Count; i++)
                 {
-                    UnLoadAssetBundle(item.m_DependAssetBundle[i]);
+                    UnLoadAssetBundle(item.DependAssetBundle[i]);
                 }
             }
-            UnLoadAssetBundle(item.m_ABName);
+            UnLoadAssetBundle(item.ABName);
         }
 
         private void UnLoadAssetBundle(string name)
@@ -116,7 +116,7 @@ namespace LF.Res
                 item.RefCount--;
                 if (item.RefCount <= 0 && item.AssetBundle != null)
                 {
-                    Debug.Log("release " + name);
+                    Log.Debug("release " + name);
                     item.AssetBundle.Unload(true);
                     ReferencePool.Release(item);
                     m_AssetBundleItemDic.Remove(crc);

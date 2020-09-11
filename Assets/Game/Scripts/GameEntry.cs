@@ -155,7 +155,6 @@ public class GameEntry : MonoBehaviour
         m_Res = Lufy.GetManager<ResManager>();
         AssetBundleLoader assetBundleLoader = new AssetBundleLoader();
         m_Res.SetResLoader(assetBundleLoader);
-        m_Res.Init();
 
         m_UI = Lufy.GetManager<UIManager>();
         m_UI.SetResManager(m_Res);

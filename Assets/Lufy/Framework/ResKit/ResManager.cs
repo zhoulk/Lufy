@@ -16,20 +16,16 @@ namespace LF.Res
 
         public bool EditorResource = false;
 
-        public int MaxCacheCount = 500;
+        //public int MaxCacheCount = 500;
 
         public ResManager()
         {
-            m_ResLoader = new ResourcesLoader();
+            m_ResLoader = null;
         }
 
         public void SetResLoader(IResLoader resLoader)
         {
             m_ResLoader = resLoader;
-        }
-
-        public void Init()
-        {
             m_ResLoader.Init();
         }
 
@@ -43,6 +39,11 @@ namespace LF.Res
             if (loadAssetCallbacks == null)
             {
                 throw new LufyException("Load asset callbacks is invalid.");
+            }
+
+            if (m_ResLoader == null)
+            {
+                throw new LufyException("ResLoader is invalid.");
             }
 
             m_ResLoader.LoadAsset(assetName, null, loadAssetCallbacks, userData);
@@ -60,16 +61,31 @@ namespace LF.Res
                 throw new LufyException("Load asset callbacks is invalid.");
             }
 
+            if (m_ResLoader == null)
+            {
+                throw new LufyException("ResLoader is invalid.");
+            }
+
             m_ResLoader.LoadAsset(assetName, assetType, loadAssetCallbacks, userData);
         }
 
         public void UnloadAsset(object asset)
         {
+            if (m_ResLoader == null)
+            {
+                throw new LufyException("ResLoader is invalid.");
+            }
+
             m_ResLoader.UnLoadAsset(asset);
         }
 
         internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
+            if (m_ResLoader == null)
+            {
+                throw new LufyException("ResLoader is invalid.");
+            }
+
             m_ResLoader.OnUpdate(elapseSeconds, realElapseSeconds);
         }
 

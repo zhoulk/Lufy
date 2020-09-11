@@ -13,8 +13,6 @@ namespace LF.Res
     /// </summary>
     public interface IResManager
     {
-        void Init();
-
         /// <summary>
         /// 异步加载资源。
         /// </summary>

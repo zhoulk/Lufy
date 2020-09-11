@@ -12,14 +12,16 @@ public class ResTest : MonoBehaviour
 
     LoadAssetCallbacks m_LoadAssetCallbacks;
 
+    object cacheObj;
+
     // Start is called before the first frame update
     void Start()
     {
         m_ResManager.SetResLoader(new AssetBundleLoader());
-        m_ResManager.Init();
 
         m_LoadAssetCallbacks = new LoadAssetCallbacks((string assetName, object asset, float duration, object userData) =>
         {
+            cacheObj = asset;
             Debug.Log(asset);
         });
         m_ResManager.LoadAsset("Assets/Game/Res/Sounds/Music/bgm2.mp3", m_LoadAssetCallbacks);
@@ -30,7 +32,12 @@ public class ResTest : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            m_ResManager.LoadAsset("loading", m_LoadAssetCallbacks);
+            m_ResManager.LoadAsset("Assets/Game/Res/Sounds/Music/bgm2.mp3", m_LoadAssetCallbacks);
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            m_ResManager.UnloadAsset(cacheObj);
         }
     }
 }
