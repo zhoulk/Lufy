@@ -7,6 +7,7 @@ using LF;
 using LF.Entity;
 using LF.Pool;
 using LF.Res;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Test.Entity
@@ -18,7 +19,10 @@ namespace Test.Entity
         ObjectPoolManager m_ObjectPoolManager = null;
         int entityId = 0;
 
-        private void Awake()
+        List<int> bulletIds = new List<int>();
+
+        // Start is called before the first frame update
+        void Start()
         {
             m_EntityManager = Lufy.GetManager<EntityManager>();
             m_ResManager = Lufy.GetManager<ResManager>();
@@ -28,21 +32,29 @@ namespace Test.Entity
             m_EntityManager.SetObjectPoolManager(m_ObjectPoolManager);
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
         // Update is called once per frame
         void Update()
         {
             if (Input.GetMouseButtonDown(0))
             {
-                Vector3 pos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                pos.z = 0;
+                Vector3 touchPos = Input.mousePosition;
+                touchPos.z = 5;
+                Vector3 pos = Camera.main.ScreenToWorldPoint(touchPos);
+                Debug.Log(pos + "  " + Input.mousePosition);
+                //pos.z = 0;
                 entityId++;
                 m_EntityManager.ShowEntity(entityId, "Assets/Game/Res/Prefabs/bullet/bullet.prefab", "bullet", typeof(Bullet), BulletData.Create(pos));
+                bulletIds.Add(entityId);
+            }
+
+            if (Input.GetMouseButtonDown(1))
+            {
+                if(bulletIds.Count > 0)
+                {
+                    int id = bulletIds[0];
+                    m_EntityManager.HideEntity(id, null);
+                    bulletIds.RemoveAt(0);
+                }
             }
         }
     }

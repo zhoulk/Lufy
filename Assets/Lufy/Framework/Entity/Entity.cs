@@ -49,6 +49,17 @@ namespace LF.Entity
         }
 
         /// <summary>
+        /// 获取实体实例。
+        /// </summary>
+        public object Handle
+        {
+            get
+            {
+                return gameObject;
+            }
+        }
+
+        /// <summary>
         /// 实体初始化。
         /// </summary>
         /// <param name="entityId">实体编号。</param>
@@ -104,7 +115,7 @@ namespace LF.Entity
         /// <param name="userData">用户自定义数据。</param>
         public void OnShow(object userData)
         {
-
+            m_EntityLogic.OnShow(userData);
         }
 
         /// <summary>
@@ -114,7 +125,7 @@ namespace LF.Entity
         /// <param name="userData">用户自定义数据。</param>
         public void OnHide(bool isShutdown, object userData)
         {
-
+            m_EntityLogic.OnHide(isShutdown, userData);
         }
 
         /// <summary>
@@ -124,7 +135,18 @@ namespace LF.Entity
         /// <param name="realElapseSeconds">真实流逝时间，以秒为单位。</param>
         public void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
+            m_EntityLogic.OnUpdate(elapseSeconds, realElapseSeconds);
+        }
 
+        /// <summary>
+        /// 实体回收。
+        /// </summary>
+        public void OnRecycle()
+        {
+            m_EntityLogic.OnRecycle();
+            m_EntityLogic.enabled = false;
+
+            m_Id = 0;
         }
     }
 }

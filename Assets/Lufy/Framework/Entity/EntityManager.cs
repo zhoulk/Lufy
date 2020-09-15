@@ -25,6 +25,8 @@ namespace LF.Entity
         private readonly HashSet<int> m_EntitiesToReleaseOnLoad;
         private readonly LoadAssetCallbacks m_LoadAssetCallbacks;
         private int m_Serial;
+        private bool m_IsShutdown;
+        private readonly Queue<EntityInfo> m_RecycleQueue;
 
         private IResManager m_ResourceManager;
         private ObjectPoolManager m_ObjectPoolManager;
@@ -35,8 +37,10 @@ namespace LF.Entity
             m_EntityGroups = new Dictionary<string, EntityGroup>();
             m_EntitiesBeingLoaded = new Dictionary<int, int>();
             m_EntitiesToReleaseOnLoad = new HashSet<int>();
+            m_RecycleQueue = new Queue<EntityInfo>();
             m_LoadAssetCallbacks = new LoadAssetCallbacks(LoadEntitySuccessCallback, LoadEntityFailureCallback, LoadEntityUpdateCallback, LoadEntityDependencyAssetCallback);
             m_Serial = 0;
+            m_IsShutdown = false;
             m_ResourceManager = null;
             m_ObjectPoolManager = null;
         }
@@ -83,14 +87,36 @@ namespace LF.Entity
 
         internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
-            
+            while (m_RecycleQueue.Count > 0)
+            {
+                EntityInfo entityInfo = m_RecycleQueue.Dequeue();
+                Entity entity = entityInfo.Entity;
+                EntityGroup entityGroup = (EntityGroup)entity.EntityGroup;
+                if (entityGroup == null)
+                {
+                    throw new LufyException("Entity group is invalid.");
+                }
+
+                entityInfo.Status = EntityStatus.WillRecycle;
+                entity.OnRecycle();
+                entityInfo.Status = EntityStatus.Recycled;
+                entityGroup.UnspawnEntity(entity);
+                ReferencePool.Release(entityInfo);
+            }
+
+            foreach (KeyValuePair<string, EntityGroup> entityGroup in m_EntityGroups)
+            {
+                entityGroup.Value.Update(elapseSeconds, realElapseSeconds);
+            }
         }
 
         internal override void Shutdown()
         {
+            m_IsShutdown = true;
             m_EntityGroups.Clear();
             m_EntitiesBeingLoaded.Clear();
             m_EntitiesToReleaseOnLoad.Clear();
+            m_RecycleQueue.Clear();
         }
 
         /// <summary>
@@ -274,7 +300,35 @@ namespace LF.Entity
 
         private void InternalHideEntity(EntityInfo entityInfo, object userData)
         {
+            Entity entity = entityInfo.Entity;
+            Entity[] childEntities = entityInfo.GetChildEntities();
+            foreach (Entity childEntity in childEntities)
+            {
+                HideEntity(childEntity.Id, userData);
+            }
 
+            if (entityInfo.Status == EntityStatus.Hidden)
+            {
+                return;
+            }
+
+            entityInfo.Status = EntityStatus.WillHide;
+            entity.OnHide(m_IsShutdown, userData);
+            entityInfo.Status = EntityStatus.Hidden;
+
+            EntityGroup entityGroup = (EntityGroup)entity.EntityGroup;
+            if (entityGroup == null)
+            {
+                throw new LufyException("Entity group is invalid.");
+            }
+
+            entityGroup.RemoveEntity(entity);
+            if (!m_EntityInfos.Remove(entity.Id))
+            {
+                throw new LufyException("Entity info is unmanaged.");
+            }
+
+            m_RecycleQueue.Enqueue(entityInfo);
         }
 
         /// <summary>
