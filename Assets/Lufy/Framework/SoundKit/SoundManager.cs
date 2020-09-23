@@ -4,7 +4,9 @@
 // 创建时间：2020-08-12 19:01:48
 // ========================================================
 
+using LF.Event;
 using LF.Res;
+using LF.Timer;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -27,6 +29,13 @@ namespace LF.Sound
 
         private IResManager m_ResManager = null;
         private LoadAssetCallbacks m_LoadAssetCallbacks;
+
+        private EventManager m_EventManager = null;
+        private TimerManager m_TimerManager = null;
+
+        // 音乐播放时间计时
+        private float m_MusicTimer = 0;
+        private string m_MusicAssetName = string.Empty;
 
         public SoundManager()
         {
@@ -74,6 +83,16 @@ namespace LF.Sound
             m_ResManager = resManager;
         }
 
+        public void SetEventManager(EventManager eventManager)
+        {
+            m_EventManager = eventManager;
+        }
+
+        public void SetTimerManager(TimerManager timerManager)
+        {
+            m_TimerManager = timerManager;
+        }
+
         /// <summary>
         /// 播放声音。
         /// </summary>
@@ -117,12 +136,12 @@ namespace LF.Sound
             }
             else
             {
-                internalPlaySound(clip, playSoundParams, isShort);
+                internalPlaySound(soundAssetName, clip, playSoundParams, isShort);
             }
             return 0;
         }
 
-        private void internalPlaySound(AudioClip clip, PlaySoundParams playSoundParams, bool isShort)
+        private void internalPlaySound(string assetName, AudioClip clip, PlaySoundParams playSoundParams, bool isShort)
         {
             if (isShort)
             {
@@ -133,11 +152,26 @@ namespace LF.Sound
             }
             else
             {
+                if (m_TimerManager)
+                {
+                    m_TimerManager.clearTimer(DelayPlayMusic);
+                }
+
                 m_MusicSource.clip = clip;
                 m_MusicSource.mute = m_MusicSoundParams.Mute;
-                m_MusicSource.loop = m_MusicSoundParams.Loop;
+                if(m_MusicSoundParams.Interval > 0)
+                {
+                    m_MusicSource.loop = false;
+                }
+                else
+                {
+                    m_MusicSource.loop = m_MusicSoundParams.Loop;
+                }
                 m_MusicSource.volume = m_MusicSoundParams.Volume;
                 m_MusicSource.Play();
+
+                m_MusicTimer = 0;
+                m_MusicAssetName = assetName;
             }
         }
 
@@ -236,7 +270,29 @@ namespace LF.Sound
 
         internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
+            if (m_MusicSource.clip != null)
+            {
+                if (m_MusicSource.isPlaying)
+                {
+                    m_MusicTimer += elapseSeconds;
+                }
 
+                bool complete = CheckMusicComplete();
+                if (complete)
+                {
+                    if(m_MusicSoundParams.Loop)
+                    {
+                        if (m_TimerManager)
+                        {
+                            m_TimerManager.doOnce((int)(m_MusicSoundParams.Interval * 1000), DelayPlayMusic);
+                        }
+                        else
+                        {
+                            internalPlaySound(m_MusicAssetName, m_AudioClips[m_MusicAssetName], m_MusicSoundParams, false);
+                        }
+                    }
+                }
+            }
         }
 
         internal override void Shutdown()
@@ -244,12 +300,53 @@ namespace LF.Sound
             m_AudioClips.Clear();
         }
 
+        void DelayPlayMusic()
+        {
+            internalPlaySound(m_MusicAssetName, m_AudioClips[m_MusicAssetName], m_MusicSoundParams, false);
+        }
+
+        bool CheckMusicComplete()
+        {
+            bool complete = false;
+            if (!m_MusicSource.isPlaying)
+            {
+                // 音乐播放完毕  计时判断 误差1秒内都算结束
+                if (Mathf.Abs(m_MusicTimer - m_MusicSource.clip.length) < 1)
+                {
+                    m_MusicTimer = 0;
+                    if (m_EventManager != null)
+                    {
+                        m_EventManager.Fire(this, PlayMusicCompleteEventArgs.Create(m_MusicAssetName, m_MusicSource.clip.length, null));
+                    }
+
+                    complete = true;
+                }
+            }
+            else
+            {
+                if (m_MusicSoundParams.Loop)
+                {
+                    if (m_MusicTimer > m_MusicSource.clip.length)
+                    {
+                        m_MusicTimer = 0;
+                        if (m_EventManager != null)
+                        {
+                            m_EventManager.Fire(this, PlayMusicCompleteEventArgs.Create(m_MusicAssetName, m_MusicSource.clip.length, null));
+                        }
+
+                        complete = true;
+                    }
+                }
+            }
+            return complete;
+        }
+
         void LoadAssetSuccess(string assetName, object asset, float duration, object userData)
         {
             PlaySoundInfo playSoundInfo = userData as PlaySoundInfo;
             AudioClip clip  = asset as AudioClip;
             m_AudioClips.Add(assetName, clip);
-            internalPlaySound(clip, playSoundInfo.PlaySoundParams, playSoundInfo.IsShort);
+            internalPlaySound(assetName, clip, playSoundInfo.PlaySoundParams, playSoundInfo.IsShort);
             ReferencePool.Release(playSoundInfo);
         }
 

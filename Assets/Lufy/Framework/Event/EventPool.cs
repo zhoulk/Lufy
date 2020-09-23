@@ -95,6 +95,7 @@ namespace LF.Event
                 {
                     eventNode = m_Events.Dequeue();
                     HandleEvent(eventNode.Sender, eventNode.EventArgs);
+                    ReferencePool.Release(eventNode);
                 }
             }
         }
@@ -276,6 +277,8 @@ namespace LF.Event
             {
                 noHandlerException = true;
             }
+
+            ReferencePool.Release(e);
 
             if (noHandlerException)
             {

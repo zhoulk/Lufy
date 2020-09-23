@@ -11,7 +11,7 @@ namespace LF.Event
         /// <summary>
         /// 事件结点。
         /// </summary>
-        private sealed class Event
+        private sealed class Event : IReference
         {
             private object m_Sender;
             private T m_EventArgs;
@@ -40,7 +40,7 @@ namespace LF.Event
 
             public static Event Create(object sender, T e)
             {
-                Event eventNode = new Event();
+                Event eventNode = ReferencePool.Acquire<Event>();
                 eventNode.m_Sender = sender;
                 eventNode.m_EventArgs = e;
                 return eventNode;

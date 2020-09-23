@@ -27,9 +27,20 @@ namespace LF.Res
             //Log.Debug("Load asset {0}", assetName);
             m_AssetManager.LoadAsset(assetName, (path, obj)=>
             {
-                if (loadAssetCallbacks.LoadAssetSuccessCallback != null)
+                if(obj != null)
                 {
-                    loadAssetCallbacks.LoadAssetSuccessCallback(assetName, obj, 0, userData);
+                    if (loadAssetCallbacks.LoadAssetSuccessCallback != null)
+                    {
+                        loadAssetCallbacks.LoadAssetSuccessCallback(assetName, obj, 0, userData);
+                    }
+                }
+                else
+                {
+                    if (loadAssetCallbacks.LoadAssetFailureCallback != null)
+                    {
+                        string errMsg = Utility.Text.Format("Load Asset {0} err", assetName);
+                        loadAssetCallbacks.LoadAssetFailureCallback(assetName, LoadResourceStatus.AssetError, errMsg, userData);
+                    }
                 }
             });
         }

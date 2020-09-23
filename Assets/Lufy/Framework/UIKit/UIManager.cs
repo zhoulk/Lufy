@@ -4,6 +4,7 @@
 // 创建时间：2020-08-06 16:31:35
 // ========================================================
 
+using LF.Event;
 using LF.Pool;
 using LF.Res;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace LF.UI
         private readonly Dictionary<string, UIFormLogic> m_cachedForms = new Dictionary<string, UIFormLogic>();
         private readonly LinkedList<UIFormLogic> m_formList = new LinkedList<UIFormLogic>();
         private readonly Queue<UIFormLogic> m_RecycleQueue = new Queue<UIFormLogic>();
+        private LinkedListNode<UIFormLogic> m_CachedNode = null;
 
         private List<string> removeKeyList = new List<string>();
 
@@ -36,6 +38,8 @@ namespace LF.UI
         private float m_InstanceExpireTime = 60f;
 
         private IResManager m_ResManager = null;
+
+        private EventManager m_EventManager = null;
 
         private ObjectPoolManager m_PoolManager = null;
         private IObjectPool<UIFormObject> m_InstancePool = null;
@@ -84,6 +88,12 @@ namespace LF.UI
         {
             m_ResManager = resManager;
         }
+
+        public void SetEventManager(EventManager eventManager)
+        {
+            m_EventManager = eventManager;
+        }
+
 
         public void SetObjectPoolManager(ObjectPoolManager objectPoolManager)
         {
@@ -153,25 +163,22 @@ namespace LF.UI
             {
                 UIFormObject obj = m_InstancePool.Spawn(uiFormAssetName);
                 uiFormInstanceObject = obj?.Target as UIFormLogic;
-                if(uiFormInstanceObject == null)
+                if (uiFormInstanceObject == null)
                 {
-                    m_ResManager.LoadAsset(uiFormAssetName, m_LoadAssetCallbacks);
+                    m_ResManager.LoadAsset(uiFormAssetName, m_LoadAssetCallbacks, userData);
                 }
                 else
                 {
                     m_cachedForms.Add(uiFormAssetName, uiFormInstanceObject);
 
-                    uiFormInstanceObject.OnOpen(userData);
-                    m_formList.AddFirst(uiFormInstanceObject);
-                    Refresh();
+                    InternalOpenUIForm(uiFormAssetName, uiFormInstanceObject, 0, userData);
                 }
             }
             else
             {
                 m_formList.Remove(uiFormInstanceObject);
-                uiFormInstanceObject.OnOpen(userData);
-                m_formList.AddFirst(uiFormInstanceObject);
-                Refresh();
+
+                InternalOpenUIForm(uiFormAssetName, uiFormInstanceObject, 0, userData);
             }
         }
 
@@ -223,17 +230,21 @@ namespace LF.UI
 
             uiForm.OnClose(userData);
 
+            if (m_CachedNode != null && m_CachedNode.Value == uiForm)
+            {
+                m_CachedNode = m_CachedNode.Next;
+            }
             m_formList.Remove(uiForm);
 
             removeKeyList.Clear();
             foreach (var kv in m_cachedForms)
             {
-                if(kv.Value == uiForm)
+                if (kv.Value == uiForm)
                 {
                     removeKeyList.Add(kv.Key);
                 }
             }
-            foreach(var key in removeKeyList)
+            foreach (var key in removeKeyList)
             {
                 m_cachedForms.Remove(key);
             }
@@ -331,7 +342,20 @@ namespace LF.UI
             }
         }
 
-        void LoadAssetSuccess(string assetName, object asset, float duration, object userData){
+        private void InternalOpenUIForm(string uiFormAssetName, UIFormLogic uiFormInstanceObject, float duration, object userData)
+        {
+            uiFormInstanceObject.OnOpen(userData);
+            m_formList.AddFirst(uiFormInstanceObject);
+            Refresh();
+
+            if(m_EventManager != null)
+            {
+                m_EventManager.Fire(this, OpenUIFormSuccessEventArgs.Create(uiFormInstanceObject, duration, userData));
+            }
+        }
+
+        void LoadAssetSuccess(string assetName, object asset, float duration, object userData)
+        {
             GameObject obj = GameObject.Instantiate(asset as GameObject);
             obj.name = obj.name.Substring(0, obj.name.Length - 7);
             obj.transform.SetParent(m_InstanceRoot);
@@ -343,14 +367,16 @@ namespace LF.UI
 
             uiFormInstanceObject.OnInit(userData);
 
-            uiFormInstanceObject.OnOpen(userData);
-            m_formList.AddFirst(uiFormInstanceObject);
-            Refresh();
+            InternalOpenUIForm(assetName, uiFormInstanceObject, duration, userData);
         }
 
         void LoadAssetFail(string assetName, LoadResourceStatus status, string errorMessage, object userData)
         {
-
+            if (m_EventManager != null)
+            {
+                string appendErrorMessage = Utility.Text.Format("Load UI form failure, asset name '{0}', status '{1}', error message '{2}'.", assetName, status.ToString(), errorMessage);
+                m_EventManager.Fire(this, OpenUIFormFailureEventArgs.Create(assetName, appendErrorMessage, userData));
+            }
         }
 
         protected override void Awake()
@@ -383,9 +409,18 @@ namespace LF.UI
                 m_InstancePool.Unspawn(obj);
             }
 
-            foreach (var uiForm in m_formList)
+            LinkedListNode<UIFormLogic> current = m_formList.First;
+            while (current != null)
             {
-                uiForm.OnUpdate(elapseSeconds, realElapseSeconds);
+                if (current.Value.Paused)
+                {
+                    break;
+                }
+
+                m_CachedNode = current.Next;
+                current.Value.OnUpdate(elapseSeconds, realElapseSeconds);
+                current = m_CachedNode;
+                m_CachedNode = null;
             }
         }
     }

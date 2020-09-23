@@ -270,6 +270,8 @@ namespace LF.Res
                 Resources.UnloadUnusedAssets();
 #endif
             }
+
+            ReferencePool.Release(item);
         }
 
         /// <summary>

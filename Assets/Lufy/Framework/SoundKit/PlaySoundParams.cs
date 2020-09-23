@@ -11,6 +11,7 @@ namespace LF.Sound
         private bool m_Mute;
         private bool m_Loop;
         private float m_Volume;
+        private float m_Interval;
 
         /// <summary>
         /// 获取或设置在声音组内是否静音。
@@ -54,6 +55,21 @@ namespace LF.Sound
             set
             {
                 m_Volume = value;
+            }
+        }
+
+        /// <summary>
+        /// 播放间隔
+        /// </summary>
+        public float Interval
+        {
+            get
+            {
+                return m_Interval;
+            }
+            set
+            {
+                m_Interval = value;
             }
         }
 

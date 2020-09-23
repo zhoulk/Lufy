@@ -27,7 +27,6 @@ public class CreateSequene : MonoBehaviour
         mySequence.Prepend(cube.transform.DOMoveX(-2, 1));
         mySequence.PrependCallback(StartCallback);
         mySequence.PrependInterval(10);
-
     }
 
     void MyCallback()
