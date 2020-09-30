@@ -273,7 +273,6 @@ namespace LF.Scene
             {
                 LoadSceneSuccessEventArgs loadSceneSuccessEventArgs = LoadSceneSuccessEventArgs.Create(sceneAssetName, 0, null);
                 Lufy.GetManager<EventManager>().Fire(this, loadSceneSuccessEventArgs);
-                ReferencePool.Release(loadSceneSuccessEventArgs);
             }
         }
 
@@ -285,7 +284,6 @@ namespace LF.Scene
             {
                 UnLoadSceneSuccessEventArgs unloadSceneSuccessEventArgs = UnLoadSceneSuccessEventArgs.Create(sceneAssetName, null);
                 Lufy.GetManager<EventManager>().Fire(this, unloadSceneSuccessEventArgs);
-                ReferencePool.Release(unloadSceneSuccessEventArgs);
             }
         }
 
@@ -295,7 +293,6 @@ namespace LF.Scene
             {
                 LoadSceneUpdateEventArgs loadSceneUpdateEventArgs = LoadSceneUpdateEventArgs.Create(sceneAssetName, progress, null);
                 Lufy.GetManager<EventManager>().Fire(this, loadSceneUpdateEventArgs);
-                ReferencePool.Release(loadSceneUpdateEventArgs);
             }
         }
     }

@@ -132,8 +132,10 @@ namespace LF.Res
             if (item == null)
             {
                 item = ReferencePool.Acquire<AssetItem>();
+#if UNITY_EDITOR
                 object obj = UnityEditor.AssetDatabase.LoadAssetAtPath<Object>(path);
                 item.Asset = obj;
+#endif
             }
 
             CacheAsset(path, item);
