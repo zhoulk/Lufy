@@ -261,9 +261,11 @@ namespace LF.Res
             // 施放
             m_NoRefrenceAssetMapList.Remove(item);
 
+#if !UNITY_EDITOR
             //释放assetbundle引用
             ConfigItem configItem = m_AssetBundleManager.LoadConfigItem(item.Crc);
             m_AssetBundleManager.ReleaseAsset(configItem);
+#endif
 
             if (item.Asset != null)
             {

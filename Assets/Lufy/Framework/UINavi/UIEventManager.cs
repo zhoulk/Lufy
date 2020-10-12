@@ -74,7 +74,7 @@ namespace LF.UINavi
             {
                 m_ClickHandlerDic.Remove(obj);
             }
-            UIEventLisner lisner = obj.AddComponent<UIEventLisner>();
+            UIEventLisner lisner = obj.GetComponent<UIEventLisner>();
             lisner.PointerClickHandler -= OnPointerClickHandler;
         }
 
