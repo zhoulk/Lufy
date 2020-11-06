@@ -17,6 +17,7 @@ using LF.Sound;
 using LF.Scene;
 using LF.Setting;
 using LF.Res;
+using LF.WebRequest;
 
 public class GameEntry : MonoBehaviour
 {
@@ -32,6 +33,7 @@ public class GameEntry : MonoBehaviour
     static SceneManager m_Scene;
     static SettingManager m_Setting;
     static ResManager m_Res;
+    static WebRequestManager m_WebRequest;
 
     private void Start()
     {
@@ -148,6 +150,15 @@ public class GameEntry : MonoBehaviour
         set { }
     }
 
+    public static WebRequestManager WebRequest
+    {
+        get
+        {
+            return m_WebRequest;
+        }
+        set { }
+    }
+
     void initManagers()
     {
         m_Base = Lufy.GetManager<BaseManager>();
@@ -176,6 +187,8 @@ public class GameEntry : MonoBehaviour
 
         m_Setting = Lufy.GetManager<SettingManager>();
         m_Setting.SetSettingHelper(new ESSettingHelper());
+
+        m_WebRequest = Lufy.GetManager<WebRequestManager>();
     }
 }
 
