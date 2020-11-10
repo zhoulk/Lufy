@@ -113,36 +113,6 @@ namespace LF.WebRequest
             m_TaskPool.RemoveAllTasks();
         }
 
-        private void OnWebRequestAgentStart(WebRequestAgent sender)
-        {
-            if (m_WebRequestStartEventHandler != null)
-            {
-                WebRequestStartEventArgs webRequestStartEventArgs = WebRequestStartEventArgs.Create(sender.Task.SerialId, sender.Task.WebRequestUri, sender.Task.UserData);
-                m_WebRequestStartEventHandler(this, webRequestStartEventArgs);
-                ReferencePool.Release(webRequestStartEventArgs);
-            }
-        }
-
-        private void OnWebRequestAgentSuccess(WebRequestAgent sender, byte[] webResponseBytes)
-        {
-            if (m_WebRequestSuccessEventHandler != null)
-            {
-                WebRequestSuccessEventArgs webRequestSuccessEventArgs = WebRequestSuccessEventArgs.Create(sender.Task.SerialId, sender.Task.WebRequestUri, webResponseBytes, sender.Task.UserData);
-                m_WebRequestSuccessEventHandler(this, webRequestSuccessEventArgs);
-                ReferencePool.Release(webRequestSuccessEventArgs);
-            }
-        }
-
-        private void OnWebRequestAgentFailure(WebRequestAgent sender, string errorMessage)
-        {
-            if (m_WebRequestFailureEventHandler != null)
-            {
-                WebRequestFailureEventArgs webRequestFailureEventArgs = WebRequestFailureEventArgs.Create(sender.Task.SerialId, sender.Task.WebRequestUri, errorMessage, sender.Task.UserData);
-                m_WebRequestFailureEventHandler(this, webRequestFailureEventArgs);
-                ReferencePool.Release(webRequestFailureEventArgs);
-            }
-        }
-
         internal override void OnUpdate(float elapseSeconds, float realElapseSeconds)
         {
             m_TaskPool.Update(elapseSeconds, realElapseSeconds);

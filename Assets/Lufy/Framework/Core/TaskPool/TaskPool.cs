@@ -150,14 +150,17 @@ namespace LF
             if (m_Agent != null)
             {
                 T task = m_Agent.Task;
-                if (!task.Done)
+                if(task != null)
                 {
-                    m_Agent.Update(elapseSeconds, realElapseSeconds);
-                    return;
-                }
+                    if (!task.Done)
+                    {
+                        m_Agent.Update(elapseSeconds, realElapseSeconds);
+                        return;
+                    }
 
-                m_Agent.Reset();
-                ReferencePool.Release(task);
+                    m_Agent.Reset();
+                    ReferencePool.Release(task);
+                }
             }
         }
 

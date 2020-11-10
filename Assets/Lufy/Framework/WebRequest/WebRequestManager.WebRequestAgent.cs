@@ -50,12 +50,13 @@ namespace LF.WebRequest
 
             public void Reset()
             {
-                throw new System.NotImplementedException();
+                m_Task = null;
+                m_WaitTime = 0f;
             }
 
             public void Shutdown()
             {
-                throw new System.NotImplementedException();
+                Reset();
             }
 
             public StartTaskStatus Start(WebRequestTask task)
@@ -99,6 +100,21 @@ namespace LF.WebRequest
                         OnWebRequestAgentError(this, "timeOut");
                     }
                 }
+
+                if (m_UnityWebRequest == null || !m_UnityWebRequest.isDone)
+                {
+                    return;
+                }
+
+                bool isError = m_UnityWebRequest.isNetworkError || m_UnityWebRequest.isHttpError;
+                if (isError)
+                {
+                    OnWebRequestAgentError(this, m_UnityWebRequest.error);
+                }
+                else if (m_UnityWebRequest.downloadHandler.isDone)
+                {
+                    OnWebRequestAgentSuccess(this);
+                }
             }
 
             private void OnWebRequestAgentError(WebRequestAgent sender, string errMsg)
@@ -110,6 +126,18 @@ namespace LF.WebRequest
                 {
                     m_EventManager.Fire(this, WebRequestFailureEventArgs.Create(sender.Task.SerialId, sender.Task.WebRequestUri, errMsg, sender.Task.UserData));
                 }
+            }
+
+            private void OnWebRequestAgentSuccess(WebRequestAgent sender)
+            {
+                m_Task.Status = WebRequestTaskStatus.Done;
+
+                if (m_EventManager != null)
+                {
+                    m_EventManager.Fire(this, WebRequestSuccessEventArgs.Create(sender.Task.SerialId, sender.Task.WebRequestUri, m_UnityWebRequest.downloadHandler.data, sender.Task.UserData));
+                }
+
+                m_Task.Done = true;
             }
         }
     }
